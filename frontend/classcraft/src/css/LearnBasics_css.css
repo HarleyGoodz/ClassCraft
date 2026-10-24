@@ -1,0 +1,124 @@
+/* ----- Layout (mirrors Dashboard layout) ----- */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+}
+
+/* ----- Sidebar ----- */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-brand {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0.5rem;
+  color: #fff;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ----- Main content ----- */
+.learn-basics {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  max-width: 900px;
+}
+
+.learn-basics-header h1 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.75rem;
+  color: #0f172a;
+}
+
+.learn-basics-header p {
+  margin: 0 0 2rem 0;
+  color: #64748b;
+}
+
+/* ----- Topic buttons ----- */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.topic-button {
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  color: #1e293b;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.topic-button:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+.topic-button.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* ----- Hints / navigation ----- */
+.topic-hint {
+  margin: 0 0 2rem 0;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.back-button {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #475569;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.back-button:hover {
+  background: #f1f5f9;
+}
