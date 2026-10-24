@@ -1,0 +1,202 @@
+/* ===== Global ===== */
+:root {
+  font-family: Arial, sans-serif;
+  color: #222;
+  background: #f4f4f4;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  color: #222;
+  background: #f4f4f4;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: #0645ad;
+}
+
+/* ===== Login / Register ===== */
+.simple-auth {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.simple-auth-form {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.simple-auth-form h1 {
+  margin: 0;
+  font-size: 22px;
+  text-align: center;
+  color: #222;
+}
+
+.simple-auth-form h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  color: #666;
+}
+
+.simple-auth-form label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #222;
+}
+
+.simple-auth-form input {
+  width: 100%;
+  padding: 8px;
+  color: #222;
+  background: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.simple-auth-form input::placeholder {
+  color: #888;
+}
+
+.simple-auth-form button {
+  margin-top: 8px;
+  padding: 10px;
+  color: #fff;
+  background: #333;
+  border: none;
+  border-radius: 4px;
+}
+
+.simple-auth-form button:hover {
+  background: #000;
+}
+
+.simple-auth-form p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: #222;
+}
+
+.simple-auth-error {
+  color: #c00 !important;
+  font-size: 14px;
+}
+
+/* ===== Dashboard ===== */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: #222;
+}
+
+.dashboard h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.3;
+  color: #222;
+}
+
+.dashboard p {
+  margin: 0;
+  color: #444;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  color: #fff;
+  background: #333;
+  border: none;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background: #000;
+}
+
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 45px;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  display: block;
+  width: 100%;
+  padding-right: 42px;
+}
+
+.simple-auth-form .password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 0;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: #777;
+  line-height: 1;
+}
+
+.simple-auth-form .password-toggle:hover,
+.simple-auth-form .password-toggle:focus {
+  background: transparent;
+  color: #222;
+}
