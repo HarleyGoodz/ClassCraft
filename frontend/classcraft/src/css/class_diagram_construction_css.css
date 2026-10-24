@@ -1,0 +1,153 @@
+/* ==================================================================
+   Layout (shared with Dashboard / LearnBasics / MyProgress / Skill Dev)
+   ================================================================== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+}
+
+/* ==================================================================
+   Sidebar
+   ================================================================== */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-brand {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0.5rem;
+  color: #fff;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ==================================================================
+   Main content — centered hero
+   ================================================================== */
+.cdc-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+
+.cdc-hero {
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.cdc-title {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.cdc-subtitle {
+  margin: 0 auto 2.25rem auto;
+  max-width: 520px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* ==================================================================
+   Start button
+   ================================================================== */
+.cdc-start-button {
+  display: inline-block;
+  padding: 0.9rem 3rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.cdc-start-button:hover {
+  background: #2563eb;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+}
+
+.cdc-start-button:active {
+  transform: translateY(1px);
+}
+
+.cdc-start-button:focus-visible {
+  outline: 3px solid #bfdbfe;
+  outline-offset: 3px;
+}
+
+/* ==================================================================
+   Hint text
+   ================================================================== */
+.cdc-hint {
+  margin: 1.75rem 0 0 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.cdc-hint strong {
+  color: #475569;
+}
+
+/* ==================================================================
+   Responsive
+   ================================================================== */
+@media (max-width: 640px) {
+  .cdc-hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .cdc-title {
+    font-size: 1.5rem;
+  }
+
+  .cdc-start-button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+  }
+}
