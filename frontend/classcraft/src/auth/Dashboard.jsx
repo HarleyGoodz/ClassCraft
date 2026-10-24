@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import "../css/dashboard_css.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -11,8 +11,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadUser() {
-      const { data, error: authError } =
-        await supabase.auth.getUser();
+      const { data, error: authError } = await supabase.auth.getUser();
 
       if (authError || !data.user) {
         navigate("/", { replace: true });
@@ -20,9 +19,7 @@ export default function Dashboard() {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:8080/api/users`
-        );
+        const response = await fetch(`http://localhost:8080/api/users`);
 
         if (!response.ok) {
           throw new Error("Could not load your profile.");
@@ -40,9 +37,7 @@ export default function Dashboard() {
           setError("Your profile was not found.");
         }
       } catch (err) {
-        setError(
-          err.message || "Could not connect to the backend."
-        );
+        setError(err.message || "Could not connect to the backend.");
       } finally {
         setLoading(false);
       }
@@ -67,15 +62,66 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="dashboard">
-      <h1>Hello, {username}!</h1>
-      <p>Welcome to ClassCraft.</p>
+    <div className="dashboard-layout">
+      {/* ===== Sidebar ===== */}
+      <aside className="sidebar">
+        <h2 className="sidebar-brand">ClassCraft</h2>
+        <nav className="sidebar-nav">
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+            end
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/learn-basics"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            Learn the Basics
+          </NavLink>
+          <NavLink
+            to="/skill-development"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            Skill Development
+          </NavLink>
+          <NavLink
+            to="/class-diagram-construction"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            Class Diagram Construction
+          </NavLink>
+          <NavLink
+            to="/my-progress"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            My Progress
+          </NavLink>
+        </nav>
+      </aside>
 
-      {error && <p role="alert">{error}</p>}
+      {/* ===== Main content ===== */}
+      <main className="dashboard">
+        <h1>Hello, {username}!</h1>
+        <p>Welcome to ClassCraft.</p>
 
-      <button className="submit-button" onClick={handleLogout}>
-        Log out
-      </button>
-    </main>
+        {error && <p role="alert">{error}</p>}
+
+        <button className="submit-button" onClick={handleLogout}>
+          Log out
+        </button>
+      </main>
+    </div>
   );
 }
