@@ -1,0 +1,388 @@
+/* ==================================================================
+   Layout (shared with other pages)
+   ================================================================== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-brand {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0.5rem;
+  color: #fff;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ==================================================================
+   Main content
+   ================================================================== */
+.class-objects {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  max-width: 1000px;
+}
+
+.class-objects-header h1 {
+  margin: 0.25rem 0 0.5rem 0;
+  font-size: 1.85rem;
+  color: #0f172a;
+}
+
+.class-objects-header p {
+  margin: 0 0 2rem 0;
+  color: #475569;
+  max-width: 680px;
+  line-height: 1.6;
+}
+
+.class-objects-breadcrumb {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #3b82f6;
+}
+
+/* ==================================================================
+   Lesson cards
+   ================================================================== */
+.lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.lesson-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  border-top: 4px solid #e2e8f0;
+}
+
+.lesson-card--class {
+  border-top-color: #3b82f6;
+}
+
+.lesson-card--object {
+  border-top-color: #22c55e;
+}
+
+.lesson-card h2 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.15rem;
+  color: #0f172a;
+}
+
+.lesson-card p {
+  margin: 0 0 0.9rem 0;
+  font-size: 0.93rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.lesson-code {
+  margin: 0 0 0.9rem 0;
+  padding: 0.85rem 1rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.lesson-code code,
+.lesson-note code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.lesson-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  background: #f8fafc;
+  border-left: 3px solid #cbd5e1;
+  padding: 0.6rem 0.85rem;
+  border-radius: 4px;
+}
+
+/* ==================================================================
+   Relationship callout
+   ================================================================== */
+.relationship-callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.relationship-callout h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.05rem;
+  color: #1e40af;
+}
+
+.relationship-callout p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: #1e3a8a;
+}
+
+/* ==================================================================
+   Activity
+   ================================================================== */
+.activity {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.activity-header h2 {
+  margin: 0 0 0.35rem 0;
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.activity-header p {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.activity-progress {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.activity-progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+.activity-counter {
+  margin: 0 0 1rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.activity-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.activity-term {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.activity-choices {
+  display: flex;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.choice-button {
+  padding: 0.7rem 2rem;
+  background: #fff;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.choice-button:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.choice-button:active {
+  transform: translateY(1px);
+}
+
+/* ==================================================================
+   Feedback
+   ================================================================== */
+.activity-feedback {
+  text-align: left;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.activity-feedback.correct {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+
+.activity-feedback.wrong {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+}
+
+.feedback-verdict {
+  margin: 0 0 0.35rem 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.activity-feedback.correct .feedback-verdict {
+  color: #166534;
+}
+
+.activity-feedback.wrong .feedback-verdict {
+  color: #92400e;
+}
+
+.feedback-answer {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.feedback-explanation {
+  margin: 0 0 1rem 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+/* ==================================================================
+   Buttons (shared)
+   ================================================================== */
+.next-button {
+  padding: 0.55rem 1.25rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.next-button:hover {
+  background: #2563eb;
+}
+
+.next-button--ghost {
+  background: transparent;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.next-button--ghost:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ==================================================================
+   Results
+   ================================================================== */
+.activity-results {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.activity-results h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.results-score {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: #334155;
+}
+
+.results-message {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.92rem;
+  color: #475569;
+}
+
+.results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ==================================================================
+   Back button
+   ================================================================== */
+.back-button {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #475569;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.back-button:hover {
+  background: #f1f5f9;
+}

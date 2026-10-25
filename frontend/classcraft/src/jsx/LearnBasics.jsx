@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../css/LearnBasics_css.css";
 
@@ -11,11 +10,10 @@ const TOPICS = [
 
 export default function LearnBasics() {
   const navigate = useNavigate();
-  const [activeTopic, setActiveTopic] = useState(null);
 
   return (
     <div className="dashboard-layout">
-      {/* ===== Sidebar (shared across pages) ===== */}
+      {/* ===== Sidebar ===== */}
       <aside className="sidebar">
         <h2 className="sidebar-brand">ClassCraft</h2>
         <nav className="sidebar-nav">
@@ -75,26 +73,13 @@ export default function LearnBasics() {
             <button
               key={topic.key}
               type="button"
-              className={
-                activeTopic === topic.key
-                  ? "topic-button active"
-                  : "topic-button"
-              }
-              onClick={() => setActiveTopic(topic.key)}
+              className="topic-button"
+              onClick={() => navigate(`/learn-basics/${topic.key}`)}
             >
               {topic.label}
             </button>
           ))}
         </section>
-
-        {activeTopic && (
-          <p className="topic-hint">
-            You selected:{" "}
-            <strong>
-              {TOPICS.find((t) => t.key === activeTopic)?.label}
-            </strong>
-          </p>
-        )}
 
         <button
           type="button"
