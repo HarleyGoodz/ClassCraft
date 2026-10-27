@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../css/LearnBasics_css.css";
 import "../css/ClassConstruction_css.css";
+import "../css/lesson_breadcrumb.css";
 
 /*
   Class Construction – drag and drop, check at the end.
@@ -53,7 +54,6 @@ const emptyLocations = () =>
   Object.fromEntries(PIECES.map((p) => [p.id, "bank"]));
 
 export default function ClassConstruction() {
-  const navigate = useNavigate();
   const [locations, setLocations] = useState(emptyLocations); // id -> "bank" | zone
   const [selected, setSelected] = useState(null); // click-to-place fallback
   const [dragOver, setDragOver] = useState(null);
@@ -273,6 +273,15 @@ export default function ClassConstruction() {
 
       {/* ===== Main content ===== */}
       <main className="learn-basics cc-page">
+        <p className="lesson-breadcrumb">
+          <NavLink to="/learn-basics">Learn the Basics</NavLink>
+          <span className="lesson-breadcrumb-separator" aria-hidden="true">
+            ›
+          </span>
+          <span className="lesson-breadcrumb-current" aria-current="page">
+            Class Construction
+          </span>
+        </p>
         <header className="learn-basics-header">
           <h1>Class Construction</h1>
           <p>
@@ -382,13 +391,6 @@ export default function ClassConstruction() {
           </section>
         )}
 
-        <button
-          type="button"
-          className="back-button"
-          onClick={() => navigate("/learn-basics")}
-        >
-          ← Back to Learn the Basics
-        </button>
       </main>
     </div>
   );

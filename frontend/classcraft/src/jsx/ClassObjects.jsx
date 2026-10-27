@@ -1,9 +1,8 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../css/class_objects.css";
+import "../css/lesson_path_header.css";
 
 export default function ClassObjects() {
-  const navigate = useNavigate();
-
   return (
     <div className="dashboard-layout">
       {/* ===== Sidebar ===== */}
@@ -56,10 +55,16 @@ export default function ClassObjects() {
 
       {/* ===== Main content ===== */}
       <main className="class-objects">
+        <p className="lesson-breadcrumb">
+          <NavLink to="/learn-basics">Learn the Basics</NavLink>
+          <span className="lesson-breadcrumb-separator" aria-hidden="true">
+            ›
+          </span>
+          <span className="lesson-breadcrumb-current" aria-current="page">
+            Classes and Objects
+          </span>
+        </p>
         <header className="class-objects-header">
-          <p className="class-objects-breadcrumb">
-            Learn the Basics › Classes and Objects
-          </p>
           <h1>Classes and Objects</h1>
           <p>
             Before you can build a class diagram, you need to tell the
@@ -123,13 +128,6 @@ john.id = "2024-001";`}
           </p>
         </section>
 
-        <button
-          type="button"
-          className="back-button"
-          onClick={() => navigate("/learn-basics")}
-        >
-          ← Back to Learn the Basics
-        </button>
       </main>
     </div>
   );

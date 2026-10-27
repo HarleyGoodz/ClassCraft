@@ -9,6 +9,8 @@ import ClassObjects from "./jsx/ClassObjects";
 import ClassConstruction from "./jsx/Classconstruction";
 import ClassDiagramConstruction from "./jsx/ClassDiagramConstruction";
 import SkillDevelopment from "./jsx/SkillDevelopment";
+import RelationshipsMultiplicity from "./jsx/RelationshipsMultiplicity";
+import FourOopPillars from "./jsx/FourOopPillars";
 import "./App.css";
 
 function App() {
@@ -20,6 +22,14 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learn-basics" element={<LearnBasics />} />
         <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />
+        <Route
+          path="/learn-basics/relationships-multiplicity"
+          element={<RelationshipsMultiplicity />}
+        />
+        <Route
+          path="/learn-basics/four-oop-pillars"
+          element={<FourOopPillars />}
+        />
         <Route path="/skill-development" element={<SkillDevelopment />} />
         <Route path="/learn-basics/class-construction" element={<ClassConstruction />} />
         <Route path="/class-diagram-construction" element={<ClassDiagramConstruction />}/>
