@@ -6,6 +6,7 @@ import Dashboard from "./jsx/Dashboard";
 import LearnBasics from "./jsx/LearnBasics";
 import MyProgress from "./jsx/MyProgress";
 import ClassObjects from "./jsx/ClassObjects";
+import ClassConstruction from "./jsx/Classconstruction";
 import ClassDiagramConstruction from "./jsx/ClassDiagramConstruction";
 import SkillDevelopment from "./jsx/SkillDevelopment";
 import "./App.css";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/learn-basics" element={<LearnBasics />} />
         <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />
         <Route path="/skill-development" element={<SkillDevelopment />} />
+        <Route path="/learn-basics/class-construction" element={<ClassConstruction />} />
         <Route path="/class-diagram-construction" element={<ClassDiagramConstruction />}/>
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/my-progress" element={<MyProgress />} />
