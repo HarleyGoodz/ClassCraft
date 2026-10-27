@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../css/relationships_multiplicity.css";
-import "../css/lesson_breadcrumb.css";
+import "../css/lesson_path_header.css";
 import {
   RelationshipConnector,
   RelationshipDiagram,
-} from "../components/RelationshipsMultiplicityDiagrams";
+} from "../components/realations_line";
 
 const RELATIONSHIPS = [
   {

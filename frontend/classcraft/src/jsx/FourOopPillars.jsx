@@ -2,11 +2,11 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../css/dashboard_css.css";
 import "../css/four_oop_pillars.css";
-import "../css/lesson_breadcrumb.css";
+import "../css/lesson_path_header.css";
 import {
   PillarDiagram,
   ScenarioDiagram,
-} from "../components/FourOopPillarDiagrams";
+} from "../components/pillars_diagram";
 
 const PILLARS = [
   {
