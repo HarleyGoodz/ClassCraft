@@ -1,0 +1,34 @@
+.lesson-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.lesson-breadcrumb a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.lesson-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.lesson-breadcrumb a:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.lesson-breadcrumb-separator {
+  color: #64748b;
+}
+
+.lesson-breadcrumb-current {
+  color: #64748b;
+}

@@ -1,0 +1,267 @@
+.four-oop-page {
+  flex: 0 1 1000px;
+  min-width: 0;
+  width: 100%;
+  max-width: 1000px;
+  padding: 2rem 2.5rem;
+  color: #0f172a;
+  text-align: left;
+}
+
+.four-oop-page h1,
+.four-oop-page h2 {
+  color: #0f172a;
+}
+
+.four-oop-header {
+  margin-bottom: 1.5rem;
+}
+
+.four-oop-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.85rem;
+  letter-spacing: normal;
+  line-height: 1.25;
+}
+
+.four-oop-header p {
+  max-width: 760px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.four-oop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  min-width: 0;
+}
+
+.four-oop-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.four-oop-card h2,
+.four-oop-scenario h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.four-oop-summary,
+.four-oop-example {
+  color: #475569;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.four-oop-diagram {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0.9rem 0;
+  padding: 0.65rem;
+  border-radius: 6px;
+  background: #f1f5f9;
+}
+
+.four-oop-card .four-oop-diagram {
+  max-width: 420px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.uml-class-outline {
+  fill: #fff;
+  stroke: #334155;
+  stroke-width: 1.5;
+  transition: fill 0.18s ease, stroke 0.18s ease, stroke-width 0.18s ease;
+}
+
+.uml-class-outline.is-highlighted {
+  fill: #eff6ff;
+  stroke: #2563eb;
+  stroke-width: 3;
+}
+
+.uml-divider,
+.uml-connector {
+  fill: none;
+  stroke: #475569;
+  stroke-width: 1.5;
+  transition: stroke 0.18s ease, stroke-width 0.18s ease;
+}
+
+.uml-connector.is-highlighted {
+  stroke: #2563eb;
+  stroke-width: 3;
+}
+
+.uml-generalization {
+  fill: #f1f5f9;
+  stroke: #475569;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.uml-generalization.is-highlighted {
+  fill: #dbeafe;
+  stroke: #2563eb;
+  stroke-width: 2.5;
+}
+
+.uml-class-title,
+.uml-stereotype,
+.uml-member,
+.uml-note {
+  fill: #0f172a;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.uml-class-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.uml-stereotype {
+  fill: #64748b;
+  font-size: 11px;
+  font-style: italic;
+  text-anchor: middle;
+}
+
+.uml-member {
+  font-size: 12px;
+}
+
+.uml-member.is-highlighted {
+  fill: #1d4ed8;
+  font-weight: 700;
+}
+
+.uml-note {
+  fill: #475569;
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+.four-oop-example {
+  margin: 0;
+}
+
+.four-oop-scenario {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.four-oop-scenario h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.scenario-intro {
+  margin: 0 0 1rem;
+  color: #475569;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.scenario-diagram {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 0 auto 1rem;
+  padding: 0.65rem;
+  border-radius: 6px;
+  background: #f1f5f9;
+}
+
+.scenario-pillar-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1.25rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.scenario-explorer-hint {
+  margin: 0 0 0.5rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.scenario-pillar-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.scenario-pillar-button.is-active {
+  color: #0f172a;
+  text-decoration-thickness: 2px;
+}
+
+.scenario-pillar-button:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.scenario-toggle:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.scenario-toggle {
+  margin-top: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.scenario-toggle:hover {
+  background: #f1f5f9;
+}
+
+.scenario-toggle:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .four-oop-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .scenario-pillar-list {
+    grid-template-columns: 1fr;
+  }
+
+  .four-oop-page {
+    padding: 1.5rem 1rem;
+  }
+}
