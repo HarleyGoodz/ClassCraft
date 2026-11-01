@@ -1,0 +1,322 @@
+/* ==================================================================
+   Main Layout & Header (Matching class_objects.css)
+   ================================================================== */
+.class-diagram-formation {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  max-width: 1100px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.cdf-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cdf-breadcrumb {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.cdf-breadcrumb-link {
+  color: #3b82f6;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cdf-breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.cdf-breadcrumb-separator {
+  margin: 0 0.5rem;
+  color: #cbd5e1;
+}
+
+.cdf-breadcrumb-current {
+  color: #64748b;
+}
+
+.cdf-scenario-counter {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.score-tracker {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.cdf-title {
+  margin: 0.5rem 0 0.5rem 0;
+  font-size: 1.85rem;
+  color: #0f172a;
+}
+
+.cdf-description {
+  margin: 0 0 2rem 0;
+  color: #475569;
+  max-width: 800px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* ==================================================================
+   Workspace (UML Box & Pieces)
+   ================================================================== */
+.cdf-workspace-layout {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+/* LEFT: UML Box */
+.cdf-uml-container {
+  width: 350px;
+}
+
+.cdf-uml-box {
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.cdf-uml-section {
+  padding: 1rem;
+}
+
+.cdf-uml-class {
+  border-bottom: 2px solid #cbd5e1;
+  min-height: 70px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #f8fafc;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.cdf-uml-attributes {
+  border-bottom: 2px solid #cbd5e1;
+  min-height: 130px;
+}
+
+.cdf-uml-methods {
+  min-height: 130px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.cdf-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.cdf-drop-placeholder {
+  color: #cbd5e1;
+  font-style: italic;
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.cdf-placed-item {
+  cursor: pointer;
+  padding: 0.35rem 0;
+  color: #334155;
+  font-size: 0.9rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  transition: color 0.15s;
+}
+
+.cdf-placed-item:hover {
+  color: #ef4444; /* Red hint to show it will be removed */
+  text-decoration: line-through;
+}
+
+.cdf-uml-class .cdf-placed-item {
+  font-weight: 700;
+  margin-top: 0.25rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1.05rem;
+}
+
+/* RIGHT: Element Bank */
+.cdf-bank-container {
+  width: 400px;
+}
+
+.cdf-bank-title {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  color: #0f172a;
+}
+
+.cdf-bank-box {
+  border: 2px dashed #cbd5e1;
+  padding: 1.25rem;
+  border-radius: 10px;
+  min-height: 420px;
+  background: #f8fafc;
+}
+
+.cdf-piece {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  margin-bottom: 0.6rem;
+  border-radius: 6px;
+  cursor: grab;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  color: #334155;
+  font-size: 0.9rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  transition: border-color 0.15s;
+}
+
+.cdf-piece:hover {
+  border-color: #3b82f6;
+}
+
+.cdf-piece:active {
+  cursor: grabbing;
+}
+
+.cdf-tip {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* ==================================================================
+   Bottom Action Bar & Buttons
+   ================================================================== */
+.cdf-action-bar {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+}
+
+.cdf-action-left,
+.cdf-action-right {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cdf-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-family: inherit;
+}
+
+.cdf-btn-prev {
+  background: #fff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.cdf-btn-prev:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.cdf-btn-prev:disabled {
+  background: #f8fafc;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+.cdf-btn-back {
+  background: transparent;
+  color: #64748b;
+  border: none;
+}
+
+.cdf-btn-back:hover {
+  color: #0f172a;
+  background: transparent;
+}
+
+.cdf-btn-reset {
+  background: #fff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.cdf-btn-reset:hover {
+  background: #f1f5f9;
+}
+
+.cdf-btn-check {
+  background: #3b82f6;
+  color: white;
+  border: none;
+}
+
+.cdf-btn-check:hover {
+  background: #2563eb;
+}
+
+.cdf-btn-next {
+  background: #fff;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}
+
+.cdf-btn-next:hover {
+  background: #eff6ff;
+}
+
+/* ==================================================================
+   Feedback Alerts (Matching class_objects.css)
+   ================================================================== */
+.cdf-feedback {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  white-space: pre-line;
+  line-height: 1.55;
+  font-size: 0.9rem;
+}
+
+.cdf-feedback-error {
+  background: #fef3c7; /* Amber background from your original file */
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.cdf-feedback-success {
+  background: #dcfce7; /* Green background from your original file */
+  color: #166534;
+  border: 1px solid #86efac;
+}

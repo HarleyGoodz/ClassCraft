@@ -11,7 +11,12 @@ import ClassDiagramConstruction from "./jsx/ClassDiagramConstruction";
 import SkillDevelopment from "./jsx/SkillDevelopment";
 import RelationshipsMultiplicity from "./jsx/RelationshipsMultiplicity";
 import FourOopPillars from "./jsx/FourOopPillars";
+import ClassDiagramFormation from './jsx/ClassDiagramFormation';
+import ClassRelationships from './jsx/ClassRelationships';
+import Multiplicity from './jsx/Multiplicity';
+import OOPClassModeling from './jsx/OOPClassModeling';
 import "./App.css";
+
 
 function App() {
   return (
@@ -22,19 +27,17 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learn-basics" element={<LearnBasics />} />
         <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />
-        <Route
-          path="/learn-basics/relationships-multiplicity"
-          element={<RelationshipsMultiplicity />}
-        />
-        <Route
-          path="/learn-basics/four-oop-pillars"
-          element={<FourOopPillars />}
-        />
+        <Route path="/learn-basics/relationships-multiplicity" element={<RelationshipsMultiplicity />} />
+        <Route path="/learn-basics/four-oop-pillars" element={<FourOopPillars />} />
         <Route path="/skill-development" element={<SkillDevelopment />} />
         <Route path="/learn-basics/class-construction" element={<ClassConstruction />} />
         <Route path="/class-diagram-construction" element={<ClassDiagramConstruction />}/>
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/my-progress" element={<MyProgress />} />
+        <Route path="/skill-development/class-diagram-formation" element={<ClassDiagramFormation />} />
+        <Route path="/skill-development/class-relationships" element={<ClassRelationships />} />
+        <Route path="/skill-development/multiplicity" element={<Multiplicity />} />
+        <Route path="/skill-development/oop-class-modeling" element={<OOPClassModeling />} />
       </Routes>
     </BrowserRouter>
   );
