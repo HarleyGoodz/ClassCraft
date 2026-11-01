@@ -1,8 +1,80 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../css/class_objects.css";
+import "../css/class_objects_scenarios.css";
 import "../css/lesson_path_header.css";
 
+/*
+  Extra scenarios shown by the "Show another scenario" button.
+  Each one has a class (blueprint: attribute names only, no values)
+  and objects created from it (the same attributes, now with real values).
+*/
+const SCENARIOS = [
+  {
+    className: "Car",
+    attributes: ["brand", "color", "speed"],
+    methods: ["start()", "brake()"],
+    objects: [
+      { name: "myCar", values: ["Toyota", "red", "0 km/h"] },
+      { name: "yourCar", values: ["Honda", "blue", "0 km/h"] },
+    ],
+    explain:
+      "Car is the blueprint: every car has a brand, a color, and a speed, and can start and brake. myCar and yourCar are two real cars made from it, each with its own values.",
+  },
+  {
+    className: "Dog",
+    attributes: ["name", "breed", "age"],
+    methods: ["bark()", "eat()"],
+    objects: [
+      { name: "bantay", values: ["Bantay", "Aspin", "3"] },
+      { name: "bella", values: ["Bella", "Poodle", "1"] },
+    ],
+    explain:
+      "Dog only says that every dog has a name, a breed, and an age, and can bark and eat. bantay and bella are real dogs, each with different values.",
+  },
+  {
+    className: "Phone",
+    attributes: ["brand", "model", "batteryLevel"],
+    methods: ["call()", "charge()"],
+    objects: [
+      { name: "phoneA", values: ["Samsung", "Galaxy A15", "80%"] },
+      { name: "phoneB", values: ["Apple", "iPhone 13", "35%"] },
+    ],
+    explain:
+      "Phone lists what every phone has and can do. phoneA and phoneB are two actual phones, so they can have different brands and different battery levels.",
+  },
+  {
+    className: "Book",
+    attributes: ["title", "author", "pages"],
+    methods: ["open()", "read()"],
+    objects: [
+      { name: "book1", values: ["Noli Me Tangere", "Jose Rizal", "439"] },
+      { name: "book2", values: ["Harry Potter", "J.K. Rowling", "309"] },
+    ],
+    explain:
+      "Book is the template: every book has a title, an author, and a number of pages. book1 and book2 are two real books made from that template.",
+  },
+  {
+    className: "BankAccount",
+    attributes: ["owner", "balance"],
+    methods: ["deposit()", "withdraw()"],
+    objects: [
+      { name: "account1", values: ["Maria", "PHP 5,000"] },
+      { name: "account2", values: ["Juan", "PHP 12,500"] },
+    ],
+    explain:
+      "BankAccount says every account has an owner and a balance, and can deposit and withdraw. account1 and account2 are real accounts that each keep their own balance.",
+  },
+];
+
 export default function ClassObjects() {
+  const [scenarioIndex, setScenarioIndex] = useState(0);
+  const scenario = SCENARIOS[scenarioIndex];
+
+  function showAnotherScenario() {
+    setScenarioIndex((i) => (i + 1) % SCENARIOS.length);
+  }
+
   return (
     <div className="dashboard-layout">
       {/* ===== Sidebar ===== */}
@@ -128,6 +200,84 @@ john.id = "2024-001";`}
           </p>
         </section>
 
+        {/* ===== Another scenario ===== */}
+        <section className="scenario-section" aria-labelledby="scenario-title">
+          <div className="scenario-top">
+            <div>
+              <h2 id="scenario-title">See it in another scenario</h2>
+              <p className="scenario-intro">
+                The class is the blueprint. The objects are the real things made
+                from it.
+              </p>
+            </div>
+            <span className="scenario-counter">
+              Scenario {scenarioIndex + 1} of {SCENARIOS.length}
+            </span>
+          </div>
+
+          <div className="scenario-body" aria-live="polite">
+            {/* Class (blueprint) */}
+            <div className="scenario-card scenario-card--class">
+              <span className="scenario-tag">Class (blueprint)</span>
+              <h3>{scenario.className}</h3>
+
+              <h4>Attributes</h4>
+              <ul>
+                {scenario.attributes.map((attr) => (
+                  <li key={attr}>
+                    <code>{attr}</code>
+                  </li>
+                ))}
+              </ul>
+
+              <h4>Methods</h4>
+              <ul>
+                {scenario.methods.map((method) => (
+                  <li key={method}>
+                    <code>{method}</code>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="scenario-small">No values yet. It is only a plan.</p>
+            </div>
+
+            <div className="scenario-arrow" aria-hidden="true">
+              <span>creates</span>
+              <span className="scenario-arrow-icon">→</span>
+            </div>
+
+            {/* Objects (real things) */}
+            <div className="scenario-objects">
+              {scenario.objects.map((obj) => (
+                <div
+                  key={obj.name}
+                  className="scenario-card scenario-card--object"
+                >
+                  <span className="scenario-tag">Object (real thing)</span>
+                  <h3>{obj.name}</h3>
+                  <ul>
+                    {scenario.attributes.map((attr, i) => (
+                      <li key={attr}>
+                        <code>{attr}</code>: <strong>{obj.values[i]}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="scenario-explain">{scenario.explain}</p>
+
+          <button
+            type="button"
+            className="submit-button"
+            onClick={showAnotherScenario}
+          >
+            Show another scenario
+          </button>
+        </section>
       </main>
     </div>
   );
