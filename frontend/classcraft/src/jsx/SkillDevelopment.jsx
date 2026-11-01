@@ -86,14 +86,7 @@ export default function SkillDevelopment() {
           >
             Class Diagram Construction
           </NavLink>
-          <NavLink
-            to="/my-progress"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            My Progress
-          </NavLink>
+          
         </nav>
       </aside>
 
@@ -125,7 +118,7 @@ export default function SkillDevelopment() {
                 <button
                   type="button"
                   className="practice-button"
-                  onClick={() =>
+                  onClick={() => 
                     navigate(`/skill-development/${exp.key}`)
                   }
                 >

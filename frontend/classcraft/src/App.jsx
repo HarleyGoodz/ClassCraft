@@ -4,7 +4,6 @@ import Login from "./jsx/Login";
 import Register from "./jsx/Register";
 import Dashboard from "./jsx/Dashboard";
 import LearnBasics from "./jsx/LearnBasics";
-import MyProgress from "./jsx/MyProgress";
 import ClassObjects from "./jsx/ClassObjects";
 import ClassConstruction from "./jsx/Classconstruction";
 import ClassDiagramConstruction from "./jsx/ClassDiagramConstruction";
@@ -33,7 +32,6 @@ function App() {
         <Route path="/learn-basics/class-construction" element={<ClassConstruction />} />
         <Route path="/class-diagram-construction" element={<ClassDiagramConstruction />}/>
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/my-progress" element={<MyProgress />} />
         <Route path="/skill-development/class-diagram-formation" element={<ClassDiagramFormation />} />
         <Route path="/skill-development/class-relationships" element={<ClassRelationships />} />
         <Route path="/skill-development/multiplicity" element={<Multiplicity />} />

@@ -49,43 +49,26 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadUser() {
-      const { data, error: authError } = await supabase.auth.getUser();
+      // 1. Check authentication with Supabase
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-      if (authError || !data.user) {
+      if (authError || !user) {
         navigate("/", { replace: true });
         return;
       }
 
       try {
-        // FIX 1: Add a 5-second timeout to prevent infinite loading
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch(`http://localhost:8080/api/users`, {
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId); // Clear timeout if successful
-
-        if (!response.ok) throw new Error("Could not load your profile.");
-        
-        const users = await response.json();
-        const profile = users.find((item) => item.authUserId === data.user.id);
-
-        if (profile) setUsername(profile.username);
-        else setError("Your profile was not found in the database.");
+        // 2. Read the username directly from the user's metadata
+        // This is the data you saved during registration
+        const displayName = user.user_metadata?.username || "User";
+        setUsername(displayName);
       } catch (err) {
-        // FIX 2: Handle the timeout specifically
-        if (err.name === 'AbortError') {
-          setError("Backend connection timed out. Is the Spring Boot server running?");
-        } else {
-          setError(err.message || "Could not connect to the backend.");
-        }
+        setError("Could not load your profile data.");
       } finally {
-        // FIX 3: This now ALWAYS runs, so the page will never be stuck
         setLoading(false);
       }
     }
+    
     loadUser();
   }, [navigate]);
 
