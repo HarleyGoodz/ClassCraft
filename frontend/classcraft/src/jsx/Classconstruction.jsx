@@ -2,16 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../css/LearnBasics_css.css";
 import "../css/ClassConstruction_css.css";
-import "../css/lesson_breadcrumb.css";
-
-/*
-  Class Construction – drag and drop, check at the end.
-  1. The learner drags every piece from the bank into a compartment (or leaves
-     it in the bank if they think it does not belong to the class).
-  2. Nothing is revealed while they work.
-  3. Pressing "Check answers" marks each piece and reveals the correct class box.
-  No scoring or progress tracking yet.
-*/
+import "../css/lesson_path_header.css";
 
 const ZONES = ["name", "attributes", "methods"];
 
@@ -21,33 +12,48 @@ const ZONE_LABELS = {
   methods: "Methods",
 };
 
-const ZONE_HINTS = {
-  name: "The class name is a singular noun in PascalCase.",
-  attributes:
-    "Attributes are the data an object stores: visibility name: type (usually private, -).",
-  methods:
-    "Methods are the behaviors an object performs: visibility name(parameters): return type (usually public, +).",
-};
+/*
+  Each piece has:
+  - zone: the compartment it belongs to (null = does not belong to Student)
+  - why:  an explanation for each WRONG compartment it could be dropped into.
+          These are shown only after "Check answers", and only for the pieces
+          the learner misplaced. The correct answer is never revealed.
 
-// zone = the compartment the piece belongs to (null = does not belong to Student)
+  Attributes = information about a student (id number, full name, year level).
+  Methods    = things a student does or that work with the student's data
+               (get id number, promote year level, update name, submit assignment).
+*/
+
+// Explanations for an attribute (e.g. "- fullName: String") placed in the wrong compartment
+const attributeWhy = () => ({
+  name: "A class name is just one simple noun with no sign, but this one has a \"-\" sign like an attribute.",
+  methods: "Methods have a \"+\" sign, but this one has a \"-\" sign, so it is an attribute, which is used to store data.",
+});
+
+// Explanations for a method (e.g. "+ submitAssignment(): void") placed in the wrong compartment
+const methodWhy = () => ({
+  name: "A class name is just one simple noun with no sign, but this one has a \"+\" sign like a method.",
+  attributes: "Attributes have a \"-\" sign, but this one has a \"+\" sign, so it is a method, which is an action word that works with the data stored in attributes.",
+});
+
 // Order here is the (mixed) order shown in the bank.
 const PIECES = [
-  { id: "m2", text: "+ getGpa(): double", zone: "methods" },
-  { id: "a1", text: "- studentId: int", zone: "attributes" },
-  { id: "x1", text: "Students", zone: null, note: "A class name should be singular, not plural." },
-  { id: "m1", text: "+ enroll(course: Course): void", zone: "methods" },
-  { id: "n1", text: "Student", zone: "name" },
-  { id: "a3", text: "- gpa: double", zone: "attributes" },
-  { id: "x2", text: "- courseCode: String", zone: null, note: "This data describes a Course, not a Student." },
-  { id: "a2", text: "- fullName: String", zone: "attributes" },
-  { id: "m3", text: "+ updateName(newName: String): void", zone: "methods" },
-  { id: "x3", text: "+ calculateTax(): double", zone: null, note: "Tax calculation is not a behavior of a Student." },
-];
-
-const VISIBILITY = [
-  { symbol: "+", meaning: "public" },
-  { symbol: "-", meaning: "private" },
-  { symbol: "#", meaning: "protected" },
+  { id: "m2", text: "+ submitAssignment(): void", zone: "methods", why: methodWhy() },
+  { id: "a1", text: "- idNumber: int", zone: "attributes", why: attributeWhy() },
+  { id: "m1", text: "+ getIdNumber(): int", zone: "methods", why: methodWhy() },
+  { id: "m4", text: "+ promoteYearLevel(): void", zone: "methods", why: methodWhy() },
+  {
+    id: "n1",
+    text: "Student",
+    zone: "name",
+    why: {
+      attributes: "Attributes have a \"-\" sign, but this is the name of the class, which has no sign.",
+      methods: "Methods have a \"+\" sign, but this is the name of the class, which has no sign.",
+    },
+  },
+  { id: "a3", text: "- yearLevel: int", zone: "attributes", why: attributeWhy() },
+  { id: "a2", text: "- fullName: String", zone: "attributes", why: attributeWhy() },
+  { id: "m3", text: "+ updateName(newName: String): void", zone: "methods", why: methodWhy() },
 ];
 
 const emptyLocations = () =>
@@ -93,6 +99,7 @@ export default function ClassConstruction() {
   }
 
   // ----- Checking -----
+  // "correct" | "wrong" (placed in the wrong compartment) | "missing" (should be placed but was not)
   function status(piece) {
     const loc = locations[piece.id];
     if (piece.zone === null) return loc === "bank" ? "correct" : "wrong";
@@ -100,17 +107,18 @@ export default function ClassConstruction() {
     return loc === piece.zone ? "correct" : "wrong";
   }
 
+  // Explains why a piece the learner dragged into a compartment is wrong.
+  // Pieces still in the bank never get a hint.
   function feedbackFor(piece) {
-    const s = status(piece);
-    if (s === "correct") return null;
-    if (piece.zone === null) return piece.note;
-    if (s === "missing")
-      return `"${piece.text}" was left out. It belongs in the ${ZONE_LABELS[piece.zone]} compartment. ${ZONE_HINTS[piece.zone]}`;
-    return `"${piece.text}" belongs in the ${ZONE_LABELS[piece.zone]} compartment, not ${ZONE_LABELS[locations[piece.id]]}. ${ZONE_HINTS[piece.zone]}`;
+    if (status(piece) !== "wrong") return null;
+    return piece.why[locations[piece.id]];
   }
 
   const allCorrect = checked && PIECES.every((p) => status(p) === "correct");
-  const problems = checked ? PIECES.filter((p) => status(p) !== "correct") : [];
+  const hasWrongPlacement =
+    checked && PIECES.some((p) => status(p) === "wrong");
+  const hasUnplaced =
+    checked && PIECES.some((p) => status(p) === "missing");
 
   function checkAnswers() {
     setChecked(true);
@@ -130,40 +138,44 @@ export default function ClassConstruction() {
   // ----- Rendering helpers -----
   function renderPiece(piece, extraClass = "") {
     const s = checked ? status(piece) : null;
+    const isWrong = s === "wrong";
     const classes = [
       "cc-piece",
       extraClass,
       selected === piece.id ? "selected" : "",
-      s ? `cc-${s}` : "",
+      isWrong ? "cc-wrong" : "",
     ]
       .filter(Boolean)
       .join(" ");
 
     return (
-      <div
-        key={piece.id}
-        className={classes}
-        draggable={!checked}
-        onDragStart={(e) => handleDragStart(e, piece)}
-        onDragEnd={() => setDragOver(null)}
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleSelect(piece.id);
-        }}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
+      <div key={piece.id} className="cc-piece-wrap">
+        <div
+          className={classes}
+          draggable={!checked}
+          onDragStart={(e) => handleDragStart(e, piece)}
+          onDragEnd={() => setDragOver(null)}
+          onClick={(e) => {
+            e.stopPropagation();
             toggleSelect(piece.id);
-          }
-        }}
-      >
-        {s === "correct" && locations[piece.id] !== "bank" && (
-          <span className="cc-mark" aria-label="correct">✓ </span>
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleSelect(piece.id);
+            }
+          }}
+        >
+          {isWrong && <span className="cc-mark" aria-label="incorrect">✗ </span>}
+          {piece.text}
+        </div>
+        {isWrong && (
+          <div className="cc-inline-hint" role="status">
+            {feedbackFor(piece)}
+          </div>
         )}
-        {s === "wrong" && <span className="cc-mark" aria-label="incorrect">✗ </span>}
-        {piece.text}
       </div>
     );
   }
@@ -204,29 +216,6 @@ export default function ClassConstruction() {
         ) : (
           items.map((p) => renderPiece(p, "cc-in-zone"))
         )}
-      </div>
-    );
-  }
-
-  function renderSolution() {
-    return (
-      <div className="cc-class-box cc-solution-box">
-        {ZONES.map((zone) => (
-          <div
-            key={zone}
-            className={zone === "name" ? "cc-zone cc-zone-name" : "cc-zone"}
-          >
-            <span className="cc-zone-label">{ZONE_LABELS[zone]}</span>
-            {PIECES.filter((p) => p.zone === zone).map((p) => (
-              <div
-                key={p.id}
-                className={zone === "name" ? "cc-placed cc-placed-name" : "cc-placed"}
-              >
-                {p.text}
-              </div>
-            ))}
-          </div>
-        ))}
       </div>
     );
   }
@@ -286,8 +275,7 @@ export default function ClassConstruction() {
           <h1>Class Construction</h1>
           <p>
             Build the <strong>Student</strong> class. Drag each piece into the compartment where
-            it belongs. Leave a piece in the bank if it does not belong to a Student. When you are
-            ready, press <strong>Check answers</strong>.
+            it belongs. When you are ready, press <strong>Check answers</strong>.
           </p>
         </header>
 
@@ -350,47 +338,20 @@ export default function ClassConstruction() {
                   <div className="cc-feedback ok">
                     Great job! Every piece is in the right place.
                   </div>
-                ) : (
-                  <>
-                    <div className="cc-feedback hint">
-                      Some pieces are not quite right. Here is why:
-                    </div>
-                    <ul className="cc-problem-list">
-                      {problems.map((p) => (
-                        <li key={p.id}>{feedbackFor(p)}</li>
-                      ))}
-                    </ul>
-                  </>
-                )}
+                ) : hasWrongPlacement ? (
+                  <div className="cc-feedback hint">
+                    Some of the pieces you placed are not quite right. See the notes under them in
+                    your class box.
+                  </div>
+                ) : hasUnplaced ? (
+                  <div className="cc-feedback ok">
+                    Nothing you placed so far is wrong. Keep building the class, then check again.
+                  </div>
+                ) : null}
               </div>
             )}
           </section>
         </div>
-
-        {/* Correct formation: only revealed after checking */}
-        {checked && (
-          <section className="cc-solution" aria-label="Correct class diagram">
-            <h2>The correct class</h2>
-            <div className="cc-solution-layout">
-              {renderSolution()}
-              <div>
-                <p>
-                  A class box always has three compartments: the <strong>name</strong>, its{" "}
-                  <strong>attributes</strong>, and its <strong>methods</strong>.
-                </p>
-                <h3>Visibility symbols</h3>
-                <ul className="cc-legend">
-                  {VISIBILITY.map((v) => (
-                    <li key={v.symbol}>
-                      <code>{v.symbol}</code> {v.meaning}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-        )}
-
       </main>
     </div>
   );
