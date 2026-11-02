@@ -1,86 +1,139 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../css/oop_class_modeling.css";
+import "../css/oop_class_modeling_feedback.css";
 
 // --- SCENARIO DATABASE ---
 export const OOP_SCENARIOS = [
   {
     id: 1,
-    title: "Dragon's Lair: Creature and Dragon",
+    title: "Car Dealership: Vehicle and Car",
     scenario:
-      "In a fantasy RPG, every Creature is an abstract blueprint: it has a protected 'health' value and a public 'attack()' action, but no creature is ever spawned as just a 'Creature'. A Dragon is a specialized kind of Creature with a private 'fireBreathPower'. Each Dragon inherits from exactly one Creature. Model the parent and child classes, protect the data properly, and connect them with the correct relationship and multiplicity.",
-    targetParent: "Creature",
-    targetChild: "Dragon",
+      "A Vehicle is only a general idea (abstract), because nobody buys just a 'Vehicle'. It has a protected 'fuelLevel' and a public 'start()'. A Car is a kind of Vehicle with a private 'numberOfDoors'. Each Car is exactly one Vehicle.",
+    targetParent: "Vehicle",
+    targetChild: "Car",
     correctRelationship: "Inheritance",
     correctMultiplicity: "1",
+    relationshipClue: "the scenario says a Car is a kind of Vehicle",
+    multiplicityClue: "the scenario says each Car is exactly one Vehicle",
     pieces: [
-      { id: "p1", text: "«abstract»\nCreature", type: "parent" },
-      { id: "p2", text: "Dragon", type: "child" },
-      { id: "p3", text: "Treasure", type: "distractor" },
-      { id: "p4", text: "health: int", type: "parent_attr", correctVis: "#" },
-      { id: "p5", text: "fireBreathPower: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "goldHoard: int", type: "distractor" },
-      { id: "p7", text: "attack(): void", type: "parent_method", correctVis: "+" },
+      { id: "p1", text: "«abstract»\nVehicle", type: "parent" },
+      { id: "p2", text: "Car", type: "child" },
+      { id: "p3", text: "Driver", type: "distractor" },
+      { id: "p4", text: "fuelLevel: int", type: "parent_attr", correctVis: "#" },
+      { id: "p5", text: "numberOfDoors: int", type: "child_attr", correctVis: "-" },
+      { id: "p6", text: "driverName: String", type: "distractor" },
+      { id: "p7", text: "start(): void", type: "parent_method", correctVis: "+" },
     ],
   },
   {
     id: 2,
-    title: "Haunted Mansion: House and Room",
+    title: "Real Estate: House and Room",
     scenario:
-      "A spooky Mansion is made up of at least one Room. If the Mansion is demolished, every Room inside it disappears too, because a Room cannot exist on its own (a strong whole-part relationship). The Mansion's 'address' is public, while each Room's 'ghostCount' is private so only the Room can change it. A Room can be 'haunt()'-ed, which is a public action. Model the classes, the relationship, and the multiplicity on the Room end.",
-    targetParent: "Mansion",
+      "A House has one or more Rooms. If the House is demolished, its Rooms are gone too. The House has a public 'address'. A Room has a private 'floorArea' and a public 'turnOnLights()'.",
+    targetParent: "House",
     targetChild: "Room",
     correctRelationship: "Composition",
     correctMultiplicity: "1..*",
+    relationshipClue: "the scenario says the Rooms are gone when the House is demolished",
+    multiplicityClue: "the scenario says a House has one or more Rooms",
     pieces: [
-      { id: "p1", text: "Mansion", type: "parent" },
+      { id: "p1", text: "House", type: "parent" },
       { id: "p2", text: "Room", type: "child" },
-      { id: "p3", text: "Ghost", type: "distractor" },
+      { id: "p3", text: "Tenant", type: "distractor" },
       { id: "p4", text: "address: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "ghostCount: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "candlesLit: int", type: "distractor" },
-      { id: "p7", text: "haunt(): void", type: "child_method", correctVis: "+" },
+      { id: "p5", text: "floorArea: double", type: "child_attr", correctVis: "-" },
+      { id: "p6", text: "monthlyRent: double", type: "distractor" },
+      { id: "p7", text: "turnOnLights(): void", type: "child_method", correctVis: "+" },
     ],
   },
   {
     id: 3,
-    title: "Adventurer's Guild: Guild and Adventurer",
+    title: "Basketball League: Team and Player",
     scenario:
-      "A Guild recruits Adventurers. A Guild may have no members yet or many members, but an Adventurer is a free spirit: if the Guild disbands, the Adventurer still exists and can join another Guild. The Guild's 'guildName' is public, the Adventurer's 'questsDone' counter is private, and the Guild can publicly 'recruit()' members. Model the classes and choose the relationship that shows the part can live without the whole, along with the correct multiplicity.",
-    targetParent: "Guild",
-    targetChild: "Adventurer",
+      "A Team has zero or more Players. If the Team disbands, the Players still exist and can join another Team. The Team has a public 'teamName' and a public 'addPlayer()'. A Player has a private 'jerseyNumber'.",
+    targetParent: "Team",
+    targetChild: "Player",
     correctRelationship: "Aggregation",
     correctMultiplicity: "0..*",
+    relationshipClue: "the scenario says the Players still exist when the Team disbands",
+    multiplicityClue: "the scenario says a Team has zero or more Players",
     pieces: [
-      { id: "p1", text: "Guild", type: "parent" },
-      { id: "p2", text: "Adventurer", type: "child" },
-      { id: "p3", text: "Tavern", type: "distractor" },
-      { id: "p4", text: "guildName: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "questsDone: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "swordType: String", type: "distractor" },
-      { id: "p7", text: "recruit(): void", type: "parent_method", correctVis: "+" },
+      { id: "p1", text: "Team", type: "parent" },
+      { id: "p2", text: "Player", type: "child" },
+      { id: "p3", text: "Stadium", type: "distractor" },
+      { id: "p4", text: "teamName: String", type: "parent_attr", correctVis: "+" },
+      { id: "p5", text: "jerseyNumber: int", type: "child_attr", correctVis: "-" },
+      { id: "p6", text: "ticketPrice: double", type: "distractor" },
+      { id: "p7", text: "addPlayer(): void", type: "parent_method", correctVis: "+" },
     ],
   },
   {
     id: 4,
-    title: "Cat Cafe: Customer and Cat",
+    title: "Public Library: Member and Book",
     scenario:
-      "At a cozy Cat Cafe, a Customer can cuddle many Cats during a visit, and the same Cat can be cuddled by many Customers over the day. Neither one is a part of the other, and neither owns the other. It is a simple connection. The Customer's 'name' is public, the Cat's 'mood' is private (you never know what a cat is thinking!), and the Cat can publicly 'purr()'. Model the classes and the relationship, using the multiplicity that shows a Customer may cuddle zero or many Cats.",
-    targetParent: "Customer",
-    targetChild: "Cat",
+      "A Member can borrow zero or many Books, and a Book can be borrowed by many Members. Neither owns the other. The Member has a public 'name'. A Book has a private 'availableCopies' and a public 'borrow()'.",
+    targetParent: "Member",
+    targetChild: "Book",
     correctRelationship: "Association",
     correctMultiplicity: "0..*",
+    relationshipClue: "the scenario says neither one owns the other",
+    multiplicityClue: "the scenario says a Member can borrow zero or many Books",
     pieces: [
-      { id: "p1", text: "Customer", type: "parent" },
-      { id: "p2", text: "Cat", type: "child" },
-      { id: "p3", text: "Barista", type: "distractor" },
+      { id: "p1", text: "Member", type: "parent" },
+      { id: "p2", text: "Book", type: "child" },
+      { id: "p3", text: "Librarian", type: "distractor" },
       { id: "p4", text: "name: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "mood: String", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "latteArtStyle: String", type: "distractor" },
-      { id: "p7", text: "purr(): void", type: "child_method", correctVis: "+" },
+      { id: "p5", text: "availableCopies: int", type: "child_attr", correctVis: "-" },
+      { id: "p6", text: "librarianSalary: double", type: "distractor" },
+      { id: "p7", text: "borrow(): void", type: "child_method", correctVis: "+" },
     ],
   },
 ];
+
+// --- TEACHING TEXT ---
+const VIS_MEANING = {
+  "+": "public (anyone can use it)",
+  "-": "private (only its own class can use it)",
+  "#": "protected (only its own class and its child classes can use it)",
+};
+const VIS_WORD = { "+": "public", "-": "private", "#": "protected" };
+
+const REL_MEANING = {
+  Association: "a simple link between two classes, where neither one is a kind of the other or a part of the other",
+  Inheritance: "an 'is a' link, where the child is a special kind of the parent",
+  Aggregation: "a 'has a' link where the parts can still exist on their own if the whole is gone",
+  Composition: "a 'has a' link where the parts are destroyed when the whole is destroyed",
+};
+
+const MULT_MEANING = {
+  "1": "exactly one",
+  "0..1": "zero or one",
+  "0..*": "zero or many",
+  "1..*": "one or many",
+};
+
+// --- HELPERS ---
+// What kind of thing is this piece? (decided by how it is written)
+const kindOf = (text) => (text.includes("(") ? "method" : text.includes(":") ? "attribute" : "class");
+const sectionKind = (section) =>
+  section.endsWith("_name") ? "class" : section.endsWith("_attr") ? "attribute" : "method";
+const sectionSide = (section) => (section.startsWith("parent") ? "parent" : "child");
+const displayName = (piece) => {
+  const kind = kindOf(piece.text);
+  if (kind === "class") return piece.text.replace(/«abstract»\n?/, "");
+  if (kind === "attribute") return piece.text.split(":")[0];
+  return piece.text.split("(")[0] + "()";
+};
+// The section a real (non-distractor) piece belongs in
+const expectedSection = (piece) => {
+  if (piece.type === "parent") return "parent_name";
+  if (piece.type === "child") return "child_name";
+  if (piece.type === "distractor") return null;
+  return piece.type;
+};
+const ownerSide = (piece) =>
+  piece.type === "parent" || piece.type.startsWith("parent_") ? "parent" : "child";
 
 export default function OOPClassModeling() {
   const navigate = useNavigate();
@@ -92,7 +145,7 @@ export default function OOPClassModeling() {
   const [parentName, setParentName] = useState(null);
   const [parentAttrs, setParentAttrs] = useState([]);
   const [parentMethods, setParentMethods] = useState([]);
-  
+
   const [childName, setChildName] = useState(null);
   const [childAttrs, setChildAttrs] = useState([]);
   const [childMethods, setChildMethods] = useState([]);
@@ -101,7 +154,7 @@ export default function OOPClassModeling() {
   const [droppedRelationship, setDroppedRelationship] = useState(null);
   const [droppedMultiplicity, setDroppedMultiplicity] = useState(null);
 
-  const [availablePieces, setAvailablePieces] = useState(() => 
+  const [availablePieces, setAvailablePieces] = useState(() =>
     [...currentScenario.pieces].sort(() => Math.random() - 0.5)
   );
 
@@ -120,36 +173,29 @@ export default function OOPClassModeling() {
     if (!pieceData) return;
     const piece = JSON.parse(pieceData);
 
-    // Helper to remove from bank
     const removeFromBank = (id) => {
-      setAvailablePieces(prev => prev.filter(p => p.id !== id));
+      setAvailablePieces((prev) => prev.filter((p) => p.id !== id));
     };
 
     // --- NO RESTRICTIONS: Anything can go anywhere ---
-    
     if (targetSection === "parent_name") {
-      if (parentName) setAvailablePieces(prev => [...prev, parentName]); // Return old piece
+      if (parentName) setAvailablePieces((prev) => [...prev, parentName]); // Return old piece
       setParentName(piece);
       removeFromBank(piece.id);
-    } 
-    else if (targetSection === "child_name") {
-      if (childName) setAvailablePieces(prev => [...prev, childName]);
+    } else if (targetSection === "child_name") {
+      if (childName) setAvailablePieces((prev) => [...prev, childName]);
       setChildName(piece);
       removeFromBank(piece.id);
-    }
-    else if (targetSection === "parent_attr") {
+    } else if (targetSection === "parent_attr") {
       setParentAttrs([...parentAttrs, { ...piece, currentVis: "+" }]);
       removeFromBank(piece.id);
-    }
-    else if (targetSection === "child_attr") {
+    } else if (targetSection === "child_attr") {
       setChildAttrs([...childAttrs, { ...piece, currentVis: "+" }]);
       removeFromBank(piece.id);
-    }
-    else if (targetSection === "parent_method") {
+    } else if (targetSection === "parent_method") {
       setParentMethods([...parentMethods, { ...piece, currentVis: "+" }]);
       removeFromBank(piece.id);
-    }
-    else if (targetSection === "child_method") {
+    } else if (targetSection === "child_method") {
       setChildMethods([...childMethods, { ...piece, currentVis: "+" }]);
       removeFromBank(piece.id);
     }
@@ -180,102 +226,257 @@ export default function OOPClassModeling() {
   const removePiece = (piece, section) => {
     if (section === "parent_name") setParentName(null);
     if (section === "child_name") setChildName(null);
-    if (section === "parent_attr") setParentAttrs(parentAttrs.filter(a => a.id !== piece.id));
-    if (section === "child_attr") setChildAttrs(childAttrs.filter(a => a.id !== piece.id));
-    if (section === "parent_method") setParentMethods(parentMethods.filter(m => m.id !== piece.id));
-    if (section === "child_method") setChildMethods(childMethods.filter(m => m.id !== piece.id));
-    setAvailablePieces(prev => [...prev, piece]);
+    if (section === "parent_attr") setParentAttrs(parentAttrs.filter((a) => a.id !== piece.id));
+    if (section === "child_attr") setChildAttrs(childAttrs.filter((a) => a.id !== piece.id));
+    if (section === "parent_method") setParentMethods(parentMethods.filter((m) => m.id !== piece.id));
+    if (section === "child_method") setChildMethods(childMethods.filter((m) => m.id !== piece.id));
+    setAvailablePieces((prev) => [...prev, piece]);
     setIsSubmitted(false);
   };
 
   const toggleVisibility = (item, section) => {
     const visOrder = ["+", "-", "#"];
     const nextVis = visOrder[(visOrder.indexOf(item.currentVis) + 1) % visOrder.length];
-    
-    if (section === "parent_attr") setParentAttrs(prev => prev.map(a => a.id === item.id ? { ...a, currentVis: nextVis } : a));
-    if (section === "child_attr") setChildAttrs(prev => prev.map(a => a.id === item.id ? { ...a, currentVis: nextVis } : a));
-    if (section === "parent_method") setParentMethods(prev => prev.map(m => m.id === item.id ? { ...m, currentVis: nextVis } : m));
-    if (section === "child_method") setChildMethods(prev => prev.map(m => m.id === item.id ? { ...m, currentVis: nextVis } : m));
+
+    if (section === "parent_attr") setParentAttrs((prev) => prev.map((a) => (a.id === item.id ? { ...a, currentVis: nextVis } : a)));
+    if (section === "child_attr") setChildAttrs((prev) => prev.map((a) => (a.id === item.id ? { ...a, currentVis: nextVis } : a)));
+    if (section === "parent_method") setParentMethods((prev) => prev.map((m) => (m.id === item.id ? { ...m, currentVis: nextVis } : m)));
+    if (section === "child_method") setChildMethods((prev) => prev.map((m) => (m.id === item.id ? { ...m, currentVis: nextVis } : m)));
     setIsSubmitted(false);
   };
 
+  // --- Teaching feedback (only for boxes the learner actually used) ---
+
+  // Piece is the wrong kind of thing for the box it was dropped in
+  const mismatchMessage = (piece, section) => {
+    const pk = kindOf(piece.text);
+    const sk = sectionKind(section);
+    const name = displayName(piece);
+
+    if (pk === "class" && sk === "attribute")
+      return `"${name}" is a class name, not an attribute. Attributes are fields that hold values. They have a name and a type, like "age: int", and usually start with a "-" sign. A class name goes in the top box of a class.`;
+    if (pk === "class" && sk === "method")
+      return `"${name}" is a class name, not a method. Methods are actions a class can do. They have parentheses, like "start()", and usually start with a "+" sign. A class name goes in the top box of a class.`;
+    if (pk === "attribute" && sk === "class")
+      return `The top box is only for the class name. "${name}" is an attribute: a field that stores a value. Attributes have a name and a type, like "age: int", and usually start with a "-" sign. It goes in the Attributes section.`;
+    if (pk === "attribute" && sk === "method")
+      return `"${name}" is an attribute, not a method. Attributes are fields that store values and have a type after a colon. Methods are actions and have parentheses "()". It goes in the Attributes section.`;
+    if (pk === "method" && sk === "class")
+      return `The top box is only for the class name. "${name}" is a method: an action the class can do. Methods have parentheses "()" and usually start with a "+" sign. It goes in the Methods section.`;
+    return `"${name}" is a method, not an attribute. It has parentheses "()", which means it is an action the class can do. Attributes are fields that store values. It goes in the Methods section.`;
+  };
+
+  // Returns { ok, message } for a piece the learner placed in a box
+  const getItemFeedback = (piece, section) => {
+    const name = displayName(piece);
+    const kind = kindOf(piece.text);
+
+    // Not part of the scenario at all
+    if (piece.type === "distractor") {
+      if (kind === "class")
+        return {
+          ok: false,
+          message: `"${name}" is not part of this scenario. The scenario only talks about ${currentScenario.targetParent} and ${currentScenario.targetChild}, so extra classes do not belong in the diagram.`,
+        };
+      return {
+        ok: false,
+        message: `"${name}" is not mentioned in the scenario. Only add the ${kind === "attribute" ? "fields" : "actions"} that the scenario talks about.`,
+      };
+    }
+
+    // Wrong kind of box (e.g. class name in Attributes)
+    if (kind !== sectionKind(section)) {
+      return { ok: false, message: mismatchMessage(piece, section) };
+    }
+
+    // Right kind of box, but wrong class
+    if (section !== expectedSection(piece)) {
+      if (kind === "class") {
+        return {
+          ok: false,
+          message: `"${name}" belongs in the ${ownerSide(piece)} class box, not the ${sectionSide(section)} one. Re-read the scenario to see which class is the main one and which one depends on it.`,
+        };
+      }
+      const owner = ownerSide(piece) === "parent" ? currentScenario.targetParent : currentScenario.targetChild;
+      const here = sectionSide(section) === "parent" ? currentScenario.targetParent : currentScenario.targetChild;
+      return {
+        ok: false,
+        message: `"${name}" is a real ${kind}, but it describes ${owner}, not ${here}. Ask yourself: which class does this belong to?`,
+      };
+    }
+
+    // Right box. Classes have no sign to check.
+    if (kind === "class") {
+      return { ok: true, message: `Correct! "${name}" is the ${sectionSide(section)} class.` };
+    }
+
+    // Right box, check the visibility sign
+    if (piece.currentVis !== piece.correctVis) {
+      return {
+        ok: false,
+        message: `Right box, but the sign is wrong. You used "${piece.currentVis}", which means ${VIS_MEANING[piece.currentVis]}. The scenario says "${name}" is ${VIS_WORD[piece.correctVis]}, so it needs "${piece.correctVis}" (${VIS_MEANING[piece.correctVis]}).`,
+      };
+    }
+
+    return {
+      ok: true,
+      message:
+        kind === "attribute"
+          ? `Correct! "${name}" is an attribute: a field that stores a value. The "${piece.currentVis}" sign matches the scenario.`
+          : `Correct! "${name}" is a method: an action the class can do. The "${piece.currentVis}" sign matches the scenario.`,
+    };
+  };
+
+  const getRelationshipFeedback = () => {
+    if (!droppedRelationship) return null;
+    if (droppedRelationship === currentScenario.correctRelationship) {
+      return {
+        ok: true,
+        message: `Correct! ${droppedRelationship} is ${REL_MEANING[droppedRelationship]}, and ${currentScenario.relationshipClue}.`,
+      };
+    }
+    return {
+      ok: false,
+      message: `You chose ${droppedRelationship}, which is ${REL_MEANING[droppedRelationship]}. That does not fit because ${currentScenario.relationshipClue}.`,
+    };
+  };
+
+  const getMultiplicityFeedback = () => {
+    if (!droppedMultiplicity) return null;
+    if (droppedMultiplicity === currentScenario.correctMultiplicity) {
+      return {
+        ok: true,
+        message: `Correct! ${droppedMultiplicity} means ${MULT_MEANING[droppedMultiplicity]}, and ${currentScenario.multiplicityClue}.`,
+      };
+    }
+    return {
+      ok: false,
+      message: `You chose ${droppedMultiplicity}, which means ${MULT_MEANING[droppedMultiplicity]}. That does not fit because ${currentScenario.multiplicityClue}.`,
+    };
+  };
+
+  // Everything the learner has placed in the diagram
+  const placedItems = () => [
+    ...(parentName ? [{ piece: parentName, section: "parent_name" }] : []),
+    ...(childName ? [{ piece: childName, section: "child_name" }] : []),
+    ...parentAttrs.map((piece) => ({ piece, section: "parent_attr" })),
+    ...childAttrs.map((piece) => ({ piece, section: "child_attr" })),
+    ...parentMethods.map((piece) => ({ piece, section: "parent_method" })),
+    ...childMethods.map((piece) => ({ piece, section: "child_method" })),
+  ];
+
   // --- Evaluation ---
   const evaluateAnswer = () => {
-    let errors = [];
+    const hasWrongItem = placedItems().some(({ piece, section }) => !getItemFeedback(piece, section).ok);
+    const relFb = getRelationshipFeedback();
+    const multFb = getMultiplicityFeedback();
+    const hasWrong = hasWrongItem || (relFb && !relFb.ok) || (multFb && !multFb.ok);
 
-    // 1. Check Class Names
-    if (!parentName || !parentName.text.includes(currentScenario.targetParent)) errors.push(`Missing or incorrect Parent Class.`);
-    if (!childName || childName.text !== currentScenario.targetChild) errors.push(`Missing or incorrect Child Class.`);
-    
-    // 2. Check Relationship
-    if (!droppedRelationship) errors.push("You must connect the two classes with a relationship line.");
-    else if (droppedRelationship !== currentScenario.correctRelationship) errors.push(`Incorrect relationship type.`);
+    const hasAll = (items, type) =>
+      currentScenario.pieces
+        .filter((p) => p.type === type)
+        .every((req) => items.some((i) => i.text === req.text));
 
-    // 3. Check Multiplicity
-    if (!droppedMultiplicity) errors.push("You must assign a multiplicity to the connection.");
-    else if (droppedMultiplicity !== currentScenario.correctMultiplicity) errors.push(`Incorrect multiplicity.`);
+    const isComplete =
+      parentName && childName && droppedRelationship && droppedMultiplicity &&
+      hasAll(parentAttrs, "parent_attr") &&
+      hasAll(childAttrs, "child_attr") &&
+      hasAll(parentMethods, "parent_method") &&
+      hasAll(childMethods, "child_method");
 
-    // 4. Check Exact Placement of Attributes and Methods
-    const checkItems = (items, requiredType, sectionName) => {
-      const required = currentScenario.pieces.filter(p => p.type === requiredType);
-      
-      // Check for missing or misplaced items
-      required.forEach(req => {
-        const placed = items.find(i => i.text === req.text);
-        if (!placed) {
-          errors.push(`Missing from ${sectionName}: ${req.text.split(':')[0].split('(')[0]}`);
-        } else if (placed.currentVis !== req.correctVis) {
-          errors.push(`Incorrect visibility for ${req.text.split(':')[0].split('(')[0]} in ${sectionName}`);
-        }
-      });
-
-      // Check for wrong items placed in this section
-      items.forEach(item => {
-        if (!required.find(r => r.text === item.text)) {
-           errors.push(`Incorrect item placed in ${sectionName}: ${item.text.split(':')[0].split('(')[0]}`);
-        }
-      });
-    };
-
-    checkItems(parentAttrs, "parent_attr", "Parent Attributes");
-    checkItems(childAttrs, "child_attr", "Child Attributes");
-    checkItems(parentMethods, "parent_method", "Parent Methods");
-    checkItems(childMethods, "child_method", "Child Methods");
-
-    // 5. Check if they left distractors on the board (Optional, but good for completeness)
-    // If they dropped a "distractor" type, it will fail the checkItems above because it's not in the required list.
-
-    const isCorrect = errors.length === 0;
-    setScores(prev => ({ ...prev, [currentIndex]: isCorrect }));
+    const isCorrect = !hasWrong && !!isComplete;
+    setScores((prev) => ({ ...prev, [currentIndex]: isCorrect }));
 
     if (isCorrect) {
       setFeedback({ message: "Excellent! You have correctly modeled the OOP concepts and relationships.", type: "success" });
+    } else if (hasWrong) {
+      setFeedback({
+        message: "Look at the red boxes. Each one explains what to fix. Green boxes are already correct.",
+        type: "error",
+      });
     } else {
-      setFeedback({ message: "Review your model:\n• " + errors.join("\n• "), type: "error" });
+      setFeedback({
+        message: "Everything you placed so far is correct, but your diagram is not finished yet. Keep building, then check again.",
+        type: "info",
+      });
     }
     return isCorrect;
   };
 
   const handleCheckAnswer = () => { evaluateAnswer(); setIsSubmitted(true); };
 
-  const handleReset = () => {
+  // Clears the board and loads the pieces of the given scenario.
+  // The scenario is passed in on purpose: right after setCurrentIndex, the
+  // `currentScenario` variable still holds the OLD scenario for this render.
+  const resetBoard = (scenario) => {
     setParentName(null); setChildName(null);
     setParentAttrs([]); setChildAttrs([]);
     setParentMethods([]); setChildMethods([]);
     setDroppedRelationship(null); setDroppedMultiplicity(null);
-    setAvailablePieces([...currentScenario.pieces].sort(() => Math.random() - 0.5));
+    setAvailablePieces([...scenario.pieces].sort(() => Math.random() - 0.5));
     setFeedback({ message: "", type: "" });
     setIsSubmitted(false);
   };
 
-  const handlePrevious = () => { if (currentIndex > 0) { setCurrentIndex(currentIndex - 1); handleReset(); } };
-  const handleNext = () => {
-    if (!isSubmitted) evaluateAnswer();
-    if (currentIndex < OOP_SCENARIOS.length - 1) { setCurrentIndex(currentIndex + 1); handleReset(); } 
-    else { navigate("/skill-development"); }
+  const handleReset = () => resetBoard(currentScenario);
+
+  const goToScenario = (index) => {
+    setCurrentIndex(index);
+    resetBoard(OOP_SCENARIOS[index]);
   };
 
-  const correctCount = Object.values(scores).filter(val => val === true).length;
+  const handlePrevious = () => {
+    if (currentIndex > 0) goToScenario(currentIndex - 1);
+  };
+
+  const handleNext = () => {
+    if (!isSubmitted) evaluateAnswer();
+    if (currentIndex < OOP_SCENARIOS.length - 1) goToScenario(currentIndex + 1);
+    else navigate("/skill-development");
+  };
+
+  const correctCount = Object.values(scores).filter((val) => val === true).length;
+
+  // --- Rendering helpers ---
+  const stateClass = (fb) => (fb ? (fb.ok ? "oop-item-correct" : "oop-item-wrong") : "");
+
+  const renderFeedback = (fb) =>
+    fb && (
+      <div className="oop-item-feedback" role="status">
+        <strong>{fb.ok ? "✓ " : "✗ "}</strong>
+        {fb.message}
+      </div>
+    );
+
+  const renderNameSlot = (piece, section, placeholder) => {
+    if (!piece) return <span className="oop-drop-placeholder">{placeholder}</span>;
+    const fb = isSubmitted ? getItemFeedback(piece, section) : null;
+    return (
+      <div className={`oop-name-wrap ${stateClass(fb)}`}>
+        <div onClick={() => removePiece(piece, section)} className="oop-class-name" style={{ whiteSpace: "pre-line" }}>
+          {piece.text}
+        </div>
+        {renderFeedback(fb)}
+      </div>
+    );
+  };
+
+  const renderItems = (items, section) =>
+    items.map((item) => {
+      const fb = isSubmitted ? getItemFeedback(item, section) : null;
+      return (
+        <div key={item.id} className={`oop-item-wrap ${stateClass(fb)}`}>
+          <div className="oop-item-row">
+            <span className="oop-visibility-badge" onClick={() => toggleVisibility(item, section)}>{item.currentVis}</span>
+            <span className="oop-item-text" onClick={() => removePiece(item, section)}>{item.text}</span>
+          </div>
+          {renderFeedback(fb)}
+        </div>
+      );
+    });
+
+  const relFeedback = isSubmitted ? getRelationshipFeedback() : null;
+  const multFeedback = isSubmitted ? getMultiplicityFeedback() : null;
 
   return (
     <div className="dashboard-layout">
@@ -297,92 +498,87 @@ export default function OOPClassModeling() {
             <span className="cdf-breadcrumb-current">OOP-Based Class Modeling</span>
           </div>
           <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-             <div className="score-tracker">Score: <span style={{ color: "#22c55e" }}>{correctCount}</span> / {OOP_SCENARIOS.length}</div>
-             <div className="cdf-scenario-counter">Scenario {currentIndex + 1} of {OOP_SCENARIOS.length}</div>
+            <div className="score-tracker">Score: <span style={{ color: "#22c55e" }}>{correctCount}</span> / {OOP_SCENARIOS.length}</div>
+            <div className="cdf-scenario-counter">Scenario {currentIndex + 1} of {OOP_SCENARIOS.length}</div>
           </div>
         </div>
 
         <h1 className="cdf-title">{currentScenario.title}</h1>
         <p className="cdf-description">
-          <strong>Scenario:</strong> {currentScenario.scenario} <br/>
+          <strong>Scenario:</strong> {currentScenario.scenario} <br />
           Drag pieces to the classes. Connect them with a relationship. <strong>Click visibility symbols to change them.</strong>
         </p>
 
         <div className="oop-workspace">
-          
+
           {/* LEFT SIDE: The UML Diagram Area */}
           <div className="oop-diagram-area">
-            
+
             {/* PARENT CLASS */}
             <div className="oop-class-box">
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_name")} className="oop-class-header">
-                {parentName ? <div onClick={() => removePiece(parentName, "parent_name")} className="oop-class-name" style={{ whiteSpace: "pre-line" }}>{parentName.text}</div> : <span className="oop-drop-placeholder">Drop Parent</span>}
+                {renderNameSlot(parentName, "parent_name", "Drop Parent")}
               </div>
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_attr")} className="oop-uml-section">
                 <span className="oop-section-label">Attributes</span>
-                {parentAttrs.map(attr => (
-                  <div key={attr.id} className="oop-item-row">
-                    <span className="oop-visibility-badge" onClick={() => toggleVisibility(attr, "parent_attr")}>{attr.currentVis}</span>
-                    <span className="oop-item-text" onClick={() => removePiece(attr, "parent_attr")}>{attr.text}</span>
-                  </div>
-                ))}
+                {renderItems(parentAttrs, "parent_attr")}
               </div>
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_method")} className="oop-uml-section" style={{ borderBottom: "none" }}>
                 <span className="oop-section-label">Methods</span>
-                {parentMethods.map(method => (
-                  <div key={method.id} className="oop-item-row">
-                    <span className="oop-visibility-badge" onClick={() => toggleVisibility(method, "parent_method")}>{method.currentVis}</span>
-                    <span className="oop-item-text" onClick={() => removePiece(method, "parent_method")}>{method.text}</span>
-                  </div>
-                ))}
+                {renderItems(parentMethods, "parent_method")}
               </div>
             </div>
 
             {/* RELATIONSHIP GAP (Middle Column) */}
             <div className="oop-relationship-gap">
               <div className="oop-line"></div>
-              
-              <div 
-                className={`rel-dropzone ${droppedRelationship ? 'filled' : ''} ${isSubmitted ? (droppedRelationship === currentScenario.correctRelationship ? 'correct' : 'wrong') : ''}`}
+
+              <div
+                className={`rel-dropzone ${droppedRelationship ? "filled" : ""} ${relFeedback ? (relFeedback.ok ? "correct" : "wrong") : ""}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDropRelationship}
-                onClick={() => setDroppedRelationship(null)}
+                onClick={() => { setDroppedRelationship(null); setIsSubmitted(false); }}
               >
                 {droppedRelationship ? droppedRelationship : "Drop Line"}
               </div>
 
-              <div 
-                className={`mult-dropzone ${droppedMultiplicity ? 'filled' : ''} ${isSubmitted ? (droppedMultiplicity === currentScenario.correctMultiplicity ? 'correct' : 'wrong') : ''}`}
+              <div
+                className={`mult-dropzone ${droppedMultiplicity ? "filled" : ""} ${multFeedback ? (multFeedback.ok ? "correct" : "wrong") : ""}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDropMultiplicity}
-                onClick={() => setDroppedMultiplicity(null)}
+                onClick={() => { setDroppedMultiplicity(null); setIsSubmitted(false); }}
               >
                 {droppedMultiplicity || "Mult"}
               </div>
+
+              {(relFeedback || multFeedback) && (
+                <div className="oop-rel-feedback">
+                  {relFeedback && (
+                    <div className={`oop-mini-feedback ${relFeedback.ok ? "correct" : "wrong"}`} role="status">
+                      <strong>{relFeedback.ok ? "✓ Line: " : "✗ Line: "}</strong>{relFeedback.message}
+                    </div>
+                  )}
+                  {multFeedback && (
+                    <div className={`oop-mini-feedback ${multFeedback.ok ? "correct" : "wrong"}`} role="status">
+                      <strong>{multFeedback.ok ? "✓ Multiplicity: " : "✗ Multiplicity: "}</strong>{multFeedback.message}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* CHILD CLASS */}
             <div className="oop-class-box">
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_name")} className="oop-class-header" style={{ background: "#f8fafc" }}>
-                {childName ? <div onClick={() => removePiece(childName, "child_name")} className="oop-class-name">{childName.text}</div> : <span className="oop-drop-placeholder">Drop Child</span>}
+                {renderNameSlot(childName, "child_name", "Drop Child")}
               </div>
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_attr")} className="oop-uml-section">
                 <span className="oop-section-label">Attributes</span>
-                {childAttrs.map(attr => (
-                  <div key={attr.id} className="oop-item-row">
-                    <span className="oop-visibility-badge" onClick={() => toggleVisibility(attr, "child_attr")}>{attr.currentVis}</span>
-                    <span className="oop-item-text" onClick={() => removePiece(attr, "child_attr")}>{attr.text}</span>
-                  </div>
-                ))}
+                {renderItems(childAttrs, "child_attr")}
               </div>
               <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_method")} className="oop-uml-section" style={{ borderBottom: "none" }}>
                 <span className="oop-section-label">Methods</span>
-                {childMethods.map(method => (
-                  <div key={method.id} className="oop-item-row">
-                    <span className="oop-visibility-badge" onClick={() => toggleVisibility(method, "child_method")}>{method.currentVis}</span>
-                    <span className="oop-item-text" onClick={() => removePiece(method, "child_method")}>{method.text}</span>
-                  </div>
-                ))}
+                {renderItems(childMethods, "child_method")}
               </div>
             </div>
           </div>
@@ -391,13 +587,13 @@ export default function OOPClassModeling() {
           <div className="oop-bank-container">
             <h3 className="oop-bank-title">Pieces</h3>
             <div className="oop-bank-box">
-              {availablePieces.map(piece => (
+              {availablePieces.map((piece) => (
                 <div key={piece.id} draggable onDragStart={(e) => handleDragStart(e, piece)} className="oop-piece" style={{ whiteSpace: "pre-line" }}>
                   {piece.text}
                 </div>
               ))}
             </div>
-            
+
             <h3 className="oop-bank-title" style={{ marginTop: "20px" }}>Relationships</h3>
             <div className="tools-bank">
               <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Association")} className="tool-item">Association</div>
@@ -417,7 +613,15 @@ export default function OOPClassModeling() {
         </div>
 
         {isSubmitted && (
-          <div className={`oop-feedback ${feedback.type === "error" ? "oop-feedback-error" : "oop-feedback-success"}`}>
+          <div
+            className={`oop-feedback ${
+              feedback.type === "error"
+                ? "oop-feedback-error"
+                : feedback.type === "info"
+                ? "oop-feedback-info"
+                : "oop-feedback-success"
+            }`}
+          >
             {feedback.message}
           </div>
         )}
