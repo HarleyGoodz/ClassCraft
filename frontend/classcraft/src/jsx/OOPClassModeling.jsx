@@ -9,7 +9,7 @@ export const OOP_SCENARIOS = [
     id: 1,
     title: "Car Dealership: Vehicle and Car",
     scenario:
-      "A Vehicle is only a general idea (abstract), because nobody buys just a 'Vehicle'. It has a protected 'fuelLevel' and a public 'start()'. A Car is a kind of Vehicle with a private 'numberOfDoors'. Each Car is exactly one Vehicle.",
+      "A Vehicle is only a general idea (abstract), because nobody buys just a 'Vehicle'. Its 'fuelLevel' can only be used by the Vehicle and the classes that come from it, and anyone can call its 'start()'. A Car is a kind of Vehicle. Its 'numberOfDoors' can only be used inside the Car itself. Each Car is exactly one Vehicle.",
     targetParent: "Vehicle",
     targetChild: "Car",
     correctRelationship: "Inheritance",
@@ -30,7 +30,7 @@ export const OOP_SCENARIOS = [
     id: 2,
     title: "Real Estate: House and Room",
     scenario:
-      "A House has one or more Rooms. If the House is demolished, its Rooms are gone too. The House has a public 'address'. A Room has a private 'floorArea' and a public 'turnOnLights()'.",
+      "A House has one or more Rooms. If the House is demolished, its Rooms are gone too. Anyone can see the House's 'address'. A Room's 'floorArea' can only be used inside the Room itself, and anyone can call its 'turnOnLights()'.",
     targetParent: "House",
     targetChild: "Room",
     correctRelationship: "Composition",
@@ -51,7 +51,7 @@ export const OOP_SCENARIOS = [
     id: 3,
     title: "Basketball League: Team and Player",
     scenario:
-      "A Team has zero or more Players. If the Team disbands, the Players still exist and can join another Team. The Team has a public 'teamName' and a public 'addPlayer()'. A Player has a private 'jerseyNumber'.",
+      "A Team has zero or more Players. If the Team disbands, the Players still exist and can join another Team. Anyone can see the Team's 'teamName' and call its 'addPlayer()'. A Player's 'jerseyNumber' can only be used inside the Player itself.",
     targetParent: "Team",
     targetChild: "Player",
     correctRelationship: "Aggregation",
@@ -72,7 +72,7 @@ export const OOP_SCENARIOS = [
     id: 4,
     title: "Public Library: Member and Book",
     scenario:
-      "A Member can borrow zero or many Books, and a Book can be borrowed by many Members. Neither owns the other. The Member has a public 'name'. A Book has a private 'availableCopies' and a public 'borrow()'.",
+      "A Member can borrow zero or many Books, and a Book can be borrowed by many Members. Neither owns the other. Anyone can see the Member's 'name'. A Book's 'availableCopies' can only be changed inside the Book itself, and anyone can call its 'borrow()'.",
     targetParent: "Member",
     targetChild: "Book",
     correctRelationship: "Association",
@@ -93,17 +93,16 @@ export const OOP_SCENARIOS = [
 
 // --- TEACHING TEXT ---
 const VIS_MEANING = {
-  "+": "public (anyone can use it)",
-  "-": "private (only its own class can use it)",
-  "#": "protected (only its own class and its child classes can use it)",
+  "+": "anyone can use it",
+  "-": "only its own class can use it",
+  "#": "its own class and its children can use it",
 };
-const VIS_WORD = { "+": "public", "-": "private", "#": "protected" };
 
 const REL_MEANING = {
-  Association: "a simple link between two classes, where neither one is a kind of the other or a part of the other",
-  Inheritance: "an 'is a' link, where the child is a special kind of the parent",
-  Aggregation: "a 'has a' link where the parts can still exist on their own if the whole is gone",
-  Composition: "a 'has a' link where the parts are destroyed when the whole is destroyed",
+  Association: "a simple link, where neither is a kind or a part of the other",
+  Inheritance: "an 'is a' link, where the child is a kind of the parent",
+  Aggregation: "a 'has a' link, where the parts live on without the whole",
+  Composition: "a 'has a' link, where the parts disappear with the whole",
 };
 
 const MULT_MEANING = {
@@ -132,8 +131,6 @@ const expectedSection = (piece) => {
   if (piece.type === "distractor") return null;
   return piece.type;
 };
-const ownerSide = (piece) =>
-  piece.type === "parent" || piece.type.startsWith("parent_") ? "parent" : "child";
 
 export default function OOPClassModeling() {
   const navigate = useNavigate();
@@ -254,16 +251,16 @@ export default function OOPClassModeling() {
     const name = displayName(piece);
 
     if (pk === "class" && sk === "attribute")
-      return `"${name}" is a class name, not an attribute. Attributes are fields that hold values. They have a name and a type, like "age: int", and usually start with a "-" sign. A class name goes in the top box of a class.`;
+      return `"${name}" is a class name, not an attribute. Attributes store values, like "age: int", and usually use "-".`;
     if (pk === "class" && sk === "method")
-      return `"${name}" is a class name, not a method. Methods are actions a class can do. They have parentheses, like "start()", and usually start with a "+" sign. A class name goes in the top box of a class.`;
+      return `"${name}" is a class name, not a method. Methods are actions with "()", like "start()", and usually use "+".`;
     if (pk === "attribute" && sk === "class")
-      return `The top box is only for the class name. "${name}" is an attribute: a field that stores a value. Attributes have a name and a type, like "age: int", and usually start with a "-" sign. It goes in the Attributes section.`;
+      return `The top box is only for the class name. "${name}" is an attribute: it stores a value and usually uses "-".`;
     if (pk === "attribute" && sk === "method")
-      return `"${name}" is an attribute, not a method. Attributes are fields that store values and have a type after a colon. Methods are actions and have parentheses "()". It goes in the Attributes section.`;
+      return `"${name}" is an attribute, not a method. Attributes store values. Methods are actions with "()".`;
     if (pk === "method" && sk === "class")
-      return `The top box is only for the class name. "${name}" is a method: an action the class can do. Methods have parentheses "()" and usually start with a "+" sign. It goes in the Methods section.`;
-    return `"${name}" is a method, not an attribute. It has parentheses "()", which means it is an action the class can do. Attributes are fields that store values. It goes in the Methods section.`;
+      return `The top box is only for the class name. "${name}" is a method: an action with "()" that usually uses "+".`;
+    return `"${name}" is a method, not an attribute. It has "()", so it is an action.`;
   };
 
   // Returns { ok, message } for a piece the learner placed in a box
@@ -276,11 +273,11 @@ export default function OOPClassModeling() {
       if (kind === "class")
         return {
           ok: false,
-          message: `"${name}" is not part of this scenario. The scenario only talks about ${currentScenario.targetParent} and ${currentScenario.targetChild}, so extra classes do not belong in the diagram.`,
+          message: `"${name}" is not in this scenario. Only ${currentScenario.targetParent} and ${currentScenario.targetChild} are.`,
         };
       return {
         ok: false,
-        message: `"${name}" is not mentioned in the scenario. Only add the ${kind === "attribute" ? "fields" : "actions"} that the scenario talks about.`,
+        message: `"${name}" is not mentioned in the scenario.`,
       };
     }
 
@@ -294,14 +291,12 @@ export default function OOPClassModeling() {
       if (kind === "class") {
         return {
           ok: false,
-          message: `"${name}" belongs in the ${ownerSide(piece)} class box, not the ${sectionSide(section)} one. Re-read the scenario to see which class is the main one and which one depends on it.`,
+          message: `"${name}" is in the wrong class box. Which class is the main one?`,
         };
       }
-      const owner = ownerSide(piece) === "parent" ? currentScenario.targetParent : currentScenario.targetChild;
-      const here = sectionSide(section) === "parent" ? currentScenario.targetParent : currentScenario.targetChild;
       return {
         ok: false,
-        message: `"${name}" is a real ${kind}, but it describes ${owner}, not ${here}. Ask yourself: which class does this belong to?`,
+        message: `"${name}" does not belong to this class. Which class does it describe?`,
       };
     }
 
@@ -314,16 +309,13 @@ export default function OOPClassModeling() {
     if (piece.currentVis !== piece.correctVis) {
       return {
         ok: false,
-        message: `Right box, but the sign is wrong. You used "${piece.currentVis}", which means ${VIS_MEANING[piece.currentVis]}. The scenario says "${name}" is ${VIS_WORD[piece.correctVis]}, so it needs "${piece.correctVis}" (${VIS_MEANING[piece.correctVis]}).`,
+        message: `Right box, but the sign is wrong. "${piece.currentVis}" means ${VIS_MEANING[piece.currentVis]}. Re-read who can use "${name}".`,
       };
     }
 
     return {
       ok: true,
-      message:
-        kind === "attribute"
-          ? `Correct! "${name}" is an attribute: a field that stores a value. The "${piece.currentVis}" sign matches the scenario.`
-          : `Correct! "${name}" is a method: an action the class can do. The "${piece.currentVis}" sign matches the scenario.`,
+      message: `Correct! "${name}" is ${kind === "attribute" ? "an attribute" : "a method"}, and "${piece.currentVis}" fits.`,
     };
   };
 
@@ -332,12 +324,12 @@ export default function OOPClassModeling() {
     if (droppedRelationship === currentScenario.correctRelationship) {
       return {
         ok: true,
-        message: `Correct! ${droppedRelationship} is ${REL_MEANING[droppedRelationship]}, and ${currentScenario.relationshipClue}.`,
+        message: `Correct! ${droppedRelationship} is ${REL_MEANING[droppedRelationship]}.`,
       };
     }
     return {
       ok: false,
-      message: `You chose ${droppedRelationship}, which is ${REL_MEANING[droppedRelationship]}. That does not fit because ${currentScenario.relationshipClue}.`,
+      message: `${droppedRelationship} is ${REL_MEANING[droppedRelationship]}. Re-read how the two classes connect.`,
     };
   };
 
@@ -346,12 +338,12 @@ export default function OOPClassModeling() {
     if (droppedMultiplicity === currentScenario.correctMultiplicity) {
       return {
         ok: true,
-        message: `Correct! ${droppedMultiplicity} means ${MULT_MEANING[droppedMultiplicity]}, and ${currentScenario.multiplicityClue}.`,
+        message: `Correct! ${droppedMultiplicity} means ${MULT_MEANING[droppedMultiplicity]}.`,
       };
     }
     return {
       ok: false,
-      message: `You chose ${droppedMultiplicity}, which means ${MULT_MEANING[droppedMultiplicity]}. That does not fit because ${currentScenario.multiplicityClue}.`,
+      message: `${droppedMultiplicity} means ${MULT_MEANING[droppedMultiplicity]}. Re-read how many connect.`,
     };
   };
 
@@ -388,15 +380,12 @@ export default function OOPClassModeling() {
     setScores((prev) => ({ ...prev, [currentIndex]: isCorrect }));
 
     if (isCorrect) {
-      setFeedback({ message: "Excellent! You have correctly modeled the OOP concepts and relationships.", type: "success" });
+      setFeedback({ message: "Excellent! Your model is correct.", type: "success" });
     } else if (hasWrong) {
-      setFeedback({
-        message: "Look at the red boxes. Each one explains what to fix. Green boxes are already correct.",
-        type: "error",
-      });
+      setFeedback({ message: "Check the red boxes to see what to fix.", type: "error" });
     } else {
       setFeedback({
-        message: "Everything you placed so far is correct, but your diagram is not finished yet. Keep building, then check again.",
+        message: "Everything placed so far is correct. Keep building, then check again.",
         type: "info",
       });
     }
