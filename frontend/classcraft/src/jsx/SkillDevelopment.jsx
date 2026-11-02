@@ -1,9 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { supabase } from "../utils/supabase"; // <-- Added missing import
 import "../css/skill_development_css.css";
 
-/* ------------------------------------------------------------------ */
-/* PLACEHOLDER DATA — swap for backend values later                   */
-/* ------------------------------------------------------------------ */
 const EXPERIENCES = [
   {
     key: "class-diagram-formation",
@@ -47,47 +45,61 @@ function accuracyLabel(value) {
 export default function SkillDevelopment() {
   const navigate = useNavigate();
 
+  async function handleLogout() {
+    // Removed setError to prevent crashes
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Logout failed:", error.message);
+      return;
+    }
+    navigate("/", { replace: true });
+  }
+
   return (
     <div className="dashboard-layout">
       {/* ===== Sidebar ===== */}
-      <aside className="sidebar">
-        <h2 className="sidebar-brand">ClassCraft</h2>
-        <nav className="sidebar-nav">
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-            end
-          >
-            Dashboard
-          </NavLink>
-          <NavLink
-            to="/learn-basics"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Learn the Basics
-          </NavLink>
-          <NavLink
-            to="/skill-development"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Skill Development
-          </NavLink>
-          <NavLink
-            to="/class-diagram-construction"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Class Diagram Construction
-          </NavLink>
-          
-        </nav>
+      <aside className="sidebar" style={{ display: "flex", flexDirection: "column" }}>
+        <div>
+          <h2 className="sidebar-brand">ClassCraft</h2>
+          <nav className="sidebar-nav">
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}
+              end
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              to="/learn-basics"
+              className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}
+            >
+              Learn the Basics
+            </NavLink>
+            <NavLink
+              to="/skill-development"
+              className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}
+            >
+              Skill Development
+            </NavLink>
+            <NavLink
+              to="/class-diagram-construction"
+              className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}
+            >
+              Class Diagram Construction
+            </NavLink>
+          </nav>
+        </div>
+        
+        {/* Logout button pushed to the bottom */}
+        <div style={{ marginTop: "auto", paddingTop: "2rem" }}>
+           <button 
+             onClick={handleLogout} 
+             className="sidebar-link" 
+             style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", cursor: "pointer", color: "#ef4444" }}
+           >
+             Log out
+           </button>
+        </div>
       </aside>
 
       {/* ===== Main content ===== */}

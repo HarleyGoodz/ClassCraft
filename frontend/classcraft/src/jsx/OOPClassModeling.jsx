@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../css/oop_class_modeling.css";
 
-
+// --- SCENARIO DATABASE ---
 export const OOP_SCENARIOS = [
   {
     id: 1,
@@ -120,32 +120,38 @@ export default function OOPClassModeling() {
     if (!pieceData) return;
     const piece = JSON.parse(pieceData);
 
-    const placePiece = (setter, list, pieceObj) => {
-      setter([...list, pieceObj]);
-      setAvailablePieces(prev => prev.filter(p => p.id !== pieceObj.id));
+    // Helper to remove from bank
+    const removeFromBank = (id) => {
+      setAvailablePieces(prev => prev.filter(p => p.id !== id));
     };
 
-    if (targetSection === "parent_name" && piece.type === "parent") {
-      if (parentName) setAvailablePieces(prev => [...prev, parentName]);
+    // --- NO RESTRICTIONS: Anything can go anywhere ---
+    
+    if (targetSection === "parent_name") {
+      if (parentName) setAvailablePieces(prev => [...prev, parentName]); // Return old piece
       setParentName(piece);
-      setAvailablePieces(prev => prev.filter(p => p.id !== piece.id));
+      removeFromBank(piece.id);
     } 
-    else if (targetSection === "child_name" && piece.type === "child") {
+    else if (targetSection === "child_name") {
       if (childName) setAvailablePieces(prev => [...prev, childName]);
       setChildName(piece);
-      setAvailablePieces(prev => prev.filter(p => p.id !== piece.id));
+      removeFromBank(piece.id);
     }
-    else if (targetSection === "parent_attr" && piece.type === "parent_attr") {
-      placePiece(setParentAttrs, parentAttrs, { ...piece, currentVis: "+" });
+    else if (targetSection === "parent_attr") {
+      setParentAttrs([...parentAttrs, { ...piece, currentVis: "+" }]);
+      removeFromBank(piece.id);
     }
-    else if (targetSection === "child_attr" && piece.type === "child_attr") {
-      placePiece(setChildAttrs, childAttrs, { ...piece, currentVis: "+" });
+    else if (targetSection === "child_attr") {
+      setChildAttrs([...childAttrs, { ...piece, currentVis: "+" }]);
+      removeFromBank(piece.id);
     }
-    else if (targetSection === "parent_method" && piece.type === "parent_method") {
-      placePiece(setParentMethods, parentMethods, { ...piece, currentVis: "+" });
+    else if (targetSection === "parent_method") {
+      setParentMethods([...parentMethods, { ...piece, currentVis: "+" }]);
+      removeFromBank(piece.id);
     }
-    else if (targetSection === "child_method" && piece.type === "child_method") {
-      placePiece(setChildMethods, childMethods, { ...piece, currentVis: "+" });
+    else if (targetSection === "child_method") {
+      setChildMethods([...childMethods, { ...piece, currentVis: "+" }]);
+      removeFromBank(piece.id);
     }
 
     setFeedback({ message: "", type: "" });
@@ -197,27 +203,47 @@ export default function OOPClassModeling() {
   const evaluateAnswer = () => {
     let errors = [];
 
+    // 1. Check Class Names
     if (!parentName || !parentName.text.includes(currentScenario.targetParent)) errors.push(`Missing or incorrect Parent Class.`);
     if (!childName || childName.text !== currentScenario.targetChild) errors.push(`Missing or incorrect Child Class.`);
     
+    // 2. Check Relationship
     if (!droppedRelationship) errors.push("You must connect the two classes with a relationship line.");
     else if (droppedRelationship !== currentScenario.correctRelationship) errors.push(`Incorrect relationship type.`);
 
+    // 3. Check Multiplicity
     if (!droppedMultiplicity) errors.push("You must assign a multiplicity to the connection.");
     else if (droppedMultiplicity !== currentScenario.correctMultiplicity) errors.push(`Incorrect multiplicity.`);
 
+    // 4. Check Exact Placement of Attributes and Methods
     const checkItems = (items, requiredType, sectionName) => {
       const required = currentScenario.pieces.filter(p => p.type === requiredType);
+      
+      // Check for missing or misplaced items
       required.forEach(req => {
         const placed = items.find(i => i.text === req.text);
-        if (!placed) errors.push(`Missing from ${sectionName}: ${req.text.split(':')[0]}`);
-        else if (placed.currentVis !== req.correctVis) errors.push(`Incorrect visibility for ${req.text.split(':')[0]}`);
+        if (!placed) {
+          errors.push(`Missing from ${sectionName}: ${req.text.split(':')[0].split('(')[0]}`);
+        } else if (placed.currentVis !== req.correctVis) {
+          errors.push(`Incorrect visibility for ${req.text.split(':')[0].split('(')[0]} in ${sectionName}`);
+        }
+      });
+
+      // Check for wrong items placed in this section
+      items.forEach(item => {
+        if (!required.find(r => r.text === item.text)) {
+           errors.push(`Incorrect item placed in ${sectionName}: ${item.text.split(':')[0].split('(')[0]}`);
+        }
       });
     };
+
     checkItems(parentAttrs, "parent_attr", "Parent Attributes");
     checkItems(childAttrs, "child_attr", "Child Attributes");
     checkItems(parentMethods, "parent_method", "Parent Methods");
     checkItems(childMethods, "child_method", "Child Methods");
+
+    // 5. Check if they left distractors on the board (Optional, but good for completeness)
+    // If they dropped a "distractor" type, it will fail the checkItems above because it's not in the required list.
 
     const isCorrect = errors.length === 0;
     setScores(prev => ({ ...prev, [currentIndex]: isCorrect }));
@@ -372,7 +398,6 @@ export default function OOPClassModeling() {
               ))}
             </div>
             
-            {/* UPDATED: All 4 Relationships */}
             <h3 className="oop-bank-title" style={{ marginTop: "20px" }}>Relationships</h3>
             <div className="tools-bank">
               <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Association")} className="tool-item">Association</div>
@@ -381,7 +406,6 @@ export default function OOPClassModeling() {
               <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Composition")} className="tool-item">Composition</div>
             </div>
 
-            {/* UPDATED: All 4 Multiplicities */}
             <h3 className="oop-bank-title" style={{ marginTop: "20px" }}>Multiplicity</h3>
             <div className="tools-bank">
               <div draggable onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", "1")} className="tool-item">1</div>
