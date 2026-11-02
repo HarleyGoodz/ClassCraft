@@ -1,0 +1,204 @@
+.scenario-section {
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.scenario-section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.scenario-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.scenario-top h2 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.scenario-intro {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.scenario-counter {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.scenario-body {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto minmax(220px, 1.2fr);
+  gap: 20px;
+  align-items: center;
+  margin: 24px 0 16px;
+}
+
+/* The sidebar and page padding take ~340px, so stack earlier than usual */
+@media (max-width: 1000px) {
+  .scenario-body {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-arrow {
+    flex-direction: row;
+  }
+
+  .scenario-arrow-icon {
+    transform: rotate(90deg);
+  }
+}
+
+/* ---------- UML class box ---------- */
+.uml-box {
+  margin-top: 6px;
+  border: 2px solid #1f2937;
+  background: #eff6ff;
+}
+
+.uml-compartment {
+  padding: 10px 14px;
+  border-top: 2px solid #1f2937;
+  min-height: 36px;
+}
+
+.uml-compartment:first-child {
+  border-top: none;
+}
+
+.uml-name {
+  text-align: center;
+  font-size: 1.05rem;
+  background: #dbeafe;
+}
+
+.uml-line {
+  padding: 2px 0;
+  font-size: 0.88rem;
+  color: #0f172a;
+}
+
+/* ---------- Object cards ---------- */
+.scenario-card {
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 2px solid #1f2937;
+  background: #fff;
+}
+
+.scenario-card--object {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.scenario-card h3 {
+  margin: 6px 0 8px;
+}
+
+.scenario-card ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.scenario-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.scenario-small {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.scenario-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.scenario-arrow-icon {
+  font-size: 1.6rem;
+  color: #2563eb;
+}
+
+.scenario-objects {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- How it's built ---------- */
+.scenario-howto {
+  margin: 8px 0 16px;
+  padding: 16px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.scenario-howto h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.scenario-howto h4 {
+  margin: 16px 0 2px;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.scenario-steps {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.scenario-steps li {
+  margin-bottom: 6px;
+}
+
+.scenario-types {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.scenario-explain {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-left: 4px solid #2563eb;
+  background: #f8fafc;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #334155;
+}

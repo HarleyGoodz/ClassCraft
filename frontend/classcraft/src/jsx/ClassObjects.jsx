@@ -5,26 +5,52 @@ import "../css/class_objects_scenarios.css";
 import "../css/lesson_path_header.css";
 
 /*
-  Extra scenarios shown by the "Show another scenario" button.
-  Each one has a class (blueprint: attribute names only, no values)
-  and objects created from it (the same attributes, now with real values).
+  Plain-English meaning of each data type used in the scenarios.
+*/
+const TYPE_MEANINGS = {
+  String: "text (words, names, letters)",
+  int: "a whole number (no decimals)",
+  double: "a number with decimals",
+  boolean: "true or false",
+};
+
+/*
+  Scenarios shown by the "Show another scenario" button.
+  - attributes: { name, type }       -> written as  - name: type
+  - methods:    { name, params, returns } -> written as  + name(params): returns
+  - objects:    values are in the same order as the attributes
 */
 const SCENARIOS = [
   {
     className: "Car",
-    attributes: ["brand", "color", "speed"],
-    methods: ["start()", "brake()"],
+    attributes: [
+      { name: "brand", type: "String" },
+      { name: "color", type: "String" },
+      { name: "speed", type: "int" },
+      { name: "isRunning", type: "boolean" },
+    ],
+    methods: [
+      { name: "start", params: "", returns: "void" },
+      { name: "brake", params: "", returns: "void" },
+    ],
     objects: [
-      { name: "myCar", values: ["Toyota", "red", "0 km/h"] },
-      { name: "yourCar", values: ["Honda", "blue", "0 km/h"] },
+      { name: "myCar", values: ["Toyota", "red", "0", "false"] },
+      { name: "yourCar", values: ["Honda", "blue", "0", "false"] },
     ],
     explain:
-      "Car is the blueprint: every car has a brand, a color, and a speed, and can start and brake. myCar and yourCar are two real cars made from it, each with its own values.",
+      "Car is the blueprint: every car has a brand, a color, a speed, and a running status, and can start and brake. myCar and yourCar are two real cars made from it, each with its own values.",
   },
   {
     className: "Dog",
-    attributes: ["name", "breed", "age"],
-    methods: ["bark()", "eat()"],
+    attributes: [
+      { name: "name", type: "String" },
+      { name: "breed", type: "String" },
+      { name: "age", type: "int" },
+    ],
+    methods: [
+      { name: "bark", params: "", returns: "void" },
+      { name: "eat", params: "food: String", returns: "void" },
+    ],
     objects: [
       { name: "bantay", values: ["Bantay", "Aspin", "3"] },
       { name: "bella", values: ["Bella", "Poodle", "1"] },
@@ -34,42 +60,75 @@ const SCENARIOS = [
   },
   {
     className: "Phone",
-    attributes: ["brand", "model", "batteryLevel"],
-    methods: ["call()", "charge()"],
+    attributes: [
+      { name: "brand", type: "String" },
+      { name: "model", type: "String" },
+      { name: "batteryLevel", type: "int" },
+      { name: "isOn", type: "boolean" },
+    ],
+    methods: [
+      { name: "call", params: "number: String", returns: "void" },
+      { name: "charge", params: "", returns: "void" },
+    ],
     objects: [
-      { name: "phoneA", values: ["Samsung", "Galaxy A15", "80%"] },
-      { name: "phoneB", values: ["Apple", "iPhone 13", "35%"] },
+      { name: "phoneA", values: ["Samsung", "Galaxy A15", "80", "true"] },
+      { name: "phoneB", values: ["Apple", "iPhone 13", "35", "false"] },
     ],
     explain:
-      "Phone lists what every phone has and can do. phoneA and phoneB are two actual phones, so they can have different brands and different battery levels.",
+      "Phone lists what every phone has and can do. phoneA and phoneB are two actual phones, so they can have different brands, battery levels, and on/off status.",
   },
   {
     className: "Book",
-    attributes: ["title", "author", "pages"],
-    methods: ["open()", "read()"],
+    attributes: [
+      { name: "title", type: "String" },
+      { name: "author", type: "String" },
+      { name: "pages", type: "int" },
+      { name: "price", type: "double" },
+    ],
+    methods: [
+      { name: "open", params: "", returns: "void" },
+      { name: "getTitle", params: "", returns: "String" },
+    ],
     objects: [
-      { name: "book1", values: ["Noli Me Tangere", "Jose Rizal", "439"] },
-      { name: "book2", values: ["Harry Potter", "J.K. Rowling", "309"] },
+      { name: "book1", values: ["Noli Me Tangere", "Jose Rizal", "439", "250.50"] },
+      { name: "book2", values: ["Harry Potter", "J.K. Rowling", "309", "399.00"] },
     ],
     explain:
-      "Book is the template: every book has a title, an author, and a number of pages. book1 and book2 are two real books made from that template.",
+      "Book is the template: every book has a title, an author, a number of pages, and a price. book1 and book2 are two real books made from that template.",
   },
   {
     className: "BankAccount",
-    attributes: ["owner", "balance"],
-    methods: ["deposit()", "withdraw()"],
+    attributes: [
+      { name: "owner", type: "String" },
+      { name: "balance", type: "double" },
+    ],
+    methods: [
+      { name: "deposit", params: "amount: double", returns: "void" },
+      { name: "withdraw", params: "amount: double", returns: "boolean" },
+    ],
     objects: [
-      { name: "account1", values: ["Maria", "PHP 5,000"] },
-      { name: "account2", values: ["Juan", "PHP 12,500"] },
+      { name: "account1", values: ["Maria", "5000.00"] },
+      { name: "account2", values: ["Juan", "12500.00"] },
     ],
     explain:
       "BankAccount says every account has an owner and a balance, and can deposit and withdraw. account1 and account2 are real accounts that each keep their own balance.",
   },
 ];
 
+const attributeLine = (a) => `- ${a.name}: ${a.type}`;
+const methodLine = (m) => `+ ${m.name}(${m.params}): ${m.returns}`;
+// Text values are shown in quotes, numbers and true/false are not.
+const formatValue = (attr, value) =>
+  attr.type === "String" ? `"${value}"` : value;
+
 export default function ClassObjects() {
   const [scenarioIndex, setScenarioIndex] = useState(0);
   const scenario = SCENARIOS[scenarioIndex];
+
+  const usedTypes = [...new Set(scenario.attributes.map((a) => a.type))];
+  const firstAttr = scenario.attributes[0];
+  const methodWithParams =
+    scenario.methods.find((m) => m.params) || scenario.methods[0];
 
   function showAnotherScenario() {
     setScenarioIndex((i) => (i + 1) % SCENARIOS.length);
@@ -206,8 +265,8 @@ john.id = "2024-001";`}
             <div>
               <h2 id="scenario-title">See it in another scenario</h2>
               <p className="scenario-intro">
-                The class is the blueprint. The objects are the real things made
-                from it.
+                The class diagram is the blueprint. The objects are the real
+                things made from it.
               </p>
             </div>
             <span className="scenario-counter">
@@ -216,29 +275,28 @@ john.id = "2024-001";`}
           </div>
 
           <div className="scenario-body" aria-live="polite">
-            {/* Class (blueprint) */}
-            <div className="scenario-card scenario-card--class">
-              <span className="scenario-tag">Class (blueprint)</span>
-              <h3>{scenario.className}</h3>
-
-              <h4>Attributes</h4>
-              <ul>
-                {scenario.attributes.map((attr) => (
-                  <li key={attr}>
-                    <code>{attr}</code>
-                  </li>
-                ))}
-              </ul>
-
-              <h4>Methods</h4>
-              <ul>
-                {scenario.methods.map((method) => (
-                  <li key={method}>
-                    <code>{method}</code>
-                  </li>
-                ))}
-              </ul>
-
+            {/* Class diagram (blueprint) */}
+            <div className="scenario-class">
+              <span className="scenario-tag">Class diagram (blueprint)</span>
+              <div className="uml-box">
+                <div className="uml-compartment uml-name">
+                  <strong>{scenario.className}</strong>
+                </div>
+                <div className="uml-compartment">
+                  {scenario.attributes.map((a) => (
+                    <div key={a.name} className="uml-line">
+                      <code>{attributeLine(a)}</code>
+                    </div>
+                  ))}
+                </div>
+                <div className="uml-compartment">
+                  {scenario.methods.map((m) => (
+                    <div key={m.name} className="uml-line">
+                      <code>{methodLine(m)}</code>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <p className="scenario-small">No values yet. It is only a plan.</p>
             </div>
 
@@ -258,8 +316,9 @@ john.id = "2024-001";`}
                   <h3>{obj.name}</h3>
                   <ul>
                     {scenario.attributes.map((attr, i) => (
-                      <li key={attr}>
-                        <code>{attr}</code>: <strong>{obj.values[i]}</strong>
+                      <li key={attr.name}>
+                        <code>{attr.name}</code> ={" "}
+                        <strong>{formatValue(attr, obj.values[i])}</strong>
                       </li>
                     ))}
                   </ul>
@@ -267,12 +326,11 @@ john.id = "2024-001";`}
               ))}
             </div>
           </div>
-
           <p className="scenario-explain">{scenario.explain}</p>
 
           <button
             type="button"
-            className="submit-button"
+            className="next-button"
             onClick={showAnotherScenario}
           >
             Show another scenario
