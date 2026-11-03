@@ -13,6 +13,7 @@ import FourOopPillars from "./jsx/FourOopPillars";
 import ClassDiagramFormation from './jsx/ClassDiagramFormation';
 import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
+import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
 import OOPClassModeling from './jsx/OOPClassModeling';
 import "./App.css";
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/skill-development" element={<SkillDevelopment />} />
         <Route path="/learn-basics/class-construction" element={<ClassConstruction />} />
         <Route path="/class-diagram-construction" element={<ClassDiagramConstruction />}/>
+        <Route path="/class-diagram-construction/scenario" element={<ClassDiagramScenarios />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/skill-development/class-diagram-formation" element={<ClassDiagramFormation />} />
         <Route path="/skill-development/class-relationships" element={<ClassRelationships />} />
