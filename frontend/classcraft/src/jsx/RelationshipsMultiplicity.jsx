@@ -143,14 +143,6 @@ export default function RelationshipsMultiplicity() {
           >
             Class Diagram Construction
           </NavLink>
-          <NavLink
-            to="/my-progress"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            My Progress
-          </NavLink>
         </nav>
       </aside>
 
