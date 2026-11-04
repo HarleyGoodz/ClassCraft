@@ -170,7 +170,6 @@ export default function ClassRelationships() {
           <NavLink to="/learn-basics" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Learn the Basics</NavLink>
           <NavLink to="/skill-development" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Skill Development</NavLink>
           <NavLink to="/class-diagram-construction" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Class Diagram Construction</NavLink>
-          <NavLink to="/my-progress" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>My Progress</NavLink>
         </nav>
       </aside>
 
