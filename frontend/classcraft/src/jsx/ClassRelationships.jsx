@@ -1,4 +1,7 @@
-import { RELATIONSHIP_SCENARIOS as SCENARIO_BANK } from "../questionBank/classRelationships.jsx";
+import {
+  RELATIONSHIP_SCENARIOS as SCENARIO_BANK,
+  getRelationshipFeedback,
+} from "../questionBank/classRelationships.jsx";
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
@@ -117,7 +120,7 @@ export default function ClassRelationships() {
   };
 
   const handleNext = async () => {
-    // NEW: If they click Next without clicking "Check Answer", we evaluate it automatically
+    // If they click Next without clicking "Check Answer", we evaluate it automatically
     if (!isSubmitted && droppedAnswer) {
        await handleCheckAnswer();
     }
@@ -131,10 +134,13 @@ export default function ClassRelationships() {
     }
   };
 
-  // Calculate live score for the header
   if (questionsLoading) return <ActivityLoadingSkeleton />;
   if (questionsError) return <main className="dashboard" role="alert">{questionsError}</main>;
   if (RELATIONSHIP_SCENARIOS.length === 0) return <NoSkillQuestions />;
+
+  // Feedback for the connector the learner dropped (never reveals the correct answer)
+  const feedback =
+    isSubmitted && droppedAnswer ? getRelationshipFeedback(currentScenario, droppedAnswer) : null;
 
   return (
     <div className="dashboard-layout">
@@ -227,10 +233,10 @@ export default function ClassRelationships() {
             {currentScenario.scenario}
           </p>
 
-          {isSubmitted && (
-            <div className={`relationship-feedback ${droppedAnswer === currentScenario.correctAnswer ? "success" : "error"}`}>
-              <h3>{droppedAnswer === currentScenario.correctAnswer ? "Correct!" : `Incorrect. It should be ${currentScenario.correctAnswer}.`}</h3>
-              <p>{currentScenario.explanation}</p>
+          {feedback && (
+            <div className={`relationship-feedback ${feedback.correct ? "success" : "error"}`}>
+              <h3>{feedback.title}</h3>
+              <p>{feedback.message}</p>
             </div>
           )}
         </div>
