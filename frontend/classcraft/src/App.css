@@ -33,6 +33,30 @@ button {
   cursor: pointer;
 }
 
+.cdf-piece,
+.connector-option,
+.multiplicity-option,
+.oop-piece,
+.tool-item {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.pointer-drag-preview {
+  position: fixed;
+  z-index: 9999;
+  max-width: 16rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #93c5fd;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 6px 18px rgb(15 23 42 / 20%);
+  color: #1e293b;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
 a {
   color: #0645ad;
 }

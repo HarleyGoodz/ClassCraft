@@ -1,5 +1,9 @@
+import { CDC_SCENARIOS } from "../questionBank/classDiagramConstruction.jsx";
 import { Fragment, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
+import { usePointerDragDrop } from "../hooks/usePointerDragDrop.jsx";
+import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import "../css/class_diagram_construction_css.css";
 import "../css/class_diagram_scenarios_css.css";
 
@@ -32,138 +36,6 @@ const MAX_BOXES = 6;
 const RELATIONSHIPS = ["Association", "Inheritance", "Aggregation", "Composition"];
 const DIRECTIONAL = ["Inheritance", "Aggregation", "Composition"];
 const MULTIPLICITIES = ["1", "0..1", "0..*", "1..*"];
-
-export const CDC_SCENARIOS = [
-  {
-    id: 1,
-    title: "Online Shopping: Customer, Order and OrderItem",
-    pillars: ["Encapsulation"],
-    scenario:
-      "An online store tracks Customers and their Orders. A Customer can place zero or many Orders, but every Order belongs to exactly one Customer. An Order is made up of one or more OrderItems, and if an Order is cancelled, its OrderItems are deleted too. The Customer's 'password', the Order's 'totalPrice' and the OrderItem's 'quantity' can only be used inside their own classes. Anyone can call the Customer's 'placeOrder()' and the Order's 'addItem()'.",
-    classes: ["Customer", "Order", "OrderItem"],
-    relations: [
-      { p: "Customer", q: "Order", rel: "Association", mult: { Customer: "1", Order: "0..*" } },
-      { p: "Order", q: "OrderItem", rel: "Composition", mult: { Order: "1", OrderItem: "1..*" } },
-    ],
-    pieces: [
-      { id: "c1", text: "Customer", owner: "Customer" },
-      { id: "c2", text: "Order", owner: "Order" },
-      { id: "c3", text: "OrderItem", owner: "OrderItem" },
-      { id: "x1", text: "Warehouse", owner: null },
-      { id: "a1", text: "password: String", owner: "Customer", vis: "-" },
-      { id: "a2", text: "totalPrice: double", owner: "Order", vis: "-" },
-      { id: "a3", text: "quantity: int", owner: "OrderItem", vis: "-" },
-      { id: "x2", text: "shelfNumber: int", owner: null },
-      { id: "m1", text: "placeOrder(): void", owner: "Customer", vis: "+" },
-      { id: "m2", text: "addItem(): void", owner: "Order", vis: "+" },
-      { id: "x3", text: "restockShelf(): void", owner: null },
-    ],
-  },
-  {
-    id: 2,
-    title: "Banking: Account, SavingsAccount and CheckingAccount",
-    pillars: ["Abstraction", "Inheritance", "Polymorphism", "Encapsulation"],
-    scenario:
-      "A bank never opens just a plain 'Account'. It only opens a SavingsAccount or a CheckingAccount, which are kinds of Account, so Account is only a general idea (abstract). Every account has a 'balance' that can only be used by the Account and the accounts that come from it. A SavingsAccount also has an 'interestRate' that only the SavingsAccount itself can use. Anyone can call 'deposit()' on an Account. Account, SavingsAccount and CheckingAccount each have their own 'calculateFee()' that anyone can call, because each type charges fees differently.",
-    classes: ["Account", "SavingsAccount", "CheckingAccount"],
-    relations: [
-      { p: "Account", q: "SavingsAccount", rel: "Inheritance", mult: {} },
-      { p: "Account", q: "CheckingAccount", rel: "Inheritance", mult: {} },
-    ],
-    pieces: [
-      { id: "c1", text: "«abstract»\nAccount", owner: "Account" },
-      { id: "c2", text: "SavingsAccount", owner: "SavingsAccount" },
-      { id: "c3", text: "CheckingAccount", owner: "CheckingAccount" },
-      { id: "x1", text: "Branch", owner: null },
-      { id: "a1", text: "balance: double", owner: "Account", vis: "#" },
-      { id: "a2", text: "interestRate: double", owner: "SavingsAccount", vis: "-" },
-      { id: "x2", text: "branchCode: String", owner: null },
-      { id: "m1", text: "deposit(): void", owner: "Account", vis: "+" },
-      { id: "m2", text: "calculateFee(): double", owner: "Account", vis: "+" },
-      { id: "m3", text: "calculateFee(): double", owner: "SavingsAccount", vis: "+" },
-      { id: "m4", text: "calculateFee(): double", owner: "CheckingAccount", vis: "+" },
-      { id: "x3", text: "openBranch(): void", owner: null },
-    ],
-  },
-  {
-    id: 3,
-    title: "Healthcare: Hospital, Department and Doctor",
-    pillars: ["Encapsulation"],
-    scenario:
-      "A Hospital is divided into one or more Departments, and each Department belongs to exactly one Hospital. If the Hospital closes, its Departments close too. Each Department has zero or more Doctors, and each Doctor works in exactly one Department, but a Doctor is not owned by the Department: if the Department closes, the Doctor still exists and can work elsewhere. The Hospital's 'name', the Department's 'departmentName' and the Doctor's 'licenseNumber' can only be used inside their own classes. Anyone can call 'addDepartment()', 'assignDoctor()' and 'treatPatient()'.",
-    classes: ["Hospital", "Department", "Doctor"],
-    relations: [
-      { p: "Hospital", q: "Department", rel: "Composition", mult: { Hospital: "1", Department: "1..*" } },
-      { p: "Department", q: "Doctor", rel: "Aggregation", mult: { Department: "1", Doctor: "0..*" } },
-    ],
-    pieces: [
-      { id: "c1", text: "Hospital", owner: "Hospital" },
-      { id: "c2", text: "Department", owner: "Department" },
-      { id: "c3", text: "Doctor", owner: "Doctor" },
-      { id: "x1", text: "Patient", owner: null },
-      { id: "a1", text: "name: String", owner: "Hospital", vis: "-" },
-      { id: "a2", text: "departmentName: String", owner: "Department", vis: "-" },
-      { id: "a3", text: "licenseNumber: String", owner: "Doctor", vis: "-" },
-      { id: "x2", text: "diagnosis: String", owner: null },
-      { id: "m1", text: "addDepartment(): void", owner: "Hospital", vis: "+" },
-      { id: "m2", text: "assignDoctor(): void", owner: "Department", vis: "+" },
-      { id: "m3", text: "treatPatient(): void", owner: "Doctor", vis: "+" },
-      { id: "x3", text: "billPatient(): void", owner: null },
-    ],
-  },
-  {
-    id: 4,
-    title: "University: Student, Course and Instructor",
-    pillars: ["Encapsulation"],
-    scenario:
-      "A university has Students and Courses. A Student can enroll in zero or many Courses, and a Course can have zero or many Students. Each Course is taught by exactly one Instructor, but an Instructor can teach zero or many Courses. Neither one owns the other. The Student's 'studentNumber', the Course's 'courseCode' and the Instructor's 'salary' can only be used inside their own classes. Anyone can call the Student's 'enroll()', the Course's 'getSchedule()' and the Instructor's 'gradeStudent()'.",
-    classes: ["Student", "Course", "Instructor"],
-    relations: [
-      { p: "Student", q: "Course", rel: "Association", mult: { Student: "0..*", Course: "0..*" } },
-      { p: "Course", q: "Instructor", rel: "Association", mult: { Course: "0..*", Instructor: "1" } },
-    ],
-    pieces: [
-      { id: "c1", text: "Student", owner: "Student" },
-      { id: "c2", text: "Course", owner: "Course" },
-      { id: "c3", text: "Instructor", owner: "Instructor" },
-      { id: "x1", text: "Classroom", owner: null },
-      { id: "a1", text: "studentNumber: int", owner: "Student", vis: "-" },
-      { id: "a2", text: "courseCode: String", owner: "Course", vis: "-" },
-      { id: "a3", text: "salary: double", owner: "Instructor", vis: "-" },
-      { id: "x2", text: "roomNumber: int", owner: null },
-      { id: "m1", text: "enroll(): void", owner: "Student", vis: "+" },
-      { id: "m2", text: "getSchedule(): String", owner: "Course", vis: "+" },
-      { id: "m3", text: "gradeStudent(): void", owner: "Instructor", vis: "+" },
-      { id: "x3", text: "cleanRoom(): void", owner: null },
-    ],
-  },
-  {
-    id: 5,
-    title: "City Library: Library, LibraryItem and Book",
-    pillars: ["Abstraction", "Inheritance", "Polymorphism", "Encapsulation"],
-    scenario:
-      "A city Library keeps zero or more LibraryItems, and each item belongs to exactly one Library. If the Library closes, its items still exist and can move to another Library. A LibraryItem is only a general idea (abstract), because nobody borrows just an 'item'. A Book is a kind of LibraryItem. The LibraryItem's 'title' can only be used by itself and the classes that come from it. The Book's 'isbn' and the Library's 'address' can only be used inside their own classes. Anyone can call the Library's 'addItem()'. LibraryItem and Book each have their own 'getLoanDays()' that anyone can call, because books can be borrowed longer than other items.",
-    classes: ["Library", "LibraryItem", "Book"],
-    relations: [
-      { p: "Library", q: "LibraryItem", rel: "Aggregation", mult: { Library: "1", LibraryItem: "0..*" } },
-      { p: "LibraryItem", q: "Book", rel: "Inheritance", mult: {} },
-    ],
-    pieces: [
-      { id: "c1", text: "Library", owner: "Library" },
-      { id: "c2", text: "«abstract»\nLibraryItem", owner: "LibraryItem" },
-      { id: "c3", text: "Book", owner: "Book" },
-      { id: "x1", text: "Librarian", owner: null },
-      { id: "a1", text: "address: String", owner: "Library", vis: "-" },
-      { id: "a2", text: "title: String", owner: "LibraryItem", vis: "#" },
-      { id: "a3", text: "isbn: String", owner: "Book", vis: "-" },
-      { id: "x2", text: "salary: double", owner: null },
-      { id: "m1", text: "addItem(): void", owner: "Library", vis: "+" },
-      { id: "m2", text: "getLoanDays(): int", owner: "LibraryItem", vis: "+" },
-      { id: "m3", text: "getLoanDays(): int", owner: "Book", vis: "+" },
-      { id: "x3", text: "payFine(): void", owner: null },
-    ],
-  },
-];
 
 // --- HELPERS ---
 const kindOf = (text) =>
@@ -294,19 +166,32 @@ function grade(scn, boxes, links) {
 }
 
 export default function ClassDiagramScenarios() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { attempts, recordAttempt, trackingError } = useLearningAttemptTracking();
+  const { startDrag, previewElement } = usePointerDragDrop();
+  const requestedScenarioIds = location.state?.scenarioIds;
+  const requestedScenarios = Array.isArray(requestedScenarioIds)
+    ? CDC_SCENARIOS.filter((scenario) =>
+        requestedScenarioIds.some((id) => String(id) === String(scenario.id))
+      )
+    : CDC_SCENARIOS;
+  const practiceScenarios = requestedScenarios.length
+    ? requestedScenarios
+    : CDC_SCENARIOS;
 
   const [index, setIndex] = useState(0);
-  const scenario = CDC_SCENARIOS[index];
+  const scenario = practiceScenarios[index];
 
   const nextUid = useRef(1);
   const [boxes, setBoxes] = useState([]); // [{ uid, name, attrs, methods }] starts empty
   const [links, setLinks] = useState({}); // "leftUid-rightUid" -> { rel, multL, multR, flipped }
-  const [bank, setBank] = useState(() => shuffled(CDC_SCENARIOS[0].pieces));
+  const [bank, setBank] = useState(() => shuffled(practiceScenarios[0].pieces));
   const [checked, setChecked] = useState(false);
   const [results, setResults] = useState({}); // index -> { satisfied, total }
   const [finished, setFinished] = useState(false);
   const [dragOver, setDragOver] = useState(null);
+  const [selectedPlacement, setSelectedPlacement] = useState(null);
 
   const graded = checked ? grade(scenario, boxes, links) : null;
   const originalPiece = (id) => scenario.pieces.find((p) => p.id === id);
@@ -319,11 +204,12 @@ export default function ClassDiagramScenarios() {
     setBank(shuffled(scn.pieces));
     setChecked(false);
     setDragOver(null);
+    setSelectedPlacement(null);
   };
 
   const goToScenario = (i) => {
     setIndex(i);
-    resetBoard(CDC_SCENARIOS[i]);
+    resetBoard(practiceScenarios[i]);
   };
 
   // --- Boxes ---
@@ -357,15 +243,13 @@ export default function ClassDiagramScenarios() {
   };
 
   // --- Drag and drop: class pieces ---
-  const dropPiece = (e, uid, section) => {
-    e.preventDefault();
-    setDragOver(null);
+  const placePiece = (id, uid, section) => {
     if (checked) return;
-    const id = e.dataTransfer.getData("piece");
     const piece = bank.find((p) => p.id === id);
     if (!piece) return;
 
     const target = boxes.find((b) => b.uid === uid);
+    if (!target) return;
     const previousName = section === "name" ? target.name : null;
 
     setBoxes(
@@ -376,6 +260,12 @@ export default function ClassDiagramScenarios() {
       })
     );
     setBank([...bank.filter((p) => p.id !== id), ...(previousName ? [previousName] : [])]);
+  };
+
+  const dropPiece = (e, uid, section) => {
+    e.preventDefault();
+    setDragOver(null);
+    placePiece(e.dataTransfer.getData("piece"), uid, section);
   };
 
   const removePiece = (uid, section, piece) => {
@@ -413,13 +303,49 @@ export default function ClassDiagramScenarios() {
   const patchLink = (key, patch) =>
     setLinks({ ...links, [key]: { ...(links[key] || emptyLink), ...patch } });
 
+  const placeLink = (value, key, field) => {
+    if (checked) return;
+    if (!value) return;
+    patchLink(key, { [field]: value });
+  };
+
   const dropLink = (e, key, field, dataKey) => {
     e.preventDefault();
     setDragOver(null);
+    placeLink(e.dataTransfer.getData(dataKey), key, field);
+  };
+
+  const handlePointerDrop = (payload, target) => {
+    const [targetType, owner, destination] = target.split("|");
+    if (targetType === "piece" && payload.kind === "piece") {
+      placePiece(payload.id, Number(owner), destination);
+    } else if (
+      targetType === "link" &&
+      ((destination === "rel" && payload.kind === "relationship") ||
+        (destination !== "rel" && payload.kind === "multiplicity"))
+    ) {
+      placeLink(payload.value, owner, destination);
+    }
+    setSelectedPlacement(null);
+    setDragOver(null);
+  };
+
+  const handleTargetClick = (target, onEmptyClick) => {
+    if (selectedPlacement) {
+      handlePointerDrop(selectedPlacement.payload, target);
+      return;
+    }
+    onEmptyClick?.();
+  };
+
+  const beginPlacementDrag = (event, payload, label) => {
     if (checked) return;
-    const value = e.dataTransfer.getData(dataKey);
-    if (!value) return;
-    patchLink(key, { [field]: value });
+    setSelectedPlacement(null);
+    startDrag(event, payload, label, handlePointerDrop);
+  };
+
+  const selectPlacement = (payload, label) => {
+    if (!checked) setSelectedPlacement({ payload, label });
   };
 
   const clearLinkField = (key, field) => {
@@ -439,14 +365,30 @@ export default function ClassDiagramScenarios() {
   };
 
   // --- Check / next ---
-  const handleCheck = () => {
+  const handleCheck = async () => {
+    if (boxes.length === 0) return;
     const g = grade(scenario, boxes, links);
     setResults((prev) => ({ ...prev, [index]: { satisfied: g.satisfied, total: g.total } }));
     setChecked(true);
+    await recordAttempt({
+      activityKey: "class-diagram-construction",
+      scenarioKey: scenario.id,
+      correctElements: g.satisfied,
+      requiredElements: g.total,
+      completed: g.satisfied === g.total,
+      submittedResponse: {
+        boxes: boxes.map((box) => ({
+          name: box.name?.text ?? null,
+          attributes: box.attrs.map((item) => ({ text: item.text, visibility: item.currentVis })),
+          methods: box.methods.map((item) => ({ text: item.text, visibility: item.currentVis })),
+        })),
+        links,
+      },
+    });
   };
 
   const handleNext = () => {
-    if (index < CDC_SCENARIOS.length - 1) goToScenario(index + 1);
+    if (index < practiceScenarios.length - 1) goToScenario(index + 1);
     else setFinished(true);
   };
 
@@ -464,10 +406,16 @@ export default function ClassDiagramScenarios() {
   const renderItems = (box, section) =>
     box[section].map((item) => (
       <div key={item.id} className={`cds-item ${mark(graded?.itemOk[item.id])}`}>
-        <span className="cds-vis" onClick={() => toggleVisibility(box.uid, section, item.id)}>
+        <span className="cds-vis" onClick={(event) => {
+          event.stopPropagation();
+          toggleVisibility(box.uid, section, item.id);
+        }}>
           {item.currentVis}
         </span>
-        <span className="cds-item-text" onClick={() => removePiece(box.uid, section, item)}>
+        <span className="cds-item-text" onClick={(event) => {
+          event.stopPropagation();
+          removePiece(box.uid, section, item);
+        }}>
           {item.text}
         </span>
       </div>
@@ -483,14 +431,16 @@ export default function ClassDiagramScenarios() {
         className={[
           "cds-zone",
           extraClass,
+          selectedPlacement ? "cds-drop-ready" : "",
           value ? "filled" : "",
           dragOver === zoneKey ? "over" : "",
           mark(graded?.conn[key]?.[field]),
         ].filter(Boolean).join(" ")}
+        data-drop-target={`link|${key}|${field}`}
         onDragOver={(e) => allowDrop(e, zoneKey)}
         onDragLeave={() => setDragOver(null)}
         onDrop={(e) => dropLink(e, key, field, dataKey)}
-        onClick={() => clearLinkField(key, field)}
+        onClick={() => handleTargetClick(`link|${key}|${field}`, () => clearLinkField(key, field))}
       >
         {value ? (field === "rel" ? <RelSymbol type={value} flipped={link.flipped} /> : value) : placeholder}
       </div>
@@ -531,15 +481,21 @@ export default function ClassDiagramScenarios() {
       <div
         className={[
           "cds-class-header",
+          selectedPlacement ? "cds-drop-ready" : "",
           dragOver === `${box.uid}-name` ? "over" : "",
           mark(graded?.names[i]),
         ].filter(Boolean).join(" ")}
+        data-drop-target={`piece|${box.uid}|name`}
         onDragOver={(e) => allowDrop(e, `${box.uid}-name`)}
         onDragLeave={() => setDragOver(null)}
         onDrop={(e) => dropPiece(e, box.uid, "name")}
+        onClick={() => handleTargetClick(`piece|${box.uid}|name`)}
       >
         {box.name ? (
-          <span className="cds-class-name" onClick={() => removePiece(box.uid, "name", box.name)}>
+          <span className="cds-class-name" onClick={(event) => {
+            event.stopPropagation();
+            removePiece(box.uid, "name", box.name);
+          }}>
             {box.name.text}
           </span>
         ) : (
@@ -549,10 +505,12 @@ export default function ClassDiagramScenarios() {
       {["attrs", "methods"].map((section) => (
         <div
           key={section}
-          className={`cds-section ${dragOver === `${box.uid}-${section}` ? "over" : ""}`}
+          className={`cds-section ${selectedPlacement ? "cds-drop-ready" : ""} ${dragOver === `${box.uid}-${section}` ? "over" : ""}`}
+          data-drop-target={`piece|${box.uid}|${section}`}
           onDragOver={(e) => allowDrop(e, `${box.uid}-${section}`)}
           onDragLeave={() => setDragOver(null)}
           onDrop={(e) => dropPiece(e, box.uid, section)}
+          onClick={() => handleTargetClick(`piece|${box.uid}|${section}`)}
         >
           <span className="cds-section-label">
             {section === "attrs" ? "Attributes" : "Methods"}
@@ -606,11 +564,12 @@ export default function ClassDiagramScenarios() {
         {finished ? (
           <section className="cds-results">
             <h1>All scenarios complete</h1>
+            {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
             <p className="cds-muted">
               Target: at least {TARGET_PERCENT}% of the required diagram elements modeled correctly in each scenario.
             </p>
             <ul className="cds-result-list">
-              {CDC_SCENARIOS.map((s, i) => {
+              {practiceScenarios.map((s, i) => {
                 const r = results[i];
                 const pct = r ? percentOf(r) : 0;
                 return (
@@ -639,10 +598,16 @@ export default function ClassDiagramScenarios() {
                 <span className="cds-breadcrumb-sep">&rsaquo;</span>
                 <span>Scenario</span>
               </div>
-              <div className="cds-counter">Scenario {index + 1} of {CDC_SCENARIOS.length}</div>
+              <div className="cds-counter">Scenario {index + 1} of {practiceScenarios.length}</div>
             </div>
 
             <h1 className="cds-title">{scenario.title}</h1>
+            {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+            <PreviousAttemptNotice
+              attempts={attempts}
+              activityKey="class-diagram-construction"
+              scenarioKey={scenario.id}
+            />
             <p className="cds-scenario">
               <strong>Scenario:</strong> {scenario.scenario}
             </p>
@@ -687,9 +652,13 @@ export default function ClassDiagramScenarios() {
                     bank.map((piece) => (
                       <div
                         key={piece.id}
-                        className="cds-piece"
-                        draggable={!checked}
-                        onDragStart={(e) => e.dataTransfer.setData("piece", piece.id)}
+                        className={`cds-piece${selectedPlacement?.payload.id === piece.id ? " cds-selected" : ""}`}
+                        onPointerDown={(event) => beginPlacementDrag(
+                          event,
+                          { kind: "piece", id: piece.id },
+                          piece.text
+                        )}
+                        onClick={() => selectPlacement({ kind: "piece", id: piece.id }, piece.text)}
                       >
                         {piece.text}
                       </div>
@@ -702,9 +671,13 @@ export default function ClassDiagramScenarios() {
                   {RELATIONSHIPS.map((r) => (
                     <div
                       key={r}
-                      className="cds-tool"
-                      draggable={!checked}
-                      onDragStart={(e) => e.dataTransfer.setData("relationship_type", r)}
+                      className={`cds-tool${selectedPlacement?.payload.value === r ? " cds-selected" : ""}`}
+                      onPointerDown={(event) => beginPlacementDrag(
+                        event,
+                        { kind: "relationship", value: r },
+                        r
+                      )}
+                      onClick={() => selectPlacement({ kind: "relationship", value: r }, r)}
                     >
                       <RelSymbol type={r} />
                     </div>
@@ -716,9 +689,13 @@ export default function ClassDiagramScenarios() {
                   {MULTIPLICITIES.map((m) => (
                     <div
                       key={m}
-                      className="cds-tool"
-                      draggable={!checked}
-                      onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", m)}
+                      className={`cds-tool${selectedPlacement?.payload.value === m ? " cds-selected" : ""}`}
+                      onPointerDown={(event) => beginPlacementDrag(
+                        event,
+                        { kind: "multiplicity", value: m },
+                        m
+                      )}
+                      onClick={() => selectPlacement({ kind: "multiplicity", value: m }, m)}
                     >
                       {m}
                     </div>
@@ -735,7 +712,7 @@ export default function ClassDiagramScenarios() {
                     Answer checked. Green boxes are correct. Boxes outlined in red need another look.
                   </span>
                   <button className="cds-btn cds-btn-primary" onClick={handleNext}>
-                    {index === CDC_SCENARIOS.length - 1 ? "Finish" : "Next Scenario →"}
+                    {index === practiceScenarios.length - 1 ? "Finish" : "Next Scenario →"}
                   </button>
                 </>
               ) : (
@@ -753,6 +730,7 @@ export default function ClassDiagramScenarios() {
             </div>
           </>
         )}
+        {previewElement}
       </main>
     </div>
   );

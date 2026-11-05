@@ -1,95 +1,15 @@
+import { OOP_SCENARIOS as SCENARIO_BANK } from "../questionBank/oopClassModeling.jsx";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
+import { usePointerDragDrop } from "../hooks/usePointerDragDrop.jsx";
+import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
+import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
+import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
+import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
 import "../css/oop_class_modeling.css";
 import "../css/oop_class_modeling_feedback.css";
 
-// --- SCENARIO DATABASE ---
-export const OOP_SCENARIOS = [
-  {
-    id: 1,
-    title: "Car Dealership: Vehicle and Car",
-    scenario:
-      "A Vehicle is only a general idea (abstract), because nobody buys just a 'Vehicle'. Its 'fuelLevel' can only be used by the Vehicle and the classes that come from it, and anyone can call its 'start()'. A Car is a kind of Vehicle. Its 'numberOfDoors' can only be used inside the Car itself. Each Car is exactly one Vehicle.",
-    targetParent: "Vehicle",
-    targetChild: "Car",
-    correctRelationship: "Inheritance",
-    correctMultiplicity: "1",
-    relationshipClue: "the scenario says a Car is a kind of Vehicle",
-    multiplicityClue: "the scenario says each Car is exactly one Vehicle",
-    pieces: [
-      { id: "p1", text: "«abstract»\nVehicle", type: "parent" },
-      { id: "p2", text: "Car", type: "child" },
-      { id: "p3", text: "Driver", type: "distractor" },
-      { id: "p4", text: "fuelLevel: int", type: "parent_attr", correctVis: "#" },
-      { id: "p5", text: "numberOfDoors: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "driverName: String", type: "distractor" },
-      { id: "p7", text: "start(): void", type: "parent_method", correctVis: "+" },
-    ],
-  },
-  {
-    id: 2,
-    title: "Real Estate: House and Room",
-    scenario:
-      "A House has one or more Rooms. If the House is demolished, its Rooms are gone too. Anyone can see the House's 'address'. A Room's 'floorArea' can only be used inside the Room itself, and anyone can call its 'turnOnLights()'.",
-    targetParent: "House",
-    targetChild: "Room",
-    correctRelationship: "Composition",
-    correctMultiplicity: "1..*",
-    relationshipClue: "the scenario says the Rooms are gone when the House is demolished",
-    multiplicityClue: "the scenario says a House has one or more Rooms",
-    pieces: [
-      { id: "p1", text: "House", type: "parent" },
-      { id: "p2", text: "Room", type: "child" },
-      { id: "p3", text: "Tenant", type: "distractor" },
-      { id: "p4", text: "address: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "floorArea: double", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "monthlyRent: double", type: "distractor" },
-      { id: "p7", text: "turnOnLights(): void", type: "child_method", correctVis: "+" },
-    ],
-  },
-  {
-    id: 3,
-    title: "Basketball League: Team and Player",
-    scenario:
-      "A Team has zero or more Players. If the Team disbands, the Players still exist and can join another Team. Anyone can see the Team's 'teamName' and call its 'addPlayer()'. A Player's 'jerseyNumber' can only be used inside the Player itself.",
-    targetParent: "Team",
-    targetChild: "Player",
-    correctRelationship: "Aggregation",
-    correctMultiplicity: "0..*",
-    relationshipClue: "the scenario says the Players still exist when the Team disbands",
-    multiplicityClue: "the scenario says a Team has zero or more Players",
-    pieces: [
-      { id: "p1", text: "Team", type: "parent" },
-      { id: "p2", text: "Player", type: "child" },
-      { id: "p3", text: "Stadium", type: "distractor" },
-      { id: "p4", text: "teamName: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "jerseyNumber: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "ticketPrice: double", type: "distractor" },
-      { id: "p7", text: "addPlayer(): void", type: "parent_method", correctVis: "+" },
-    ],
-  },
-  {
-    id: 4,
-    title: "Public Library: Member and Book",
-    scenario:
-      "A Member can borrow zero or many Books, and a Book can be borrowed by many Members. Neither owns the other. Anyone can see the Member's 'name'. A Book's 'availableCopies' can only be changed inside the Book itself, and anyone can call its 'borrow()'.",
-    targetParent: "Member",
-    targetChild: "Book",
-    correctRelationship: "Association",
-    correctMultiplicity: "0..*",
-    relationshipClue: "the scenario says neither one owns the other",
-    multiplicityClue: "the scenario says a Member can borrow zero or many Books",
-    pieces: [
-      { id: "p1", text: "Member", type: "parent" },
-      { id: "p2", text: "Book", type: "child" },
-      { id: "p3", text: "Librarian", type: "distractor" },
-      { id: "p4", text: "name: String", type: "parent_attr", correctVis: "+" },
-      { id: "p5", text: "availableCopies: int", type: "child_attr", correctVis: "-" },
-      { id: "p6", text: "librarianSalary: double", type: "distractor" },
-      { id: "p7", text: "borrow(): void", type: "child_method", correctVis: "+" },
-    ],
-  },
-];
 
 // --- TEACHING TEXT ---
 const VIS_MEANING = {
@@ -133,7 +53,34 @@ const expectedSection = (piece) => {
 };
 
 export default function OOPClassModeling() {
+  const location = useLocation();
+  const {
+    questions,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useSkillQuestionSet(
+    "oop-class-modeling",
+    SCENARIO_BANK,
+    location.state?.skillQuestions
+  );
+
+  if (questionsLoading) return <ActivityLoadingSkeleton />;
+  if (questionsError) return <main className="dashboard" role="alert">{questionsError}</main>;
+  if (questions.length === 0) return <NoSkillQuestions />;
+
+  return (
+    <OOPClassModelingActivity
+      scenarios={questions}
+      initialAttempts={location.state?.learningAttempts}
+    />
+  );
+}
+
+function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts }) {
   const navigate = useNavigate();
+  const { startDrag, previewElement } = usePointerDragDrop();
+  const { attempts, priorAttempts, recordAttempt, trackingError } =
+    useLearningAttemptTracking(initialAttempts);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentScenario = OOP_SCENARIOS[currentIndex];
@@ -150,6 +97,7 @@ export default function OOPClassModeling() {
   // Relationship States
   const [droppedRelationship, setDroppedRelationship] = useState(null);
   const [droppedMultiplicity, setDroppedMultiplicity] = useState(null);
+  const [selectedTool, setSelectedTool] = useState(null);
 
   const [availablePieces, setAvailablePieces] = useState(() =>
     [...currentScenario.pieces].sort(() => Math.random() - 0.5)
@@ -157,19 +105,8 @@ export default function OOPClassModeling() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [feedback, setFeedback] = useState({ message: "", type: "" });
-  const [scores, setScores] = useState({});
 
-  // --- Drag and Drop Logic ---
-  const handleDragStart = (e, piece) => {
-    e.dataTransfer.setData("piece", JSON.stringify(piece));
-  };
-
-  const handleDrop = (e, targetSection) => {
-    e.preventDefault();
-    const pieceData = e.dataTransfer.getData("piece");
-    if (!pieceData) return;
-    const piece = JSON.parse(pieceData);
-
+  const placePiece = (piece, targetSection) => {
     const removeFromBank = (id) => {
       setAvailablePieces((prev) => prev.filter((p) => p.id !== id));
     };
@@ -199,23 +136,36 @@ export default function OOPClassModeling() {
 
     setFeedback({ message: "", type: "" });
     setIsSubmitted(false);
+    setSelectedTool(null);
   };
 
-  // --- Relationship Drag Logic ---
-  const handleDropRelationship = (e) => {
-    e.preventDefault();
-    const rel = e.dataTransfer.getData("relationship_type");
-    if (rel) {
-      setDroppedRelationship(rel);
-      setIsSubmitted(false);
+  const placeSelectedPiece = (targetSection) => {
+    if (selectedTool?.type === "piece") {
+      placePiece(selectedTool.value, targetSection);
     }
   };
 
-  const handleDropMultiplicity = (e) => {
-    e.preventDefault();
-    const mult = e.dataTransfer.getData("multiplicity_type");
-    if (mult) {
-      setDroppedMultiplicity(mult);
+  const placeSelectedTool = (type) => {
+    if (selectedTool?.type !== type) return;
+    if (type === "relationship") setDroppedRelationship(selectedTool.value);
+    if (type === "multiplicity") setDroppedMultiplicity(selectedTool.value);
+    setSelectedTool(null);
+    setIsSubmitted(false);
+  };
+
+  // --- Relationship Drag Logic ---
+  const handlePointerDrop = (payload, target) => {
+    if (payload.type === "piece") {
+      if (currentScenario.pieces.some((piece) => piece.id === payload.value.id)) {
+        placePiece(payload.value, target);
+      }
+    } else if (payload.type === "relationship" && target === "relationship") {
+      setDroppedRelationship(payload.value);
+      setSelectedTool(null);
+      setIsSubmitted(false);
+    } else if (payload.type === "multiplicity" && target === "multiplicity") {
+      setDroppedMultiplicity(payload.value);
+      setSelectedTool(null);
       setIsSubmitted(false);
     }
   };
@@ -377,7 +327,14 @@ export default function OOPClassModeling() {
       hasAll(childMethods, "child_method");
 
     const isCorrect = !hasWrong && !!isComplete;
-    setScores((prev) => ({ ...prev, [currentIndex]: isCorrect }));
+    const requiredPieces = currentScenario.pieces.filter((piece) => piece.type !== "distractor");
+    const correctPieces = requiredPieces.filter((required) =>
+      placedItems().some(
+        ({ piece, section }) => piece.id === required.id && getItemFeedback(piece, section).ok
+      )
+    ).length;
+    const correctElements =
+      correctPieces + Number(!!relFb?.ok) + Number(!!multFb?.ok);
 
     if (isCorrect) {
       setFeedback({ message: "Excellent! Your model is correct.", type: "success" });
@@ -389,10 +346,35 @@ export default function OOPClassModeling() {
         type: "info",
       });
     }
-    return isCorrect;
+    return {
+      isCorrect,
+      correctElements,
+      requiredElements: requiredPieces.length + 2,
+    };
   };
 
-  const handleCheckAnswer = () => { evaluateAnswer(); setIsSubmitted(true); };
+  const handleCheckAnswer = async () => {
+    if (placedItems().length === 0 && !droppedRelationship && !droppedMultiplicity) return;
+    const result = evaluateAnswer();
+    setIsSubmitted(true);
+    await recordAttempt({
+      activityKey: "oop-class-modeling",
+      scenarioKey: currentScenario.id,
+      correctElements: result.correctElements,
+      requiredElements: result.requiredElements,
+      completed: result.isCorrect,
+      submittedResponse: {
+        parentName: parentName?.text ?? null,
+        parentAttributes: parentAttrs.map(({ text, currentVis }) => ({ text, visibility: currentVis })),
+        parentMethods: parentMethods.map(({ text, currentVis }) => ({ text, visibility: currentVis })),
+        childName: childName?.text ?? null,
+        childAttributes: childAttrs.map(({ text, currentVis }) => ({ text, visibility: currentVis })),
+        childMethods: childMethods.map(({ text, currentVis }) => ({ text, visibility: currentVis })),
+        relationship: droppedRelationship,
+        multiplicity: droppedMultiplicity,
+      },
+    });
+  };
 
   // Clears the board and loads the pieces of the given scenario.
   // The scenario is passed in on purpose: right after setCurrentIndex, the
@@ -402,6 +384,7 @@ export default function OOPClassModeling() {
     setParentAttrs([]); setChildAttrs([]);
     setParentMethods([]); setChildMethods([]);
     setDroppedRelationship(null); setDroppedMultiplicity(null);
+    setSelectedTool(null);
     setAvailablePieces([...scenario.pieces].sort(() => Math.random() - 0.5));
     setFeedback({ message: "", type: "" });
     setIsSubmitted(false);
@@ -418,13 +401,13 @@ export default function OOPClassModeling() {
     if (currentIndex > 0) goToScenario(currentIndex - 1);
   };
 
-  const handleNext = () => {
-    if (!isSubmitted) evaluateAnswer();
+  const handleNext = async () => {
+    if (!isSubmitted && (placedItems().length > 0 || droppedRelationship || droppedMultiplicity)) {
+      await handleCheckAnswer();
+    }
     if (currentIndex < OOP_SCENARIOS.length - 1) goToScenario(currentIndex + 1);
     else navigate("/skill-development");
   };
-
-  const correctCount = Object.values(scores).filter((val) => val === true).length;
 
   // --- Rendering helpers ---
   const stateClass = (fb) => (fb ? (fb.ok ? "oop-item-correct" : "oop-item-wrong") : "");
@@ -442,7 +425,7 @@ export default function OOPClassModeling() {
     const fb = isSubmitted ? getItemFeedback(piece, section) : null;
     return (
       <div className={`oop-name-wrap ${stateClass(fb)}`}>
-        <div onClick={() => removePiece(piece, section)} className="oop-class-name" style={{ whiteSpace: "pre-line" }}>
+        <div onClick={(event) => { event.stopPropagation(); removePiece(piece, section); }} className="oop-class-name" style={{ whiteSpace: "pre-line" }}>
           {piece.text}
         </div>
         {renderFeedback(fb)}
@@ -456,8 +439,8 @@ export default function OOPClassModeling() {
       return (
         <div key={item.id} className={`oop-item-wrap ${stateClass(fb)}`}>
           <div className="oop-item-row">
-            <span className="oop-visibility-badge" onClick={() => toggleVisibility(item, section)}>{item.currentVis}</span>
-            <span className="oop-item-text" onClick={() => removePiece(item, section)}>{item.text}</span>
+            <span className="oop-visibility-badge" onClick={(event) => { event.stopPropagation(); toggleVisibility(item, section); }}>{item.currentVis}</span>
+            <span className="oop-item-text" onClick={(event) => { event.stopPropagation(); removePiece(item, section); }}>{item.text}</span>
           </div>
           {renderFeedback(fb)}
         </div>
@@ -487,16 +470,26 @@ export default function OOPClassModeling() {
             <span className="cdf-breadcrumb-current">OOP-Based Class Modeling</span>
           </div>
           <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-            <div className="score-tracker">Score: <span style={{ color: "#22c55e" }}>{correctCount}</span> / {OOP_SCENARIOS.length}</div>
             <div className="cdf-scenario-counter">Scenario {currentIndex + 1} of {OOP_SCENARIOS.length}</div>
           </div>
         </div>
 
         <h1 className="cdf-title">{currentScenario.title}</h1>
+        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
         <p className="cdf-description">
           <strong>Scenario:</strong> {currentScenario.scenario} <br />
           Drag pieces to the classes. Connect them with a relationship. <strong>Click visibility symbols to change them.</strong>
         </p>
+        <PreviousAttemptNotice
+          attempts={priorAttempts}
+          activityKey="oop-class-modeling"
+          scenarioKey={currentScenario.id}
+        />
+        <GuidedExperiencePrompt
+          attempts={attempts}
+          activityKey="oop-class-modeling"
+          scenarioKey={currentScenario.id}
+        />
 
         <div className="oop-workspace">
 
@@ -505,14 +498,14 @@ export default function OOPClassModeling() {
 
             {/* PARENT CLASS */}
             <div className="oop-class-box">
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_name")} className="oop-class-header">
+              <div data-drop-target="parent_name" onClick={() => placeSelectedPiece("parent_name")} className={`oop-class-header${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`}>
                 {renderNameSlot(parentName, "parent_name", "Drop Parent")}
               </div>
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_attr")} className="oop-uml-section">
+              <div data-drop-target="parent_attr" onClick={() => placeSelectedPiece("parent_attr")} className={`oop-uml-section${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`}>
                 <span className="oop-section-label">Attributes</span>
                 {renderItems(parentAttrs, "parent_attr")}
               </div>
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "parent_method")} className="oop-uml-section" style={{ borderBottom: "none" }}>
+              <div data-drop-target="parent_method" onClick={() => placeSelectedPiece("parent_method")} className={`oop-uml-section${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`} style={{ borderBottom: "none" }}>
                 <span className="oop-section-label">Methods</span>
                 {renderItems(parentMethods, "parent_method")}
               </div>
@@ -523,19 +516,21 @@ export default function OOPClassModeling() {
               <div className="oop-line"></div>
 
               <div
-                className={`rel-dropzone ${droppedRelationship ? "filled" : ""} ${relFeedback ? (relFeedback.ok ? "correct" : "wrong") : ""}`}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleDropRelationship}
-                onClick={() => { setDroppedRelationship(null); setIsSubmitted(false); }}
+                className={`rel-dropzone ${droppedRelationship ? "filled" : ""} ${selectedTool?.type === "relationship" ? "oop-drop-ready" : ""} ${relFeedback ? (relFeedback.ok ? "correct" : "wrong") : ""}`}
+                data-drop-target="relationship"
+                onClick={() => selectedTool?.type === "relationship"
+                  ? placeSelectedTool("relationship")
+                  : (setDroppedRelationship(null), setIsSubmitted(false))}
               >
                 {droppedRelationship ? droppedRelationship : "Drop Line"}
               </div>
 
               <div
-                className={`mult-dropzone ${droppedMultiplicity ? "filled" : ""} ${multFeedback ? (multFeedback.ok ? "correct" : "wrong") : ""}`}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleDropMultiplicity}
-                onClick={() => { setDroppedMultiplicity(null); setIsSubmitted(false); }}
+                className={`mult-dropzone ${droppedMultiplicity ? "filled" : ""} ${selectedTool?.type === "multiplicity" ? "oop-drop-ready" : ""} ${multFeedback ? (multFeedback.ok ? "correct" : "wrong") : ""}`}
+                data-drop-target="multiplicity"
+                onClick={() => selectedTool?.type === "multiplicity"
+                  ? placeSelectedTool("multiplicity")
+                  : (setDroppedMultiplicity(null), setIsSubmitted(false))}
               >
                 {droppedMultiplicity || "Mult"}
               </div>
@@ -558,14 +553,14 @@ export default function OOPClassModeling() {
 
             {/* CHILD CLASS */}
             <div className="oop-class-box">
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_name")} className="oop-class-header" style={{ background: "#f8fafc" }}>
+              <div data-drop-target="child_name" onClick={() => placeSelectedPiece("child_name")} className={`oop-class-header${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`} style={{ background: "#f8fafc" }}>
                 {renderNameSlot(childName, "child_name", "Drop Child")}
               </div>
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_attr")} className="oop-uml-section">
+              <div data-drop-target="child_attr" onClick={() => placeSelectedPiece("child_attr")} className={`oop-uml-section${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`}>
                 <span className="oop-section-label">Attributes</span>
                 {renderItems(childAttrs, "child_attr")}
               </div>
-              <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "child_method")} className="oop-uml-section" style={{ borderBottom: "none" }}>
+              <div data-drop-target="child_method" onClick={() => placeSelectedPiece("child_method")} className={`oop-uml-section${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`} style={{ borderBottom: "none" }}>
                 <span className="oop-section-label">Methods</span>
                 {renderItems(childMethods, "child_method")}
               </div>
@@ -577,7 +572,7 @@ export default function OOPClassModeling() {
             <h3 className="oop-bank-title">Pieces</h3>
             <div className="oop-bank-box">
               {availablePieces.map((piece) => (
-                <div key={piece.id} draggable onDragStart={(e) => handleDragStart(e, piece)} className="oop-piece" style={{ whiteSpace: "pre-line" }}>
+                <div key={piece.id} onPointerDown={(e) => startDrag(e, { type: "piece", value: piece }, piece.text, handlePointerDrop)} onClick={() => setSelectedTool({ type: "piece", value: piece })} className={`oop-piece${selectedTool?.type === "piece" && selectedTool.value.id === piece.id ? " oop-piece-selected" : ""}`} style={{ whiteSpace: "pre-line" }}>
                   {piece.text}
                 </div>
               ))}
@@ -585,21 +580,20 @@ export default function OOPClassModeling() {
 
             <h3 className="oop-bank-title" style={{ marginTop: "20px" }}>Relationships</h3>
             <div className="tools-bank">
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Association")} className="tool-item">Association</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Inheritance")} className="tool-item">Inheritance</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Aggregation")} className="tool-item">Aggregation</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("relationship_type", "Composition")} className="tool-item">Composition</div>
+              {["Association", "Inheritance", "Aggregation", "Composition"].map((relationship) => (
+                <div key={relationship} onPointerDown={(e) => startDrag(e, { type: "relationship", value: relationship }, relationship, handlePointerDrop)} onClick={() => setSelectedTool({ type: "relationship", value: relationship })} className={`tool-item${selectedTool?.type === "relationship" && selectedTool.value === relationship ? " oop-tool-selected" : ""}`}>{relationship}</div>
+              ))}
             </div>
 
             <h3 className="oop-bank-title" style={{ marginTop: "20px" }}>Multiplicity</h3>
             <div className="tools-bank">
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", "1")} className="tool-item">1</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", "0..1")} className="tool-item">0..1</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", "0..*")} className="tool-item">0..*</div>
-              <div draggable onDragStart={(e) => e.dataTransfer.setData("multiplicity_type", "1..*")} className="tool-item">1..*</div>
+              {["1", "0..1", "0..*", "1..*"].map((multiplicity) => (
+                <div key={multiplicity} onPointerDown={(e) => startDrag(e, { type: "multiplicity", value: multiplicity }, multiplicity, handlePointerDrop)} onClick={() => setSelectedTool({ type: "multiplicity", value: multiplicity })} className={`tool-item${selectedTool?.type === "multiplicity" && selectedTool.value === multiplicity ? " oop-tool-selected" : ""}`}>{multiplicity}</div>
+              ))}
             </div>
           </div>
         </div>
+        {previewElement}
 
         {isSubmitted && (
           <div

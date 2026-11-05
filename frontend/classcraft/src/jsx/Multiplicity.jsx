@@ -1,152 +1,46 @@
+import { MULTIPLICITY_SCENARIOS as SCENARIO_BANK } from "../questionBank/multiplicity.jsx";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
+import { usePointerDragDrop } from "../hooks/usePointerDragDrop.jsx";
+import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
+import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
+import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
+import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
 import "../css/multiplicity.css";
 
-// --- SCENARIO DATABASE ---
-const MULTIPLICITY_SCENARIOS = [
-  {
-    id: 1,
-    classA: "Student",
-    classB: "Course",
-    scenario: "A Student can enroll in many courses. A Course can have many students.",
-    correctA: "0..*", 
-    correctB: "0..*", 
-    explanation: "Both ends are '0..*' (or '*') because a student can take zero or many courses, and a course can have zero or many students."
-  },
-  {
-    id: 2,
-    classA: "Department",
-    classB: "Manager",
-    scenario: "A Department has exactly one Manager. A Manager manages exactly one Department.",
-    correctA: "1", 
-    correctB: "1", 
-    explanation: "Both ends are '1' because it is a strict one-to-one relationship."
-  },
-  {
-    id: 3,
-    classA: "Customer",
-    classB: "Order",
-    scenario: "A Customer can place many orders (or none if they are new). Every Order must belong to exactly one Customer.",
-    correctA: "1", 
-    correctB: "0..*", 
-    explanation: "A customer is exactly '1', but they can have '0..*' orders. Every order has exactly 1 customer."
-  },
-  {
-    id: 4,
-    classA: "Car",
-    classB: "LicensePlate",
-    scenario: "A Car has exactly one License Plate. A License Plate belongs to exactly one Car.",
-    correctA: "1",
-    correctB: "1",
-    explanation: "Both are '1' because a car has one plate, and a plate belongs to one car."
-  },
-  {
-    id: 5,
-    classA: "Teacher",
-    classB: "Student",
-    scenario: "A Teacher teaches one or many Students. A Student is taught by exactly one Teacher.",
-    correctA: "1", // Teacher end
-    correctB: "1..*", // Student end
-    explanation: "A teacher is '1', but they must teach at least one student ('1..*')."
-  },
-  {
-    id: 6,
-    classA: "Person",
-    classB: "Passport",
-    scenario: "A Person can have zero or one Passport. A Passport belongs to exactly one Person.",
-    correctA: "1", // Person end
-    correctB: "0..1", // Passport end
-    explanation: "A passport belongs to exactly '1' person. A person can have '0..1' passports (they might not have one)."
-  },
-  {
-    id: 7,
-    classA: "Company",
-    classB: "Employee",
-    scenario: "A Company employs zero or many Employees. An Employee works for exactly one Company.",
-    correctA: "1", 
-    correctB: "0..*", 
-    explanation: "A company is '1'. Employees are '0..*' because a company can have zero employees (just started) or many."
-  },
-  {
-    id: 8,
-    classA: "Team",
-    classB: "Player",
-    scenario: "A Team has one or many Players. A Player belongs to zero or one Team (free agent).",
-    correctA: "0..1", // Team end
-    correctB: "1..*", // Player end
-    explanation: "A team has '1..*' players. A player can be a free agent, so they belong to '0..1' teams."
-  },
-  {
-    id: 9,
-    classA: "Author",
-    classB: "Book",
-    scenario: "An Author can write zero or many Books. A Book must be written by one or many Authors.",
-    correctA: "1..*", // Author end
-    correctB: "0..*", // Book end
-    explanation: "An author can write '0..*' books. A book must have at least '1..*' authors."
-  },
-  {
-    id: 10,
-    classA: "Patient",
-    classB: "Doctor",
-    scenario: "A Patient can visit one or many Doctors. A Doctor can treat zero or many Patients.",
-    correctA: "0..*", // Patient end
-    correctB: "1..*", // Doctor end
-    explanation: "A patient visits '1..*' doctors. A doctor treats '0..*' patients."
-  },
-  {
-    id: 11,
-    classA: "ShoppingCart",
-    classB: "Item",
-    scenario: "A ShoppingCart contains zero or many Items. An Item is placed in exactly one ShoppingCart.",
-    correctA: "1", // Cart end
-    correctB: "0..*", // Item end
-    explanation: "An item is in exactly '1' cart. A cart can have '0..*' items (it might be empty)."
-  },
-  {
-    id: 12,
-    classA: "Country",
-    classB: "CapitalCity",
-    scenario: "A Country has exactly one CapitalCity. A CapitalCity is the capital of exactly one Country.",
-    correctA: "1",
-    correctB: "1",
-    explanation: "It is a strict one-to-one relationship. Both ends are '1'."
-  }
-];
 
 const OPTIONS = ["1", "0..1", "0..*", "1..*"];
 
 export default function Multiplicity() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { startDrag, previewElement } = usePointerDragDrop();
+  const { attempts, priorAttempts, recordAttempt, trackingError } =
+    useLearningAttemptTracking(location.state?.learningAttempts);
+  const {
+    questions: MULTIPLICITY_SCENARIOS,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useSkillQuestionSet(
+    "multiplicity",
+    SCENARIO_BANK,
+    location.state?.skillQuestions
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [droppedA, setDroppedA] = useState(null);
   const [droppedB, setDroppedB] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // Score Tracker
-  const [scores, setScores] = useState({});
-
   const currentScenario = MULTIPLICITY_SCENARIOS[currentIndex];
 
   // --- Drag and Drop Logic ---
-  const handleDragStart = (e, option) => {
-    e.dataTransfer.setData("multiplicity", option);
-  };
-
-  const handleDropA = (e) => {
-    e.preventDefault();
-    const option = e.dataTransfer.getData("multiplicity");
-    if (option) {
+  const handlePointerDrop = (option, target) => {
+    if (target === "multiplicity-a") {
       setDroppedA(option);
-      if (isSubmitted) setIsSubmitted(false); // Reset if changing answer
-    }
-  };
-
-  const handleDropB = (e) => {
-    e.preventDefault();
-    const option = e.dataTransfer.getData("multiplicity");
-    if (option) {
+      if (isSubmitted) setIsSubmitted(false);
+    } else if (target === "multiplicity-b") {
       setDroppedB(option);
       if (isSubmitted) setIsSubmitted(false);
     }
@@ -180,14 +74,21 @@ export default function Multiplicity() {
     if (!droppedA || !droppedB) return false;
     const isCorrect = droppedA === currentScenario.correctA && droppedB === currentScenario.correctB;
     
-    setScores(prev => ({ ...prev, [currentIndex]: isCorrect }));
     return isCorrect;
   };
 
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = async () => {
     if (!droppedA || !droppedB) return;
-    evaluateAnswer();
+    const isCorrect = evaluateAnswer();
     setIsSubmitted(true);
+    await recordAttempt({
+      activityKey: "multiplicity",
+      scenarioKey: currentScenario.id,
+      correctElements: Number(droppedA === currentScenario.correctA) + Number(droppedB === currentScenario.correctB),
+      requiredElements: 2,
+      completed: isCorrect,
+      submittedResponse: { classA: droppedA, classB: droppedB },
+    });
   };
 
   const handleReset = () => {
@@ -203,10 +104,10 @@ export default function Multiplicity() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Auto-evaluate if they haven't checked yet
     if (!isSubmitted && droppedA && droppedB) {
-      evaluateAnswer();
+      await handleCheckAnswer();
     }
 
     if (currentIndex < MULTIPLICITY_SCENARIOS.length - 1) {
@@ -217,7 +118,9 @@ export default function Multiplicity() {
     }
   };
 
-  const correctCount = Object.values(scores).filter(val => val === true).length;
+  if (questionsLoading) return <ActivityLoadingSkeleton />;
+  if (questionsError) return <main className="dashboard" role="alert">{questionsError}</main>;
+  if (MULTIPLICITY_SCENARIOS.length === 0) return <NoSkillQuestions />;
 
   return (
     <div className="dashboard-layout">
@@ -242,9 +145,6 @@ export default function Multiplicity() {
           </div>
           
           <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-             <div className="score-tracker">
-                Score: <span style={{ color: "#22c55e" }}>{correctCount}</span> / {MULTIPLICITY_SCENARIOS.length}
-             </div>
              <div className="cdf-scenario-counter">
                Scenario {currentIndex + 1} of {MULTIPLICITY_SCENARIOS.length}
              </div>
@@ -255,6 +155,17 @@ export default function Multiplicity() {
         <p className="cdf-description">
           Read the scenario and drag the correct multiplicity notation to the ends of the line.
         </p>
+        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        <PreviousAttemptNotice
+          attempts={priorAttempts}
+          activityKey="multiplicity"
+          scenarioKey={currentScenario.id}
+        />
+        <GuidedExperiencePrompt
+          attempts={attempts}
+          activityKey="multiplicity"
+          scenarioKey={currentScenario.id}
+        />
 
         <div className="multiplicity-builder">
           
@@ -263,8 +174,12 @@ export default function Multiplicity() {
             {OPTIONS.map(opt => (
               <div 
                 key={opt} 
-                draggable={true}
-                onDragStart={(e) => handleDragStart(e, opt)}
+                onPointerDown={(e) => startDrag(
+                  e,
+                  opt,
+                  opt,
+                  handlePointerDrop
+                )}
                 onClick={() => handleOptionClick(opt)}
                 className="multiplicity-option"
               >
@@ -281,8 +196,7 @@ export default function Multiplicity() {
             {/* Left Drop Zone */}
             <div 
               className={`multiplicity-dropzone ${droppedA ? 'filled' : ''} ${isSubmitted ? (droppedA === currentScenario.correctA ? 'correct' : 'wrong') : ''}`}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDropA}
+              data-drop-target="multiplicity-a"
               onClick={handleRemoveA}
               title={droppedA ? "Click to remove" : "Drop here"}
             >
@@ -295,13 +209,13 @@ export default function Multiplicity() {
             {/* Right Drop Zone */}
             <div 
               className={`multiplicity-dropzone ${droppedB ? 'filled' : ''} ${isSubmitted ? (droppedB === currentScenario.correctB ? 'correct' : 'wrong') : ''}`}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDropB}
+              data-drop-target="multiplicity-b"
               onClick={handleRemoveB}
               title={droppedB ? "Click to remove" : "Drop here"}
             >
               {droppedB || <span>Drop</span>}
             </div>
+            {previewElement}
 
             <div className="uml-class-box">{currentScenario.classB}</div>
           </div>

@@ -76,6 +76,8 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  touch-action: none;
+  user-select: none;
 }
 
 .connector-option:hover {
