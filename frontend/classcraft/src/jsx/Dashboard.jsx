@@ -330,7 +330,6 @@ export default function Dashboard() {
                   <th>Latest Attempt Accuracy</th>
                   <th>Consistency</th>
                   <th>Attempts</th>
-                  <th>Guided attempt used</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -364,7 +363,7 @@ export default function Dashboard() {
                         />
                       </td>
                       <td className="cell-center">{item.attempts}</td>
-                      <td><span className="badge badge--muted">—</span></td>
+                
                       <td><SkillMetricStatus activity={item} /></td>
                     </tr>
                   );
@@ -384,7 +383,6 @@ export default function Dashboard() {
                   <th>First attempt</th>
                   <th>Latest attempt</th>
                   <th>80% target</th>
-                  <th>Guided attempt used</th>
                   <th>Attempts</th>
                   <th>Status</th>
                 </tr>
@@ -435,9 +433,7 @@ export default function Dashboard() {
                           ? <span className="badge badge--pass">Met</span>
                           : <span className="badge badge--warn">Not met</span>}
                     </td>
-                    <td>
-                      <span className="badge badge--muted">—</span>
-                    </td>
+                    
                     <td className="cell-center">{item.attempts}</td>
                     <td>
                       {item.completed
