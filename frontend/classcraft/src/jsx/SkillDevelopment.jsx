@@ -1,5 +1,17 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { supabase } from "../utils/supabase"; // <-- Added missing import
+import { supabase } from "../utils/supabase";
+import {
+  getCachedLearningAttempts,
+  getSkillScenarioBreakdown,
+  hasAttemptBelowTarget,
+  loadLearningAttempts,
+  TARGET_FIRST_ATTEMPT_ACCURACY,
+} from "../utils/learningAttempts";
+import {
+  getSkillPracticeQuestions,
+  SKILL_QUESTION_BANKS,
+} from "../utils/skillQuestionSelection";
 import "../css/skill_development_css.css";
 
 const EXPERIENCES = [
@@ -8,42 +20,57 @@ const EXPERIENCES = [
     title: "Class Diagram Formation",
     description:
       "Identify candidate classes and organize attributes, methods, and visibility symbols.",
-    accuracy: 85,
   },
   {
     key: "class-relationships",
     title: "Class Relationships",
     description:
       "Apply association, inheritance, aggregation, and composition between classes.",
-    accuracy: 68,
   },
   {
     key: "multiplicity",
     title: "Multiplicity",
     description:
       "Assign the correct multiplicity notation to relationships in a sample class diagram.",
-    accuracy: 72,
   },
   {
     key: "oop-class-modeling",
     title: "OOP-Based Class Modeling",
     description:
       "Build a complete class diagram from a scenario using the four OOP pillars.",
-    accuracy: null,
   },
 ];
 
-const TARGET_ACCURACY = 80;
-
-function accuracyLabel(value) {
-  if (value === null) return { text: "Not attempted", status: "empty" };
-  if (value >= TARGET_ACCURACY)
-    return { text: `First-attempt accuracy: ${value}%`, status: "pass" };
-  return { text: `First-attempt accuracy: ${value}%`, status: "warn" };
-}
-
 export default function SkillDevelopment() {
   const navigate = useNavigate();
+  const [attempts, setAttempts] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [progressError, setProgressError] = useState("");
+  const [showMastered, setShowMastered] = useState({});
+  const [practiceMode, setPracticeMode] = useState({});
+
+  useEffect(() => {
+    async function loadProgress() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        const user = session?.user;
+        if (error) throw new Error(error.message);
+        if (!user) throw new Error("Sign in to view your Skill Development progress.");
+
+        setUserId(user.id);
+        const cachedAttempts = getCachedLearningAttempts(user.id);
+        setAttempts(cachedAttempts);
+
+        const loadedAttempts = await loadLearningAttempts();
+        setAttempts(loadedAttempts);
+      } catch (error) {
+        console.error("Could not load learning progress:", error);
+        setProgressError(`Progress could not be refreshed: ${error.message}`);
+      }
+    }
+
+    loadProgress();
+  }, []);
 
   async function handleLogout() {
     // Removed setError to prevent crashes
@@ -53,6 +80,20 @@ export default function SkillDevelopment() {
       return;
     }
     navigate("/", { replace: true });
+  }
+
+  function handlePractice(experience) {
+    const skillQuestions = getSkillPracticeQuestions(
+      experience.key,
+      SKILL_QUESTION_BANKS[experience.key],
+      attempts,
+      practiceMode[experience.key] ?? "unmastered"
+    );
+    if (skillQuestions.length === 0) return;
+
+    navigate(`/skill-development/${experience.key}`, {
+      state: { skillQuestions, learningAttempts: attempts },
+    });
   }
 
   return (
@@ -106,36 +147,133 @@ export default function SkillDevelopment() {
       <main className="skill-development">
         <header className="skill-development-header">
           <h1>Skill Development</h1>
-          <p>
-            Practice each class-modeling skill. A Guided Experience opens
-            automatically if your first-attempt accuracy drops below{" "}
-            {TARGET_ACCURACY}%.
+          <p className="skill-development-intro">
+            Practice all available questions. Completed questions are optional.
           </p>
+          {progressError && <p role="alert">{progressError}</p>}
         </header>
 
         <section className="experience-grid">
-          {EXPERIENCES.map((exp) => {
-            const acc = accuracyLabel(exp.accuracy);
+          {EXPERIENCES.map((experience) => {
+            const scenarios = getSkillScenarioBreakdown(attempts, experience.key);
+            const masteredScenarios = scenarios.filter(
+              (scenario) => scenario.currentlyMeetsTarget
+            );
+            const belowTargetScenarios = scenarios.filter((scenario) =>
+              hasAttemptBelowTarget(scenario)
+            );
+            const selectedMode = practiceMode[experience.key] ?? "unmastered";
+            const availableQuestionCount = selectedMode === "include-mastered"
+              ? scenarios.length
+              : selectedMode === "below-80"
+                ? belowTargetScenarios.length
+                : scenarios.length - masteredScenarios.length;
             return (
-              <article key={exp.key} className="experience-card">
+              <article key={experience.key} className="experience-card">
                 <div className="experience-card-body">
-                  <h2 className="experience-title">{exp.title}</h2>
+                  <h2 className="experience-title">{experience.title}</h2>
                   <p className="experience-description">
-                    {exp.description}
+                    {experience.description}
                   </p>
-                  <p className={`experience-accuracy accuracy--${acc.status}`}>
-                    {acc.text}
+                  <p className="experience-availability">
+                    {availableQuestionCount} questions available
                   </p>
+                  <fieldset className="practice-mode-options">
+                    <legend>Practice focus</legend>
+                    <label>
+                      <input
+                        type="radio"
+                        name={`practice-mode-${experience.key}`}
+                        value="unmastered"
+                        checked={selectedMode === "unmastered"}
+                        onChange={() =>
+                          setPracticeMode((current) => ({
+                            ...current,
+                            [experience.key]: "unmastered",
+                          }))
+                        }
+                      />
+                      New and incomplete
+                    </label>
+                    {masteredScenarios.length > 0 && (
+                      <label>
+                        <input
+                          type="radio"
+                          name={`practice-mode-${experience.key}`}
+                          value="include-mastered"
+                          checked={selectedMode === "include-mastered"}
+                          onChange={() =>
+                            setPracticeMode((current) => ({
+                              ...current,
+                              [experience.key]: "include-mastered",
+                            }))
+                          }
+                        />
+                        Include completed scenarios
+                      </label>
+                    )}
+                    <label>
+                      <input
+                        type="radio"
+                        name={`practice-mode-${experience.key}`}
+                        value="below-80"
+                        checked={selectedMode === "below-80"}
+                        onChange={() =>
+                          setPracticeMode((current) => ({
+                            ...current,
+                            [experience.key]: "below-80",
+                          }))
+                        }
+                      />
+                      Focus on scenarios with an attempt below {TARGET_FIRST_ATTEMPT_ACCURACY}%
+                    </label>
+                  </fieldset>
+                  {availableQuestionCount === 0 && (
+                    <p className="practice-empty-state">
+                      {selectedMode === "below-80"
+                        ? `No scenarios have an attempt below ${TARGET_FIRST_ATTEMPT_ACCURACY}% yet.`
+                        : "All scenarios are completed. Include completed scenarios to keep practicing."}
+                    </p>
+                  )}
+                  {masteredScenarios.length > 0 && (
+                    <>
+                      <button
+                        type="button"
+                        className="mastered-scenarios-toggle"
+                        onClick={() =>
+                          setShowMastered((current) => ({
+                            ...current,
+                            [experience.key]: !current[experience.key],
+                          }))
+                        }
+                        aria-expanded={Boolean(showMastered[experience.key])}
+                      >
+                        {showMastered[experience.key] ? "Hide" : "Show"} completed
+                        scenarios ({masteredScenarios.length})
+                      </button>
+                    </>
+                  )}
+                  {showMastered[experience.key] && masteredScenarios.length > 0 && (
+                    <ul className="mastered-scenario-list">
+                      {masteredScenarios.map((scenario) => (
+                        <li key={scenario.scenarioKey}>
+                          <span>{scenario.label}</span>
+                          <strong>{scenario.latestAttemptAccuracy}%</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <button
-                  type="button"
-                  className="practice-button"
-                  onClick={() => 
-                    navigate(`/skill-development/${exp.key}`)
-                  }
-                >
-                  Practice
-                </button>
+                <div className="experience-card-actions">
+                  <button
+                    type="button"
+                    className="practice-button"
+                    onClick={() => handlePractice(experience)}
+                    disabled={!userId || availableQuestionCount === 0}
+                  >
+                    Practice
+                  </button>
+                </div>
               </article>
             );
           })}

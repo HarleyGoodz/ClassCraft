@@ -1,0 +1,95 @@
+.activity-loading {
+  width: min(100% - 2rem, 940px);
+  min-height: 70vh;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.activity-loading-header,
+.activity-loading-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.activity-loading-header span,
+.activity-loading-title,
+.activity-loading-description,
+.activity-loading-panel,
+.activity-loading-footer span {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e8eef5 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: activity-loading-pulse 1.4s ease-in-out infinite;
+}
+
+.activity-loading-header span {
+  width: 8rem;
+  height: 1rem;
+  border-radius: 999px;
+}
+
+.activity-loading-title {
+  width: min(24rem, 70%);
+  height: 2rem;
+  margin-top: 2rem;
+  border-radius: 6px;
+}
+
+.activity-loading-description {
+  width: min(42rem, 90%);
+  height: 1rem;
+  margin-top: 0.75rem;
+  border-radius: 999px;
+}
+
+.activity-loading-workspace {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.activity-loading-panel {
+  min-height: 18rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.activity-loading-footer {
+  margin-top: 1.5rem;
+}
+
+.activity-loading-footer span {
+  width: 6rem;
+  height: 2.5rem;
+  border-radius: 8px;
+}
+
+@keyframes activity-loading-pulse {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .activity-loading-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-loading-panel {
+    min-height: 10rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-loading-header span,
+  .activity-loading-title,
+  .activity-loading-description,
+  .activity-loading-panel,
+  .activity-loading-footer span {
+    animation: none;
+  }
+}

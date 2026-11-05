@@ -95,6 +95,17 @@
 
 .cdf-uml-section {
   padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cdf-uml-section.cdf-drop-ready {
+  cursor: copy;
+}
+
+.cdf-uml-section.cdf-drop-ready:hover {
+  background-color: #eff6ff;
+  box-shadow: inset 0 0 0 2px #93c5fd;
 }
 
 .cdf-uml-class {
@@ -193,10 +204,17 @@
   font-size: 0.9rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   transition: border-color 0.15s;
+  touch-action: none;
+  user-select: none;
 }
 
 .cdf-piece:hover {
   border-color: #3b82f6;
+}
+
+.cdf-piece-selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #bfdbfe;
 }
 
 .cdf-piece:active {

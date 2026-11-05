@@ -90,6 +90,55 @@
   color: #475569;
 }
 
+.cdc-practice-modes {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 520px;
+  margin: 0 auto 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.cdc-practice-modes legend {
+  padding: 0 0.3rem;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cdc-practice-modes label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: #475569;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.cdc-practice-modes input {
+  margin: 0.15rem 0 0;
+  flex: 0 0 auto;
+}
+
+.cdc-availability,
+.cdc-empty-state,
+.cdc-progress-error {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.cdc-availability {
+  color: #64748b;
+}
+
+.cdc-empty-state,
+.cdc-progress-error {
+  color: #b91c1c;
+}
+
 /* ==================================================================
    Start button
    ================================================================== */
@@ -114,6 +163,12 @@
 
 .cdc-start-button:active {
   transform: translateY(1px);
+}
+
+.cdc-start-button:disabled {
+  background: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 .cdc-start-button:focus-visible {

@@ -59,6 +59,8 @@
   flex: 1;
   padding: 2.5rem 3rem;
   max-width: 1100px;
+  min-width: 0;
+  text-align: left;
 }
 
 .skill-development-header h1 {
@@ -79,19 +81,21 @@
    ================================================================== */
 .experience-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.25rem;
   margin-bottom: 2rem;
 }
 
 .experience-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-width: 0;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  padding: 1.25rem 1.25rem 1.25rem;
+  padding: 1.35rem;
+  text-align: left;
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     transform 0.1s ease;
 }
@@ -103,7 +107,8 @@
 }
 
 .experience-card-body {
-  margin-bottom: 1.25rem;
+  flex: 1;
+  margin-bottom: 1rem;
 }
 
 .experience-title {
@@ -126,6 +131,96 @@
   font-weight: 500;
 }
 
+.experience-availability {
+  margin: 0 0 0.75rem;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.practice-mode-options {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.9rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+.practice-mode-options legend {
+  padding: 0 0.25rem;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.practice-mode-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.practice-mode-options input {
+  flex: 0 0 auto;
+  margin: 0.16rem 0 0;
+}
+
+.practice-empty-state {
+  margin: 0.6rem 0 0;
+  color: #b91c1c;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.mastered-scenarios-toggle {
+  margin-top: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.mastered-scenarios-toggle:disabled {
+  color: #94a3b8;
+  cursor: default;
+}
+
+.mastered-scenario-list {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 12rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.mastered-scenario-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  background: #f0fdf4;
+  color: #166534;
+  font-size: 0.8rem;
+}
+
+.practice-availability-note {
+  max-width: 16rem;
+  margin: 0.55rem 0 0;
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
 .accuracy--pass {
   color: #15803d;
 }
@@ -142,7 +237,7 @@
    Practice button
    ================================================================== */
 .practice-button {
-  align-self: flex-start;
+  min-width: 6.5rem;
   padding: 0.55rem 1.25rem;
   background: #3b82f6;
   color: #fff;
@@ -154,12 +249,21 @@
   transition: background 0.15s ease, transform 0.1s ease;
 }
 
+.experience-card-actions {
+  text-align: center;
+}
+
 .practice-button:hover {
   background: #2563eb;
 }
 
 .practice-button:active {
   transform: translateY(1px);
+}
+
+.practice-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
 }
 
 /* ==================================================================
@@ -178,4 +282,20 @@
 
 .back-button:hover {
   background: #f1f5f9;
+}
+
+@media (max-width: 760px) {
+  .skill-development {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .experience-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .skill-development {
+    padding: 1.5rem 1rem;
+  }
 }

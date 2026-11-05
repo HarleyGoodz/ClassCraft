@@ -1,46 +1,14 @@
+import { RELATIONSHIP_SCENARIOS as SCENARIO_BANK } from "../questionBank/classRelationships.jsx";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
+import { usePointerDragDrop } from "../hooks/usePointerDragDrop.jsx";
+import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
+import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
+import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
+import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
 import "../css/class_relationships.css";
 
-// --- SCENARIO DATABASE ---
-const RELATIONSHIP_SCENARIOS = [
-  {
-    id: 1,
-    classA: "Student",
-    classB: "Course",
-    scenario: "A Student enrolls in Courses. A Student can enroll in many courses, and a Course can have many Students. Neither owns the other.",
-    options: ["Association", "Inheritance", "Aggregation", "Composition"],
-    correctAnswer: "Association",
-    explanation: "Association is a simple connection. Neither class is a part of the other."
-  },
-  {
-    id: 2,
-    classA: "Dog",
-    classB: "Animal",
-    scenario: "A Dog is a specific type of Animal. It inherits the traits of the Animal class.",
-    options: ["Association", "Inheritance", "Aggregation", "Composition"],
-    correctAnswer: "Inheritance",
-    explanation: "Inheritance is an 'is-a' relationship."
-  },
-  {
-    id: 3,
-    classA: "Department",
-    classB: "Professor",
-    scenario: "A Department has Professors. If the Department closes, the Professors still exist.",
-    options: ["Association", "Inheritance", "Aggregation", "Composition"],
-    correctAnswer: "Aggregation",
-    explanation: "Aggregation is a weak 'has-a' relationship where the part can exist independently."
-  },
-  {
-    id: 4,
-    classA: "Car",
-    classB: "Engine",
-    scenario: "A Car has an Engine. If the Car is destroyed, the Engine is destroyed with it.",
-    options: ["Association", "Inheritance", "Aggregation", "Composition"],
-    correctAnswer: "Composition",
-    explanation: "Composition is a strong 'has-a' relationship where the part cannot exist without the whole."
-  }
-];
 
 // Visual Connector Component
 function ConnectorVisual({ type }) {
@@ -78,32 +46,34 @@ function ConnectorVisual({ type }) {
 }
 
 export default function ClassRelationships() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { startDrag, previewElement } = usePointerDragDrop();
+  const { attempts, priorAttempts, recordAttempt, trackingError } =
+    useLearningAttemptTracking(location.state?.learningAttempts);
+  const {
+    questions: RELATIONSHIP_SCENARIOS,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useSkillQuestionSet(
+    "class-relationships",
+    SCENARIO_BANK,
+    location.state?.skillQuestions
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [droppedAnswer, setDroppedAnswer] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // NEW: Track scores for each scenario
-  // e.g., { 0: true, 1: false } means scenario 1 was correct, scenario 2 was wrong
-  const [scores, setScores] = useState({}); 
-
   const currentScenario = RELATIONSHIP_SCENARIOS[currentIndex];
 
-  const handleDragStart = (e, type) => {
-    e.dataTransfer.setData("relationshipType", type);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const type = e.dataTransfer.getData("relationshipType");
+  const handlePointerDrop = (type, target) => {
+    if (target !== "relationship") return;
     if (type) {
       setDroppedAnswer(type);
       if (isSubmitted) setIsSubmitted(false); // Reset feedback if they change answer
     }
   };
-
-  const handleDragOver = (e) => e.preventDefault();
 
   const handleOptionClick = (option) => {
     setDroppedAnswer(option);
@@ -121,15 +91,21 @@ export default function ClassRelationships() {
     if (!droppedAnswer) return false;
     const isCorrect = droppedAnswer === currentScenario.correctAnswer;
     
-    // Save to state
-    setScores(prev => ({ ...prev, [currentIndex]: isCorrect }));
     return isCorrect;
   };
 
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = async () => {
     if (!droppedAnswer) return;
-    evaluateAnswer();
+    const isCorrect = evaluateAnswer();
     setIsSubmitted(true);
+    await recordAttempt({
+      activityKey: "class-relationships",
+      scenarioKey: currentScenario.id,
+      correctElements: Number(isCorrect),
+      requiredElements: 1,
+      completed: isCorrect,
+      submittedResponse: { relationship: droppedAnswer },
+    });
   };
 
   const handlePrevious = () => {
@@ -140,10 +116,10 @@ export default function ClassRelationships() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // NEW: If they click Next without clicking "Check Answer", we evaluate it automatically
     if (!isSubmitted && droppedAnswer) {
-       evaluateAnswer();
+       await handleCheckAnswer();
     }
 
     if (currentIndex < RELATIONSHIP_SCENARIOS.length - 1) {
@@ -151,15 +127,14 @@ export default function ClassRelationships() {
       setDroppedAnswer(null);
       setIsSubmitted(false);
     } else {
-      // Calculate final score before finishing
-      const totalScore = Object.values(scores).filter(Boolean).length;
-      console.log(`Finished! Score: ${totalScore}/${RELATIONSHIP_SCENARIOS.length}`);
       navigate("/skill-development");
     }
   };
 
   // Calculate live score for the header
-  const correctCount = Object.values(scores).filter(val => val === true).length;
+  if (questionsLoading) return <ActivityLoadingSkeleton />;
+  if (questionsError) return <main className="dashboard" role="alert">{questionsError}</main>;
+  if (RELATIONSHIP_SCENARIOS.length === 0) return <NoSkillQuestions />;
 
   return (
     <div className="dashboard-layout">
@@ -182,11 +157,7 @@ export default function ClassRelationships() {
             <span className="cdf-breadcrumb-current">Class Relationships</span>
           </div>
           
-          {/* NEW: Score Tracker & Counter */}
           <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-             <div className="score-tracker">
-                Score: <span style={{ color: "#22c55e" }}>{correctCount}</span> / {RELATIONSHIP_SCENARIOS.length}
-             </div>
              <div className="cdf-scenario-counter">
                Scenario {currentIndex + 1} of {RELATIONSHIP_SCENARIOS.length}
              </div>
@@ -197,6 +168,17 @@ export default function ClassRelationships() {
         <p className="cdf-description">
           Drag a connector into the gap between the classes. On a touchscreen, tap a connector, then tap the gap.
         </p>
+        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        <PreviousAttemptNotice
+          attempts={priorAttempts}
+          activityKey="class-relationships"
+          scenarioKey={currentScenario.id}
+        />
+        <GuidedExperiencePrompt
+          attempts={attempts}
+          activityKey="class-relationships"
+          scenarioKey={currentScenario.id}
+        />
 
         <div className="relationship-builder-box">
           
@@ -205,8 +187,12 @@ export default function ClassRelationships() {
               <div 
                 key={option} 
                 className="connector-option"
-                draggable={true}
-                onDragStart={(e) => handleDragStart(e, option)}
+                onPointerDown={(e) => startDrag(
+                  e,
+                  option,
+                  option,
+                  handlePointerDrop
+                )}
                 onClick={() => handleOptionClick(option)}
               >
                 <div className="svg-container">
@@ -222,8 +208,7 @@ export default function ClassRelationships() {
             
             <div 
               className={`connection-gap ${droppedAnswer ? 'filled' : ''} ${isSubmitted ? (droppedAnswer === currentScenario.correctAnswer ? 'correct' : 'wrong') : ''}`}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
+              data-drop-target="relationship"
             >
               {droppedAnswer ? (
                 <div className="dropped-connector" onClick={handleRemoveConnector} title="Click to remove">
@@ -236,6 +221,7 @@ export default function ClassRelationships() {
 
             <div className="uml-class-box">{currentScenario.classB}</div>
           </div>
+          {previewElement}
 
           <p className="relationship-scenario-text">
             {currentScenario.scenario}
