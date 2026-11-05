@@ -18,26 +18,5 @@ export function GuidedExperiencePrompt({ attempts, activityKey, scenarioKey }) {
 
   if (!scenario?.needsGuidedExperience) return null;
 
-  return (
-    <section
-      role="status"
-      style={{
-        margin: "1rem 0",
-        padding: "1rem",
-        border: "1px solid #f59e0b",
-        borderRadius: "0.75rem",
-        background: "#fffbeb",
-        color: "#78350f",
-      }}
-    >
-      <strong>A guided experience may help</strong>
-      <p style={{ margin: "0.35rem 0 0.75rem" }}>
-        Your last two submissions for this question were below 80%. A guided
-        walkthrough for this topic is coming soon.
-      </p>
-      <button type="button" disabled>
-        Guided experience coming soon
-      </button>
-    </section>
-  );
+  
 }
