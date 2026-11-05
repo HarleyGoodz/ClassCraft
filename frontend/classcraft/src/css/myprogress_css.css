@@ -1,55 +1,127 @@
 /* ==================================================================
-   Layout (shared with Dashboard / LearnBasics)
+   Page shell
    ================================================================== */
-.dashboard-layout {
+.app-shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   font-family: system-ui, -apple-system, sans-serif;
   background: #f8fafc;
 }
 
 /* ==================================================================
-   Sidebar
+   Top navigation
    ================================================================== */
-.sidebar {
-  width: 240px;
-  flex-shrink: 0;
+.topnav {
   background: #1e293b;
-  color: #e2e8f0;
-  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #334155;
 }
 
-.sidebar-brand {
-  font-size: 1.25rem;
-  margin: 0 0 1.5rem 0.5rem;
-  color: #fff;
-}
-
-.sidebar-nav {
+/* Same side padding as .my-progress so the logo lines up with the content */
+.topnav-inner {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 2rem;
+  min-height: 64px;
+  padding: 0 3rem;
+  box-sizing: border-box;
+}
+
+.topnav-brand {
+  padding: 1rem 0;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.topnav-links {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-self: stretch;
   gap: 0.25rem;
 }
 
-.sidebar-link {
-  display: block;
-  padding: 0.6rem 0.75rem;
-  border-radius: 6px;
+.topnav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  box-sizing: border-box;
+  border-bottom: 3px solid transparent;
   color: #cbd5e1;
-  text-decoration: none;
   font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.topnav-link:hover {
+  color: #fff;
+}
+
+.topnav-link.active {
+  border-bottom-color: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.topnav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+}
+
+.topnav-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.topnav-username {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.topnav-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: transparent;
+  color: #fca5a5;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
   transition: background 0.15s ease;
 }
 
-.sidebar-link:hover {
+.topnav-logout:hover {
   background: #334155;
-  color: #fff;
+  color: #fecaca;
 }
 
-.sidebar-link.active {
-  background: #3b82f6;
-  color: #fff;
-  font-weight: 600;
+.topnav-brand:focus-visible,
+.topnav-link:focus-visible,
+.topnav-logout:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
 }
 
 /* ==================================================================
@@ -57,70 +129,150 @@
    ================================================================== */
 .my-progress {
   flex: 1;
-  padding: 2.5rem 3rem;
-  max-width: 1250px;
+  width: 100%;
   min-width: 0;
+  padding: 2.5rem 3rem;
   box-sizing: border-box;
 }
 
 .my-progress-header h1 {
   margin: 0 0 0.25rem 0;
-  font-size: 1.75rem;
   color: #0f172a;
+  font-size: 1.75rem;
 }
 
 .my-progress-header p {
-  margin: 0 0 2rem 0;
+  margin: 0;
   color: #64748b;
+}
+
+/* ==================================================================
+   Error banner
+   ================================================================== */
+.progress-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+}
+
+.progress-alert-icon {
+  flex: none;
+  color: #b91c1c;
+}
+
+.progress-alert-text {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  gap: 0.125rem;
+  text-align: left;
+}
+
+.progress-alert-title {
+  color: #991b1b;
+  font-size: 0.95rem;
+}
+
+.progress-alert-message {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.progress-alert-action {
+  min-height: 40px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #b91c1c;
+  color: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.progress-alert-action:hover {
+  background: #991b1b;
 }
 
 /* ==================================================================
    Summary cards
    ================================================================== */
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.875rem;
-}
-
 .summary-section {
   margin-bottom: 1.5rem;
 }
 
+.summary-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin: 2rem 0 0.875rem;
+}
+
 .summary-section-title {
-  margin: 0 0 0.25rem;
+  margin: 0;
   color: #334155;
   font-size: 1.1rem;
   font-weight: 600;
   text-align: left;
 }
 
-.summary-section-description {
-  margin: 0 0 0.875rem;
+.summary-section-note {
+  margin: 0;
   color: #64748b;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
-.summary-card--construction {
+.summary-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding: 1.125rem 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.875rem;
 }
 
 .summary-card {
   position: relative;
   min-width: 0;
   box-sizing: border-box;
-  background: #fff;
+  padding: 1.125rem;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 1.125rem;
+  background: #fff;
   text-align: left;
 }
 
 .summary-card--breakdown:hover,
 .summary-card--breakdown:focus-within {
   z-index: 8;
+}
+
+.summary-label {
+  margin: 0 0 0.25rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.summary-value {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.summary-sub {
+  margin: 0.35rem 0 0 0;
+  color: #94a3b8;
+  font-size: 0.8rem;
 }
 
 .summary-card-value-wrap {
@@ -181,163 +333,26 @@
   margin: 0;
 }
 
-.summary-card--construction {
-  padding: 0.25rem 0;
-}
-
-.construction-summary-metric {
-  min-width: 0;
-  padding: 0.875rem 1.25rem;
-}
-
-.construction-summary-metric + .construction-summary-metric {
-  border-left: 1px solid #e2e8f0;
-}
-
-.summary-label {
-  margin: 0 0 0.25rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.summary-value {
-  margin: 0;
-  font-size: 1.65rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.summary-sub {
-  margin: 0.35rem 0 0 0;
-  font-size: 0.8rem;
-  color: #94a3b8;
-}
-
-.summary-card > .badge {
-  margin-top: 0.4rem;
-}
-
-.improvement-metric {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.12rem;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0.55rem 0;
-  color: #475569;
-}
-
-.cell-center .improvement-metric {
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.improvement-metric--interactive:hover,
-.improvement-metric--interactive:focus-within {
-  z-index: 4;
-  outline: none;
-}
-
-.improvement-metric--interactive:focus-visible {
-  border-radius: 0.25rem;
-  outline: 2px solid #93c5fd;
-  outline-offset: 3px;
-}
-
-.improvement-breakdown-panel {
-  display: none;
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  left: 50%;
-  z-index: 5;
-  box-sizing: border-box;
-  width: 250px;
-  max-width: min(250px, calc(100vw - 2rem));
-  padding: 0.75rem 0.875rem;
-  transform: translateX(-50%);
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  background: #fff;
-  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
-  color: #334155;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  text-align: left;
-}
-
-.improvement-metric--interactive:hover .improvement-breakdown-panel,
-.improvement-metric--interactive:focus-within .improvement-breakdown-panel {
-  display: block;
-}
-
-.improvement-breakdown-panel > strong {
-  display: block;
-  margin-bottom: 0.35rem;
-  color: #0f172a;
-  font-size: 0.82rem;
-}
-
-.improvement-breakdown-panel p {
-  margin: 0;
-  color: #64748b;
-}
-
-.improvement-breakdown-panel ul {
-  max-height: 8rem;
-  margin: 0.45rem 0 0;
-  padding-left: 1.1rem;
-  overflow-y: auto;
-}
-
-.improvement-metric strong {
-  color: #334155;
-  font-size: 1rem;
-}
-
-.improvement-metric strong.improvement-positive {
-  color: #15803d;
-}
-
-.improvement-metric small {
-  color: #94a3b8;
-  font-size: 0.72rem;
-}
-
-.improvement-label {
-  color: #64748b;
-  font-size: 0.76rem;
-}
-
-.improvement-explanation {
-  margin: -0.75rem 0 1rem;
-  color: #64748b;
-  font-size: 0.82rem;
-}
-
 /* ==================================================================
    Tabs
    ================================================================== */
 .progress-tabs {
   display: flex;
   gap: 0.25rem;
-  border-bottom: 1px solid #e2e8f0;
   margin-bottom: 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .progress-tab {
+  margin-bottom: -1px;
   padding: 0.6rem 1rem;
-  background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #64748b;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #64748b;
   cursor: pointer;
-  margin-bottom: -1px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
@@ -346,20 +361,20 @@
 }
 
 .progress-tab.active {
-  color: #1d4ed8;
   border-bottom-color: #3b82f6;
+  color: #1d4ed8;
   font-weight: 600;
 }
 
 /* ==================================================================
-   Table
+   Tables
    ================================================================== */
 .progress-table-wrapper {
   overflow: visible;
-  background: #fff;
+  margin-bottom: 1.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  margin-bottom: 1.75rem;
+  background: #fff;
 }
 
 .progress-table {
@@ -369,17 +384,21 @@
   font-size: 0.82rem;
 }
 
-.progress-table thead th {
+.progress-table th,
+.progress-table td {
   text-align: center;
+}
+
+.progress-table thead th {
   padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
   background: #f1f5f9;
   color: #475569;
   font-size: 0.62rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0;
   line-height: 1.35;
-  border-bottom: 1px solid #e2e8f0;
+  text-transform: uppercase;
   white-space: normal;
   overflow-wrap: normal;
 }
@@ -392,23 +411,49 @@
   overflow-wrap: anywhere;
 }
 
-.progress-table th,
-.progress-table td {
-  text-align: center;
-}
-
+/* Experience / Scenario column reads better left-aligned */
+.progress-table thead th:first-child,
 .progress-table tbody td:first-child {
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.progress-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.progress-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.cell-center {
   text-align: center;
 }
 
-.progress-table .accuracy-breakdown {
-  margin-right: auto;
-  margin-left: auto;
+.skill-progress-table th:nth-child(1) { width: 15%; }
+.skill-progress-table th:nth-child(2),
+.skill-progress-table th:nth-child(3) { width: 17%; }
+.skill-progress-table th:nth-child(4) { width: 15%; }
+.skill-progress-table th:nth-child(5) { width: 8%; }
+.skill-progress-table th:nth-child(6) { width: 15%; }
+
+.construction-progress-table th:nth-child(1) { width: 25%; }
+.construction-progress-table th:nth-child(2),
+.construction-progress-table th:nth-child(3) { width: 15%; }
+.construction-progress-table th:nth-child(4) { width: 12%; }
+.construction-progress-table th:nth-child(5) { width: 14%; }
+.construction-progress-table th:nth-child(6) { width: 7%; }
+
+.progress-table details > summary {
+  color: #1d4ed8;
+  cursor: pointer;
+  font-size: 0.82rem;
 }
 
+/* ----- Construction scenario cell ----- */
 .construction-progress-table .construction-scenario-cell {
-  text-align: left;
   padding: 0.9rem 1rem;
+  text-align: left;
 }
 
 .construction-scenario-name {
@@ -470,41 +515,132 @@
   color: #334155;
 }
 
-.skill-progress-table th:nth-child(1) { width: 15%; }
-.skill-progress-table th:nth-child(2),
-.skill-progress-table th:nth-child(3) { width: 17%; }
-.skill-progress-table th:nth-child(4) { width: 15%; }
-.skill-progress-table th:nth-child(5) { width: 8%; }
-.skill-progress-table th:nth-child(6) { width: 15%; }
-.skill-progress-table th:nth-child(7) { width: 13%; }
-
-.construction-progress-table th:nth-child(1) { width: 25%; }
-.construction-progress-table th:nth-child(2),
-.construction-progress-table th:nth-child(3) { width: 15%; }
-.construction-progress-table th:nth-child(4) { width: 12%; }
-.construction-progress-table th:nth-child(5) { width: 14%; }
-.construction-progress-table th:nth-child(6) { width: 7%; }
-.construction-progress-table th:nth-child(7) { width: 12%; }
-
-.construction-progress-table .accuracy-breakdown {
-  max-width: 150px;
+/* ==================================================================
+   Accuracy bar
+   ================================================================== */
+.accuracy-breakdown {
+  position: relative;
+  width: 140px;
+  outline: none;
 }
 
 .progress-table .accuracy-breakdown {
   width: 100%;
   max-width: 140px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
+.construction-progress-table .accuracy-breakdown {
+  max-width: 150px;
+}
+
+.accuracy-breakdown:hover,
+.accuracy-breakdown:focus-within {
+  z-index: 2;
+}
+
+.accuracy-breakdown:focus-visible .accuracy-bar {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.accuracy-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.accuracy-bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: #94a3b8;
+  transition: width 0.3s ease;
+}
+
+.accuracy-bar--pass .accuracy-bar-fill {
+  background: #22c55e;
+}
+
+.accuracy-bar--needs-improvement .accuracy-bar-fill {
+  background: #f59e0b;
+}
+
+.accuracy-bar--empty .accuracy-bar-fill {
+  background: #cbd5e1;
+}
+
+.accuracy-bar-label {
+  position: relative;
+  z-index: 1;
+  margin-right: 0.5rem;
+  margin-left: auto;
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.accuracy-breakdown-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: min(280px, calc(100vw - 2rem));
+  max-height: min(14rem, calc(100vh - 2rem));
+  padding: 0.8rem 0.9rem;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
+  color: #334155;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Inside the table, open the panel upwards */
 .progress-table .accuracy-breakdown-panel {
   top: auto;
   bottom: calc(100% - 1px);
 }
 
-.progress-table .badge--info {
-  white-space: nowrap;
-  text-align: center;
+.accuracy-breakdown:hover .accuracy-breakdown-panel,
+.accuracy-breakdown:focus-within .accuracy-breakdown-panel {
+  display: block;
 }
 
+.accuracy-breakdown-panel strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+}
+
+.accuracy-breakdown-panel p {
+  margin: 0;
+}
+
+.accuracy-breakdown-panel ul {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+}
+
+/* ==================================================================
+   Consistency bar
+   ================================================================== */
 .consistency-metric {
   position: relative;
   display: flex;
@@ -601,164 +737,6 @@
   padding-left: 1rem;
 }
 
-.progress-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.progress-table tbody tr:hover {
-  background: #f8fafc;
-}
-
-.scenario-breakdown-row > td {
-  padding: 0.75rem 1rem 1rem 1.5rem;
-  background: #f8fafc;
-}
-
-.scenario-breakdown-row details > summary,
-.progress-table details > summary {
-  color: #1d4ed8;
-  cursor: pointer;
-  font-size: 0.82rem;
-}
-
-.scenario-breakdown-scroll {
-  max-width: 100%;
-  margin-top: 0.75rem;
-  overflow-x: auto;
-}
-
-.scenario-breakdown-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  font-size: 0.82rem;
-}
-
-.scenario-breakdown-table th,
-.scenario-breakdown-table td {
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.scenario-breakdown-table th {
-  background: #f1f5f9;
-  color: #475569;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-}
-
-.cell-center {
-  text-align: center;
-}
-
-/* ==================================================================
-   Accuracy bar
-   ================================================================== */
-.accuracy-bar {
-  position: relative;
-  width: 100%;
-  height: 20px;
-  background: #e2e8f0;
-  border-radius: 999px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.accuracy-breakdown {
-  position: relative;
-  width: 140px;
-  outline: none;
-}
-
-.accuracy-breakdown:hover,
-.accuracy-breakdown:focus-within {
-  z-index: 2;
-}
-
-.accuracy-breakdown:focus-visible .accuracy-bar {
-  outline: 3px solid #93c5fd;
-  outline-offset: 3px;
-}
-
-.accuracy-breakdown-panel {
-  display: none;
-  position: absolute;
-  top: calc(100% - 1px);
-  left: 0;
-  z-index: 5;
-  box-sizing: border-box;
-  width: 280px;
-  max-width: min(280px, calc(100vw - 2rem));
-  max-height: min(14rem, calc(100vh - 2rem));
-  padding: 0.8rem 0.9rem;
-  overflow-y: auto;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  background: #fff;
-  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
-  color: #334155;
-  font-size: 0.72rem;
-  line-height: 1.4;
-  text-align: left;
-}
-
-.accuracy-breakdown:hover .accuracy-breakdown-panel,
-.accuracy-breakdown:focus-within .accuracy-breakdown-panel {
-  display: block;
-}
-
-.accuracy-breakdown-panel strong {
-  display: block;
-  margin-bottom: 0.3rem;
-  color: #0f172a;
-  font-size: 0.76rem;
-}
-
-.accuracy-breakdown-panel p {
-  margin: 0;
-}
-
-.accuracy-breakdown-panel ul {
-  display: grid;
-  gap: 0.12rem;
-  margin: 0.4rem 0 0;
-  padding-left: 1rem;
-}
-
-.accuracy-bar-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background: #94a3b8;
-  transition: width 0.3s ease;
-}
-
-.accuracy-bar--pass .accuracy-bar-fill {
-  background: #22c55e;
-}
-
-.accuracy-bar--needs-improvement .accuracy-bar-fill {
-  background: #f59e0b;
-}
-
-.accuracy-bar--empty .accuracy-bar-fill {
-  background: #cbd5e1;
-}
-
-.accuracy-bar-label {
-  position: relative;
-  margin-left: auto;
-  margin-right: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #0f172a;
-  z-index: 1;
-}
-
 /* ==================================================================
    Badges
    ================================================================== */
@@ -792,26 +770,15 @@
 }
 
 /* ==================================================================
-   Back button
+   Responsive
    ================================================================== */
-.back-button {
-  padding: 0.6rem 1rem;
-  background: transparent;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  color: #475569;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.back-button:hover {
-  background: #f1f5f9;
-}
-
 @media (max-width: 1000px) {
   .my-progress {
     padding: 2rem;
+  }
+
+  .topnav-inner {
+    padding: 0 2rem;
   }
 
   .summary-grid {
@@ -824,18 +791,16 @@
     padding: 1.25rem 1rem;
   }
 
-  .summary-grid,
-  .summary-card--construction {
+  .topnav-inner {
+    padding: 0 1rem;
+  }
+
+  .topnav-link {
+    padding: 0 0.6rem;
+  }
+
+  .summary-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .summary-card--construction {
-    padding: 0;
-  }
-
-  .construction-summary-metric + .construction-summary-metric {
-    border-top: 1px solid #e2e8f0;
-    border-left: 0;
   }
 
   .progress-table {
@@ -859,4 +824,57 @@
     margin-right: 0.25rem;
     font-size: 0.68rem;
   }
+}
+
+/* ==================================================================
+   Legacy sidebar layout — only for pages that still use the
+   sidebar. Delete once every page has the top header.
+   ================================================================== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-brand {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0.5rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.sidebar-link:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.dashboard {
+  flex: 1;
+  padding: 2rem;
 }

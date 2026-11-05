@@ -1,3 +1,835 @@
+/* ==================================================================
+   Page shell
+   ================================================================== */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+}
+
+/* ==================================================================
+   Top navigation
+   ================================================================== */
+.topnav {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+/* Same side padding as .my-progress so the logo lines up with the content */
+.topnav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 2rem;
+  min-height: 64px;
+  padding: 0 3rem;
+  box-sizing: border-box;
+}
+
+.topnav-brand {
+  padding: 1rem 0;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.topnav-links {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-self: stretch;
+  gap: 0.25rem;
+}
+
+.topnav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  box-sizing: border-box;
+  border-bottom: 3px solid transparent;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.topnav-link:hover {
+  color: #fff;
+}
+
+.topnav-link.active {
+  border-bottom-color: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.topnav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+}
+
+.topnav-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.topnav-username {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.topnav-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: transparent;
+  color: #fca5a5;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.topnav-logout:hover {
+  background: #334155;
+  color: #fecaca;
+}
+
+.topnav-brand:focus-visible,
+.topnav-link:focus-visible,
+.topnav-logout:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* ==================================================================
+   Main content
+   ================================================================== */
+.my-progress {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+}
+
+.my-progress-header h1 {
+  margin: 0 0 0.25rem 0;
+  color: #0f172a;
+  font-size: 1.75rem;
+}
+
+.my-progress-header p {
+  margin: 0;
+  color: #64748b;
+}
+
+/* ==================================================================
+   Error banner
+   ================================================================== */
+.progress-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+}
+
+.progress-alert-icon {
+  flex: none;
+  color: #b91c1c;
+}
+
+.progress-alert-text {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  gap: 0.125rem;
+  text-align: left;
+}
+
+.progress-alert-title {
+  color: #991b1b;
+  font-size: 0.95rem;
+}
+
+.progress-alert-message {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.progress-alert-action {
+  min-height: 40px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #b91c1c;
+  color: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.progress-alert-action:hover {
+  background: #991b1b;
+}
+
+/* ==================================================================
+   Summary cards
+   ================================================================== */
+.summary-section {
+  margin-bottom: 1.5rem;
+}
+
+.summary-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin: 2rem 0 0.875rem;
+}
+
+.summary-section-title {
+  margin: 0;
+  color: #334155;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.summary-section-note {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.875rem;
+}
+
+.summary-card {
+  position: relative;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 1.125rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+}
+
+.summary-card--breakdown:hover,
+.summary-card--breakdown:focus-within {
+  z-index: 8;
+}
+
+.summary-label {
+  margin: 0 0 0.25rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.summary-value {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.summary-sub {
+  margin: 0.35rem 0 0 0;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.summary-card-value-wrap {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  outline: none;
+}
+
+.summary-card-value-wrap:focus-visible .summary-value {
+  border-radius: 0.2rem;
+  outline: 2px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.summary-card-breakdown-tooltip {
+  display: none;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: min(280px, calc(100vw - 2rem));
+  max-height: min(14rem, calc(100vh - 2rem));
+  padding: 0.8rem 0.9rem;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
+  color: #334155;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.summary-card-value-wrap:hover .summary-card-breakdown-tooltip,
+.summary-card-value-wrap:focus .summary-card-breakdown-tooltip {
+  display: block;
+}
+
+.summary-card-breakdown-tooltip strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+}
+
+.summary-card-breakdown-tooltip ul {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.summary-card-breakdown-tooltip p {
+  margin: 0;
+}
+
+/* ==================================================================
+   Tabs
+   ================================================================== */
+.progress-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.progress-tab {
+  margin-bottom: -1px;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.progress-tab:hover {
+  color: #0f172a;
+}
+
+.progress-tab.active {
+  border-bottom-color: #3b82f6;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* ==================================================================
+   Tables
+   ================================================================== */
+.progress-table-wrapper {
+  overflow: visible;
+  margin-bottom: 1.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.progress-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.progress-table th,
+.progress-table td {
+  text-align: center;
+}
+
+.progress-table thead th {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+.progress-table tbody td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Experience / Scenario column reads better left-aligned */
+.progress-table thead th:first-child,
+.progress-table tbody td:first-child {
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.progress-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.progress-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.cell-center {
+  text-align: center;
+}
+
+.skill-progress-table th:nth-child(1) { width: 15%; }
+.skill-progress-table th:nth-child(2),
+.skill-progress-table th:nth-child(3) { width: 17%; }
+.skill-progress-table th:nth-child(4) { width: 15%; }
+.skill-progress-table th:nth-child(5) { width: 8%; }
+.skill-progress-table th:nth-child(6) { width: 15%; }
+
+.construction-progress-table th:nth-child(1) { width: 25%; }
+.construction-progress-table th:nth-child(2),
+.construction-progress-table th:nth-child(3) { width: 15%; }
+.construction-progress-table th:nth-child(4) { width: 12%; }
+.construction-progress-table th:nth-child(5) { width: 14%; }
+.construction-progress-table th:nth-child(6) { width: 7%; }
+
+.progress-table details > summary {
+  color: #1d4ed8;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+/* ----- Construction scenario cell ----- */
+.construction-progress-table .construction-scenario-cell {
+  padding: 0.9rem 1rem;
+  text-align: left;
+}
+
+.construction-scenario-name {
+  display: block;
+  color: #0f172a;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.construction-score-details {
+  margin-top: 0.45rem;
+}
+
+.construction-score-details > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  list-style: none;
+}
+
+.construction-score-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.construction-score-details > summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+}
+
+.construction-score-details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.construction-score-details ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.construction-score-details li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.construction-score-details li strong {
+  color: #334155;
+}
+
+/* ==================================================================
+   Accuracy bar
+   ================================================================== */
+.accuracy-breakdown {
+  position: relative;
+  width: 140px;
+  outline: none;
+}
+
+.progress-table .accuracy-breakdown {
+  width: 100%;
+  max-width: 140px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.construction-progress-table .accuracy-breakdown {
+  max-width: 150px;
+}
+
+.accuracy-breakdown:hover,
+.accuracy-breakdown:focus-within {
+  z-index: 2;
+}
+
+.accuracy-breakdown:focus-visible .accuracy-bar {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.accuracy-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.accuracy-bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: #94a3b8;
+  transition: width 0.3s ease;
+}
+
+.accuracy-bar--pass .accuracy-bar-fill {
+  background: #22c55e;
+}
+
+.accuracy-bar--needs-improvement .accuracy-bar-fill {
+  background: #f59e0b;
+}
+
+.accuracy-bar--empty .accuracy-bar-fill {
+  background: #cbd5e1;
+}
+
+.accuracy-bar-label {
+  position: relative;
+  z-index: 1;
+  margin-right: 0.5rem;
+  margin-left: auto;
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.accuracy-breakdown-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: min(280px, calc(100vw - 2rem));
+  max-height: min(14rem, calc(100vh - 2rem));
+  padding: 0.8rem 0.9rem;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
+  color: #334155;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Inside the table, open the panel upwards */
+.progress-table .accuracy-breakdown-panel {
+  top: auto;
+  bottom: calc(100% - 1px);
+}
+
+.accuracy-breakdown:hover .accuracy-breakdown-panel,
+.accuracy-breakdown:focus-within .accuracy-breakdown-panel {
+  display: block;
+}
+
+.accuracy-breakdown-panel strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+}
+
+.accuracy-breakdown-panel p {
+  margin: 0;
+}
+
+.accuracy-breakdown-panel ul {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+}
+
+/* ==================================================================
+   Consistency bar
+   ================================================================== */
+.consistency-metric {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 140px;
+  margin: 0 auto;
+  outline: none;
+}
+
+.consistency-metric--interactive:hover,
+.consistency-metric--interactive:focus-within {
+  z-index: 4;
+}
+
+.consistency-metric--interactive:focus-visible .consistency-bar {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.consistency-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.consistency-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+.consistency-bar--empty .consistency-bar-fill {
+  background: #cbd5e1;
+}
+
+.consistency-bar-label {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  padding: 0 0.45rem;
+  color: #0f172a;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.consistency-breakdown-panel {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% - 1px);
+  z-index: 5;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: min(280px, calc(100vw - 2rem));
+  max-height: min(14rem, calc(100vh - 2rem));
+  padding: 0.8rem 0.9rem;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
+  color: #334155;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.consistency-metric--interactive:hover .consistency-breakdown-panel,
+.consistency-metric--interactive:focus-within .consistency-breakdown-panel {
+  display: block;
+}
+
+.consistency-breakdown-panel strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+}
+
+.consistency-breakdown-panel p {
+  margin: 0;
+}
+
+.consistency-breakdown-panel ul {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+}
+
+/* ==================================================================
+   Badges
+   ================================================================== */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge--pass {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge--warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge--info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge--muted {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ==================================================================
+   Responsive
+   ================================================================== */
+@media (max-width: 1000px) {
+  .my-progress {
+    padding: 2rem;
+  }
+
+  .topnav-inner {
+    padding: 0 2rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .my-progress {
+    padding: 1.25rem 1rem;
+  }
+
+  .topnav-inner {
+    padding: 0 1rem;
+  }
+
+  .topnav-link {
+    padding: 0 0.6rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-table {
+    font-size: 0.72rem;
+  }
+
+  .progress-table thead th,
+  .progress-table tbody td {
+    padding: 0.5rem 0.3rem;
+  }
+
+  .progress-table thead th {
+    font-size: 0.56rem;
+  }
+
+  .progress-table .accuracy-breakdown {
+    min-width: 0;
+  }
+
+  .progress-table .accuracy-bar-label {
+    margin-right: 0.25rem;
+    font-size: 0.68rem;
+  }
+}
+
+/* ==================================================================
+   Legacy sidebar layout — only for pages that still use the
+   sidebar. Delete once every page has the top header.
+   ================================================================== */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;

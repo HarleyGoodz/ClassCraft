@@ -1,13 +1,12 @@
-.cc-page {
-  padding: 24px 32px;
-}
+/* Page padding comes from .learn-basics (LearnBasics_css.css) so the
+   content lines up with the header at every screen size. */
 
 /* Layout */
 .cc-workspace {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
   gap: 32px;
-  align-items: start;
+  align-items: stretch;
   margin-bottom: 24px;
 }
 
@@ -17,11 +16,12 @@
   }
 }
 
-/* Class box */
+/* Class box: the canvas fills its column and keeps the box centred */
 .cc-canvas {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px 24px;
   background: #f8fafc;
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
@@ -29,14 +29,14 @@
 
 .cc-class-box {
   width: 100%;
-  max-width: 360px;
+  max-width: 480px;
   border: 2px solid #1f2937;
   background: #fff;
 }
 
 .cc-zone {
   position: relative;
-  min-height: 90px;
+  min-height: 110px;
   padding: 26px 12px 12px;
   border-top: 2px solid #1f2937;
   display: flex;
@@ -52,7 +52,7 @@
 }
 
 .cc-zone-name {
-  min-height: 70px;
+  min-height: 80px;
 }
 
 .cc-zone-label {
@@ -62,7 +62,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #9ca3af;
+  color: #6b7280;
 }
 
 .cc-zone-over {
@@ -71,7 +71,7 @@
 }
 
 .cc-zone-empty {
-  color: #9ca3af;
+  color: #6b7280;
   font-size: 0.85rem;
   font-style: italic;
 }
@@ -91,7 +91,10 @@
 
 /* Side panel */
 .cc-side h2 {
-  margin-top: 0;
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .cc-palette {
@@ -136,6 +139,11 @@
   border-color: #2563eb;
 }
 
+.cc-piece:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
 .cc-piece.selected {
   border-color: #2563eb;
   background: #eff6ff;
@@ -163,6 +171,17 @@
   font-weight: 700;
 }
 
+/* Note shown under a misplaced piece */
+.cc-inline-hint {
+  margin-top: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 .cc-muted {
   color: #6b7280;
   font-size: 0.85rem;
@@ -171,6 +190,7 @@
 /* Actions */
 .cc-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin: 16px 0;
 }

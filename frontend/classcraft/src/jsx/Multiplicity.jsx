@@ -1,6 +1,7 @@
 import { MULTIPLICITY_SCENARIOS as SCENARIO_BANK } from "../questionBank/multiplicity.jsx";
-import { useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "../utils/supabase";
 import { useLearningAttemptTracking } from "../hooks/useLearningAttemptTracking";
 import { usePointerDragDrop } from "../hooks/usePointerDragDrop.jsx";
 import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
@@ -11,6 +12,50 @@ import "../css/multiplicity.css";
 
 
 const OPTIONS = ["1", "0..1", "0..*", "1..*"];
+
+const NAV_ITEMS = [
+  { to: "/dashboard", label: "Dashboard", end: true },
+  { to: "/learn-basics", label: "Learn the Basics" },
+  { to: "/skill-development", label: "Skill Development" },
+  { to: "/class-diagram-construction", label: "Class Diagram Construction" },
+];
+
+function TopNav({ username, onLogout }) {
+  const initial = (username || "U").trim().charAt(0).toUpperCase();
+  return (
+    <header className="topnav">
+      <div className="topnav-inner">
+        <Link to="/dashboard" className="topnav-brand">ClassCraft</Link>
+
+        <nav className="topnav-links" aria-label="Main">
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => (isActive ? "topnav-link active" : "topnav-link")}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="topnav-user">
+          <span className="topnav-avatar" aria-hidden="true">{initial}</span>
+          <span className="topnav-username">{username}</span>
+          <button type="button" className="topnav-logout" onClick={onLogout}>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Log out
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
 
 export default function Multiplicity() {
   const location = useLocation();
@@ -32,7 +77,25 @@ export default function Multiplicity() {
   const [droppedA, setDroppedA] = useState(null);
   const [droppedB, setDroppedB] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  const [username, setUsername] = useState("User");
+
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUsername(session?.user?.user_metadata?.username || "User");
+    }
+    loadUser();
+  }, []);
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Logout failed:", error.message);
+      return;
+    }
+    navigate("/", { replace: true });
+  }
+
   const currentScenario = MULTIPLICITY_SCENARIOS[currentIndex];
 
   // --- Drag and Drop Logic ---
@@ -123,16 +186,9 @@ export default function Multiplicity() {
   if (MULTIPLICITY_SCENARIOS.length === 0) return <NoSkillQuestions />;
 
   return (
-    <div className="dashboard-layout">
-      <aside className="sidebar">
-        <h2 className="sidebar-brand">ClassCraft</h2>
-        <nav className="sidebar-nav">
-          <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")} end>Dashboard</NavLink>
-          <NavLink to="/learn-basics" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Learn the Basics</NavLink>
-          <NavLink to="/skill-development" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Skill Development</NavLink>
-          <NavLink to="/class-diagram-construction" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Class Diagram Construction</NavLink>
-        </nav>
-      </aside>
+    <div className="app-shell">
+      {/* ===== Top navigation ===== */}
+      <TopNav username={username} onLogout={handleLogout} />
 
       <main className="multiplicity-page">
         

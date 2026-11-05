@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import {
   getCachedLearningAttempts,
@@ -11,8 +11,53 @@ import {
 import { CDC_SCENARIOS } from "../questionBank/classDiagramConstruction.jsx";
 import "../css/class_diagram_construction_css.css";
 
+const NAV_ITEMS = [
+  { to: "/dashboard", label: "Dashboard", end: true },
+  { to: "/learn-basics", label: "Learn the Basics" },
+  { to: "/skill-development", label: "Skill Development" },
+  { to: "/class-diagram-construction", label: "Class Diagram Construction" },
+];
+
+function TopNav({ username, onLogout }) {
+  const initial = (username || "U").trim().charAt(0).toUpperCase();
+  return (
+    <header className="topnav">
+      <div className="topnav-inner">
+        <Link to="/dashboard" className="topnav-brand">ClassCraft</Link>
+
+        <nav className="topnav-links" aria-label="Main">
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => (isActive ? "topnav-link active" : "topnav-link")}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="topnav-user">
+          <span className="topnav-avatar" aria-hidden="true">{initial}</span>
+          <span className="topnav-username">{username}</span>
+          <button type="button" className="topnav-logout" onClick={onLogout}>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Log out
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 export default function ClassDiagramConstruction() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("User");
   const [attempts, setAttempts] = useState([]);
   const [practiceMode, setPracticeMode] = useState("unmastered");
   const [progressError, setProgressError] = useState("");
@@ -27,6 +72,7 @@ export default function ClassDiagramConstruction() {
         if (error) throw new Error(error.message);
         const user = data.session?.user;
         if (!user) throw new Error("Sign in to view your construction progress.");
+        if (active) setUsername(user.user_metadata?.username || "User");
 
         if (active) setAttempts(getCachedLearningAttempts(user.id));
         const loadedAttempts = await loadLearningAttempts();
@@ -70,6 +116,15 @@ export default function ClassDiagramConstruction() {
     return !masteredIds.has(scenarioId);
   });
 
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Logout failed:", error.message);
+      return;
+    }
+    navigate("/", { replace: true });
+  }
+
   function handleStart() {
     if (availableScenarios.length === 0 || loadingProgress) return;
     navigate("/class-diagram-construction/scenario", {
@@ -78,61 +133,32 @@ export default function ClassDiagramConstruction() {
   }
 
   return (
-    <div className="dashboard-layout">
-      {/* ===== Sidebar ===== */}
-      <aside className="sidebar">
-        <h2 className="sidebar-brand">ClassCraft</h2>
-        <nav className="sidebar-nav">
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-            end
-          >
-            Dashboard
-          </NavLink>
-          <NavLink
-            to="/learn-basics"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Learn the Basics
-          </NavLink>
-          <NavLink
-            to="/skill-development"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Skill Development
-          </NavLink>
-          <NavLink
-            to="/class-diagram-construction"
-            className={({ isActive }) =>
-              isActive ? "sidebar-link active" : "sidebar-link"
-            }
-          >
-            Class Diagram Construction
-          </NavLink>
-          
-        </nav>
-      </aside>
+    <div className="app-shell">
+      {/* ===== Top navigation ===== */}
+      <TopNav username={username} onLogout={handleLogout} />
 
       {/* ===== Main content ===== */}
       <main className="cdc-page">
         <div className="cdc-hero">
-          <h1 className="cdc-title">
-            Independent Class Diagram Construction
-          </h1>
-          <p className="cdc-subtitle">
-            Construct complete UML class diagrams from unfamiliar, increasingly
-            complex problem scenarios — without system guidance. Your submitted
-            diagrams are evaluated against predefined criteria, with feedback
-            on missing or incorrectly modeled elements.
-          </p>
+          {/* Left: what this is */}
+          <div className="cdc-hero-intro">
+            <h1 className="cdc-title">
+              Independent Class Diagram Construction
+            </h1>
+            <p className="cdc-subtitle">
+              Construct complete UML class diagrams from unfamiliar, increasingly
+              complex problem scenarios — without system guidance. Your submitted
+              diagrams are evaluated against predefined criteria, with feedback
+              on missing or incorrectly modeled elements.
+            </p>
+            <p className="cdc-hint">
+              Target: at least <strong>80%</strong> of required diagram elements
+              correctly modeled per scenario.
+            </p>
+          </div>
 
+          {/* Right: choose a focus and start */}
+          <div className="cdc-hero-panel">
           {progressError && <p className="cdc-progress-error" role="alert">{progressError}</p>}
 
           <fieldset className="cdc-practice-modes">
@@ -190,11 +216,7 @@ export default function ClassDiagramConstruction() {
           >
             Start
           </button>
-
-          <p className="cdc-hint">
-            Target: at least <strong>80%</strong> of required diagram elements
-            correctly modeled per scenario.
-          </p>
+          </div>
         </div>
       </main>
     </div>

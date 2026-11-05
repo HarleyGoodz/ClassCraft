@@ -1,21 +1,25 @@
 /* ==================================================================
    Class Diagram Construction – scenario page
-   (sidebar + .dashboard-layout come from class_diagram_construction_css.css)
+   (.app-shell + the top header come from class_diagram_construction_css.css)
    ================================================================== */
 .cds-page {
   flex: 1;
+  width: 100%;
   min-width: 0;
   box-sizing: border-box;
   padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 /* ---------- Header ---------- */
 .cds-top {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem 1rem;
   margin-bottom: 0.75rem;
 }
 
@@ -594,6 +598,7 @@
 /* ---------- Actions ---------- */
 .cds-action-bar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
   gap: 0.75rem;
@@ -706,5 +711,26 @@
 
   .cds-bank {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Page padding follows the header's padding (set in class_diagram_construction_css.css) */
+@media (max-width: 1000px) {
+  .cds-page {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cds-page {
+    padding: 1.25rem 1rem;
+  }
+
+  .cds-bank {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cds-toolbar {
+    flex-wrap: wrap;
   }
 }

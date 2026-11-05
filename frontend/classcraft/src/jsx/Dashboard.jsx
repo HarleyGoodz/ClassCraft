@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import {
   getFirstAttemptMetrics,
@@ -11,7 +11,6 @@ import {
   TARGET_FIRST_ATTEMPT_ACCURACY,
 } from "../utils/learningAttempts";
 import "../css/dashboard_css.css";
-import "../css/myprogress_css.css";
 
 // --- HELPER COMPONENTS ---
 function AccuracyBar({
@@ -150,10 +149,77 @@ function SkillMetricStatus({ activity }) {
   return <StatusBadge value={activity.accuracy} targetValue={activity.accuracyValue} />;
 }
 
+const NAV_ITEMS = [
+  { to: "/dashboard", label: "Dashboard", end: true },
+  { to: "/learn-basics", label: "Learn the Basics" },
+  { to: "/skill-development", label: "Skill Development" },
+  { to: "/class-diagram-construction", label: "Class Diagram Construction" },
+];
+
+function TopNav({ username, onLogout }) {
+  const initial = (username || "U").trim().charAt(0).toUpperCase();
+  return (
+    <header className="topnav">
+      <div className="topnav-inner">
+        <Link to="/dashboard" className="topnav-brand">ClassCraft</Link>
+
+        <nav className="topnav-links" aria-label="Main">
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => (isActive ? "topnav-link active" : "topnav-link")}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="topnav-user">
+          <span className="topnav-avatar" aria-hidden="true">{initial}</span>
+          <span className="topnav-username">{username}</span>
+          <button type="button" className="topnav-logout" onClick={onLogout}>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Log out
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function ErrorBanner({ error, onSignInAgain }) {
+  return (
+    <div className="progress-alert" role="alert">
+      <svg className="progress-alert-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      <div className="progress-alert-text">
+        <strong className="progress-alert-title">{error.title}</strong>
+        <span className="progress-alert-message">{error.message}</span>
+      </div>
+      {error.needsSignIn && (
+        <button type="button" className="progress-alert-action" onClick={onSignInAgain}>
+          Sign in again
+        </button>
+      )}
+    </div>
+  );
+}
+
+const SESSION_ERROR_PATTERN = /token|jwt|expired|unauthori[sz]ed|session/i;
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [attempts, setAttempts] = useState([]);
   const [activeTab, setActiveTab] = useState("skills");
 
@@ -173,19 +239,37 @@ export default function Dashboard() {
         setAttempts(getCachedLearningAttempts(user.id));
         setAttempts(await loadLearningAttempts());
       } catch (err) {
-        setError(`Could not load your progress: ${err.message}`);
+        const message = err?.message ?? "";
+        setError(
+          SESSION_ERROR_PATTERN.test(message)
+            ? {
+                title: "Couldn't load your progress",
+                message: "Your session has expired. Sign in again to see your latest scores.",
+                needsSignIn: true,
+              }
+            : {
+                title: "Couldn't load your progress",
+                message: message || "Something went wrong. Please try again in a moment.",
+              }
+        );
       }
     }
-    
+
     loadUser();
   }, [navigate]);
 
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      setError(error.message);
+      setError({ title: "Couldn't log you out", message: error.message });
       return;
     }
+    navigate("/", { replace: true });
+  }
+
+  async function handleSignInAgain() {
+    // The session is already invalid, so a failed signOut shouldn't block the redirect.
+    await supabase.auth.signOut().catch(() => {});
     navigate("/", { replace: true });
   }
 
@@ -225,53 +309,32 @@ export default function Dashboard() {
   const constructionScenarios = getScenarioMetrics(attempts, "class-diagram-construction");
 
   return (
-    <div className="dashboard-layout">
-      
-      {/* ===== Sidebar ===== */}
-      <aside className="sidebar" style={{ display: "flex", flexDirection: "column" }}>
-        <div>
-          <h2 className="sidebar-brand">ClassCraft</h2>
-          <nav className="sidebar-nav">
-            <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")} end>Dashboard</NavLink>
-            <NavLink to="/learn-basics" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Learn the Basics</NavLink>
-            <NavLink to="/skill-development" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Skill Development</NavLink>
-            <NavLink to="/class-diagram-construction" className={({ isActive }) => (isActive ? "sidebar-link active" : "sidebar-link")}>Class Diagram Construction</NavLink>
-          </nav>
-        </div>
-        
-        {/* Logout button pushed to the bottom */}
-        <div style={{ marginTop: "auto", paddingTop: "2rem" }}>
-           <button 
-             onClick={handleLogout} 
-             className="sidebar-link" 
-             style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", cursor: "pointer", color: "#ef4444" }}
-           >
-             Log out
-           </button>
-        </div>
-      </aside>
+    <div className="app-shell">
+      {/* ===== Top navigation ===== */}
+      <TopNav username={username} onLogout={handleLogout} />
 
       {/* ===== Main content ===== */}
-      <main className="my-progress"> 
-        
+      <main className="my-progress">
         <header className="my-progress-header">
           <h1>Hello, {username}!</h1>
-          <p>
-            Progress is shown separately for Skill Development and Class Diagram
-            Construction. Overall first-attempt accuracy stays fixed, while overall
-            latest-attempt accuracy reflects the most recent score for each scenario.
-          </p>
-          {error && <p role="alert" style={{ color: '#ef4444', fontWeight: 'bold', marginTop: '10px' }}>⚠ {error}</p>}
+          <p>Here's how you're doing in Skill Development and Class Diagram Construction.</p>
         </header>
+
+        {error && <ErrorBanner error={error} onSignInAgain={handleSignInAgain} />}
 
         {/* ===== Overview cards ===== */}
         <section className="summary-section" aria-labelledby="progress-overview-heading">
-          <h2 className="summary-section-title" id="progress-overview-heading">
-            Progress Overview
-          </h2>
+          <div className="summary-section-head">
+            <h2 className="summary-section-title" id="progress-overview-heading">
+              Progress overview
+            </h2>
+            <p className="summary-section-note">
+              First-attempt accuracy stays fixed; latest-attempt accuracy uses your most recent score per scenario.
+            </p>
+          </div>
           <div className="summary-grid">
             <MetricCard
-              title="Overall First-Attempt Accuracy"
+              title="First-attempt accuracy"
               value={overallFirstAccuracy === null ? "—" : `${overallFirstAccuracy}%`}
               description={`Across ${attemptedSkillScenarios.length} attempted scenarios`}
               breakdown={skillExperiences.map((activity) => ({
@@ -280,7 +343,7 @@ export default function Dashboard() {
               }))}
             />
             <MetricCard
-              title="Overall Latest-Attempt Accuracy"
+              title="Latest-attempt accuracy"
               value={overallLatestAccuracy === null ? "—" : `${overallLatestAccuracy}%`}
               description="Most recent score per scenario"
               breakdown={skillExperiences.map((activity) => ({
@@ -289,7 +352,7 @@ export default function Dashboard() {
               }))}
             />
             <MetricCard
-              title="Scenarios Meeting Target"
+              title="Scenarios meeting target"
               value={`${scenariosMeetingTarget} / ${attemptedSkillScenarios.length}`}
               description="At least 80% on the first attempt"
               breakdown={skillExperiences.map((activity) => ({
@@ -298,9 +361,9 @@ export default function Dashboard() {
               }))}
             />
             <MetricCard
-              title="Skill Experiences Practiced"
+              title="Experiences practiced"
               value={`${practicedSkills} / ${skillExperiences.length}`}
-              description="Experiences with at least one attempt"
+              description="With at least one attempt"
               breakdown={skillExperiences.map((activity) => ({
                 label: activity.label,
                 value: `${activity.attemptedScenarios} scenarios · ${activity.attempts} attempts`,
@@ -310,11 +373,23 @@ export default function Dashboard() {
         </section>
 
         {/* ===== Tabs ===== */}
-        <div className="progress-tabs">
-          <button type="button" className={activeTab === "skills" ? "progress-tab active" : "progress-tab"} onClick={() => setActiveTab("skills")}>
+        <div className="progress-tabs" role="tablist" aria-label="Progress area">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "skills"}
+            className={activeTab === "skills" ? "progress-tab active" : "progress-tab"}
+            onClick={() => setActiveTab("skills")}
+          >
             Skill Development
           </button>
-          <button type="button" className={activeTab === "construction" ? "progress-tab active" : "progress-tab"} onClick={() => setActiveTab("construction")}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "construction"}
+            className={activeTab === "construction" ? "progress-tab active" : "progress-tab"}
+            onClick={() => setActiveTab("construction")}
+          >
             Class Diagram Construction
           </button>
         </div>
@@ -326,48 +401,45 @@ export default function Dashboard() {
               <thead>
                 <tr>
                   <th>Experience</th>
-                  <th>First-Attempt Accuracy</th>
-                  <th>Latest Attempt Accuracy</th>
+                  <th>First attempt</th>
+                  <th>Latest attempt</th>
                   <th>Consistency</th>
                   <th>Attempts</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {skillExperiences.map((item) => {
-                  return (
-                    <tr key={item.key}>
-                      <td>{item.label}</td>
-                      <td>
-                        <AccuracyBar
-                          value={item.accuracy}
-                          targetValue={item.accuracyValue}
-                          breakdown={{ scenarios: item.accuracyBreakdown }}
-                        />
-                      </td>
-                      <td className="cell-center">
-                        <AccuracyBar
-                          value={item.latestAccuracy}
-                          targetValue={item.latestAccuracyValue}
-                          breakdown={{ scenarios: item.latestAccuracyBreakdown }}
-                          attemptLabel="latest-attempt"
-                          accuracyKey="latestAttemptAccuracyValue"
-                        />
-                      </td>
-                      <td className="cell-center">
-                        <ConsistencyBar
-                          value={item.consistency}
-                          met={item.scenariosMeetingTarget}
-                          total={item.attemptedScenarios}
-                          scenarios={item.accuracyBreakdown}
-                        />
-                      </td>
-                      <td className="cell-center">{item.attempts}</td>
-                
-                      <td><SkillMetricStatus activity={item} /></td>
-                    </tr>
-                  );
-                })}
+                {skillExperiences.map((item) => (
+                  <tr key={item.key}>
+                    <td>{item.label}</td>
+                    <td>
+                      <AccuracyBar
+                        value={item.accuracy}
+                        targetValue={item.accuracyValue}
+                        breakdown={{ scenarios: item.accuracyBreakdown }}
+                      />
+                    </td>
+                    <td className="cell-center">
+                      <AccuracyBar
+                        value={item.latestAccuracy}
+                        targetValue={item.latestAccuracyValue}
+                        breakdown={{ scenarios: item.latestAccuracyBreakdown }}
+                        attemptLabel="latest-attempt"
+                        accuracyKey="latestAttemptAccuracyValue"
+                      />
+                    </td>
+                    <td className="cell-center">
+                      <ConsistencyBar
+                        value={item.consistency}
+                        met={item.scenariosMeetingTarget}
+                        total={item.attemptedScenarios}
+                        scenarios={item.accuracyBreakdown}
+                      />
+                    </td>
+                    <td className="cell-center">{item.attempts}</td>
+                    <td><SkillMetricStatus activity={item} /></td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </section>
@@ -433,7 +505,6 @@ export default function Dashboard() {
                           ? <span className="badge badge--pass">Met</span>
                           : <span className="badge badge--warn">Not met</span>}
                     </td>
-                    
                     <td className="cell-center">{item.attempts}</td>
                     <td>
                       {item.completed
@@ -443,7 +514,7 @@ export default function Dashboard() {
                   </tr>
                 ))}
                 {constructionScenarios.length === 0 && (
-                  <tr><td colSpan="7">No construction scenarios submitted yet.</td></tr>
+                  <tr><td colSpan="6">No construction scenarios submitted yet.</td></tr>
                 )}
               </tbody>
             </table>

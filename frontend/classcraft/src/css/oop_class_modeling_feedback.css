@@ -1,102 +1,498 @@
 /* ==================================================================
-   Per-box teaching feedback (shown only on boxes the learner used)
+   Page shell (same as Dashboard)
    ================================================================== */
-
-/* Wrapper around each attribute / method row */
-.oop-item-wrap {
+.app-shell {
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.5rem;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  padding: 4px;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
 }
 
-.oop-item-wrap .oop-item-row {
-  margin-bottom: 0;
+/* ==================================================================
+   Top navigation (same as Dashboard)
+   ================================================================== */
+.topnav {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
 }
 
-/* Wrapper around a class name inside the header */
-.oop-name-wrap {
+/* Same side padding as the page content so the logo lines up with it */
+.topnav-inner {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 0.5rem 2rem;
+  min-height: 64px;
+  padding: 0 3rem;
+  box-sizing: border-box;
+}
+
+.topnav-brand {
+  padding: 1rem 0;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.topnav-links {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-self: stretch;
+  gap: 0.25rem;
+}
+
+.topnav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  box-sizing: border-box;
+  border-bottom: 3px solid transparent;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.topnav-link:hover {
+  color: #fff;
+}
+
+.topnav-link.active {
+  border-bottom-color: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.topnav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+}
+
+.topnav-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.topnav-username {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.topnav-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: transparent;
+  color: #fca5a5;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.topnav-logout:hover {
+  background: #334155;
+  color: #fecaca;
+}
+
+.topnav-brand:focus-visible,
+.topnav-link:focus-visible,
+.topnav-logout:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* ==================================================================
+   Main Layout  (fills the whole page under the header)
+   ================================================================== */
+.oop-modeling-page {
+  flex: 1;                   /* fills the height left under the header */
+  min-width: 0;              /* lets the flex child shrink/grow correctly */
   width: 100%;
-  border: 2px solid transparent;
+  box-sizing: border-box;
+  padding: 2rem 3rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* Header */
+.cdf-top-header { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.cdf-breadcrumb { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.cdf-breadcrumb-link { color: #4a90e2; cursor: pointer; }
+.cdf-breadcrumb-link:hover { text-decoration: underline; }
+.cdf-breadcrumb-separator { color: #a0a0a0; margin: 0 8px; font-weight: normal; }
+.cdf-breadcrumb-current { color: #888888; }
+.cdf-scenario-counter { font-weight: bold; color: #555; font-size: 14px; }
+.score-tracker { font-size: 0.85rem; font-weight: 600; color: #475569; background: #f1f5f9; padding: 0.25rem 0.75rem; border-radius: 20px; border: 1px solid #e2e8f0; }
+.cdf-title { font-size: 30px; margin: 10px 0; color: #333; text-align: left; }
+.cdf-description {
+  margin-bottom: 24px;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1rem;
+  text-align: left;
+  max-width: 1100px;         /* keeps long text readable on wide screens */
+}
+
+/* ==================================================================
+   Workspace Layout
+   ================================================================== */
+.oop-workspace {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;       /* both columns share the same height */
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.oop-diagram-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  flex: 1;
+  min-width: 0;
+  min-height: 560px;
+}
+
+/* ==================================================================
+   UML Class Boxes
+   ================================================================== */
+.oop-class-box {
+  background: #fff;
+  border: 2px solid #334155;
   border-radius: 6px;
-  padding: 6px;
+  width: 300px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.oop-class-header {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 2px solid #334155;
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70px;
+}
+
+.oop-uml-section {
+  padding: 12px;
+  border-bottom: 1px solid #cbd5e1;
+  min-height: 150px;
+}
+
+.oop-drop-ready {
+  cursor: copy;
+  background-color: #eff6ff;
+}
+
+.oop-piece-selected,
+.oop-tool-selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.oop-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 
-/* Highlight states */
-.oop-item-correct {
-  border-color: #22c55e;
-  background: #f0fdf4;
+.oop-drop-placeholder {
+  color: #cbd5e1;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
-.oop-item-wrong {
-  border-color: #ef4444;
-  background: #fef2f2;
+.oop-class-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #0f172a;
+  cursor: pointer;
 }
 
-/* Explanation text under a box */
-.oop-item-feedback {
-  margin-top: 6px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  text-align: left;
+.oop-item-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 8px;
 }
 
-.oop-item-correct .oop-item-feedback {
-  color: #166534;
+/* Visibility Toggle */
+.oop-visibility-badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: monospace;
+  color: #0f172a;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-.oop-item-wrong .oop-item-feedback {
-  color: #991b1b;
+.oop-visibility-badge:hover {
+  background: #bfdbfe;
+  border-color: #3b82f6;
 }
 
-.oop-name-wrap .oop-item-feedback {
-  margin-top: 0;
+.oop-item-text {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #334155;
+  font-family: ui-monospace, monospace;
+  transition: color 0.15s;
 }
 
-/* Relationship / multiplicity explanations (under the line) */
-.oop-rel-feedback {
-  position: absolute;
-  top: calc(50% + 34px);
-  left: -10px;
-  right: -10px;
+.oop-item-text:hover {
+  color: #ef4444;
+  text-decoration: line-through;
+}
+
+/* ==================================================================
+   Relationship Line  (stretches to fill the space between the classes)
+   ================================================================== */
+.oop-relationship-gap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  z-index: 3;
+  align-items: center;
+  position: relative;
+  flex: 1;                    /* grows with the screen */
+  min-width: 190px;
+  max-width: 340px;
+  height: 220px;
+  justify-content: center;
 }
 
-.oop-mini-feedback {
-  padding: 6px 8px;
+.oop-line {
+  position: absolute;
+  top: 50%;
+  left: -2px;
+  right: -2px;
+  height: 2px;
+  background: #334155;
+  z-index: 1;
+}
+
+.rel-dropzone, .mult-dropzone {
+  border: 2px dashed #cbd5e1;
   border-radius: 6px;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  text-align: left;
-  border: 1px solid transparent;
+  background: #fff;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.oop-mini-feedback.correct {
-  background: #f0fdf4;
-  border-color: #86efac;
+.rel-dropzone.oop-drop-ready,
+.mult-dropzone.oop-drop-ready {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.rel-dropzone {
+  width: 130px;
+  height: 42px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.mult-dropzone {
+  width: 56px;
+  height: 32px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  position: absolute;
+  top: calc(50% - 46px);      /* sits just above the line, near the child class */
+  right: 8px;
+}
+
+.rel-dropzone.filled, .mult-dropzone.filled {
+  border: 1px solid #cbd5e1;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: bold;
+}
+
+.rel-dropzone.correct, .mult-dropzone.correct {
+  border-color: #22c55e;
+  background: #dcfce7;
   color: #166534;
 }
 
-.oop-mini-feedback.wrong {
-  background: #fef2f2;
-  border-color: #fca5a5;
+.rel-dropzone.wrong, .mult-dropzone.wrong {
+  border-color: #ef4444;
+  background: #fee2e2;
   color: #991b1b;
 }
 
-/* Neutral banner: placed items are fine but diagram is unfinished */
-.oop-feedback-info {
-  background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #bfdbfe;
+/* ==================================================================
+   Banks & Tools
+   ================================================================== */
+.oop-bank-container {
+  width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.oop-bank-title {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+/* Pieces now sit in a 2-column grid so nothing needs to scroll */
+.oop-bank-box {
+  border: 2px dashed #cbd5e1;
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 250px;
+  background: #f8fafc;
+  margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  align-content: start;
+}
+
+.oop-piece {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  padding: 12px 8px;
+  margin: 0;
+  border-radius: 6px;
+  cursor: grab;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  color: #334155;
+  font-size: 0.85rem;
+  font-family: ui-monospace, monospace;
+  transition: border-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+  touch-action: none;
+  user-select: none;
+}
+
+.oop-piece:hover { border-color: #3b82f6; }
+.oop-piece:active { cursor: grabbing; }
+
+.tools-bank {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.tool-item {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: grab;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  touch-action: none;
+  user-select: none;
+}
+
+.tool-item:hover {
+  border-color: #3b82f6;
+}
+
+/* Feedback & Actions */
+.oop-feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; white-space: pre-line; line-height: 1.5; font-size: 0.95rem; }
+.oop-feedback-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.oop-feedback-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+.cdf-action-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; margin-top: 1rem; }
+.cdf-action-left, .cdf-action-right { display: flex; gap: 0.75rem; }
+.cdf-btn { padding: 10px 20px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; font-family: inherit; }
+.cdf-btn-prev { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+.cdf-btn-prev:hover:not(:disabled) { background: #f1f5f9; }
+.cdf-btn-prev:disabled { background: #f8fafc; color: #cbd5e1; cursor: not-allowed; border-color: #e2e8f0; }
+.cdf-btn-reset { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+.cdf-btn-reset:hover { background: #f1f5f9; }
+.cdf-btn-next { background: #3b82f6; color: white; }
+.cdf-btn-next:hover { background: #2563eb; }
+.cdf-btn-check { background: #3b82f6; color: white; }
+.cdf-btn-check:hover:not(:disabled) { background: #2563eb; }
+
+/* ==================================================================
+   Smaller screens: stack the bank under the diagram
+   ================================================================== */
+@media (max-width: 1200px) {
+  .oop-workspace { flex-direction: column; }
+  .oop-bank-container { width: 100%; }
+  .oop-bank-box { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Keep the header and page padding in step on smaller screens */
+@media (max-width: 1000px) {
+  .oop-modeling-page { padding: 2rem; }
+  .topnav-inner { padding: 0 2rem; }
+}
+
+@media (max-width: 640px) {
+  .oop-modeling-page { padding: 1.25rem 1rem; }
+  .topnav-inner { padding: 0 1rem; }
+  .topnav-link { padding: 0 0.6rem; }
+  .oop-bank-box { grid-template-columns: repeat(2, 1fr); }
 }

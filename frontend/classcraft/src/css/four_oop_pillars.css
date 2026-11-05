@@ -1,9 +1,11 @@
+/* Full width; side padding matches the header in dashboard_css.css
+   (3rem, then 2rem below 1000px, 1rem below 640px) so the logo lines up. */
 .four-oop-page {
-  flex: 0 1 1000px;
+  flex: 1;
   min-width: 0;
   width: 100%;
-  max-width: 1000px;
-  padding: 2rem 2.5rem;
+  box-sizing: border-box;
+  padding: 2.5rem 3rem;
   color: #0f172a;
   text-align: left;
 }
@@ -248,6 +250,19 @@
 .scenario-toggle:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 3px;
+}
+
+/* Wide screens: all four pillars side by side */
+@media (min-width: 1400px) {
+  .four-oop-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .four-oop-page {
+    padding: 2rem;
+  }
 }
 
 @media (max-width: 900px) {
