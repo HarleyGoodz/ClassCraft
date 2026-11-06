@@ -102,6 +102,10 @@ export default function Login() {
 
         </div>
 
+        <p className="forgot-password-link">
+    <Link to="/forgot-password">Forgot password?</Link>
+        </p>
+
         {error && <p className="simple-auth-error">{error}</p>}
 
         <button type="submit">Log in</button>
