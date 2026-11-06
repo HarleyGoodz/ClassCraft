@@ -11,6 +11,8 @@ import SkillDevelopment from "./jsx/SkillDevelopment";
 import RelationshipsMultiplicity from "./jsx/RelationshipsMultiplicity";
 import FourOopPillars from "./jsx/FourOopPillars";
 import ClassDiagramFormation from './jsx/ClassDiagramFormation';
+import ForgotPassword from './jsx/ForgotPassword';
+import ResetPassword from './jsx/ResetPassword';
 import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
 import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
@@ -26,6 +28,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learn-basics" element={<LearnBasics />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />
         <Route path="/learn-basics/relationships-multiplicity" element={<RelationshipsMultiplicity />} />
         <Route path="/learn-basics/four-oop-pillars" element={<FourOopPillars />} />
