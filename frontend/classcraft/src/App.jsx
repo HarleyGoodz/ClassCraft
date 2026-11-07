@@ -5,6 +5,7 @@
  * account checks, and runs DiagramConnectors for the interactive diagram effects.
  */
 
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./jsx/Login";
 import Register from "./jsx/Register";
@@ -28,10 +29,30 @@ import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
 import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
 import OOPClassModeling from './jsx/OOPClassModeling';
+import { playHoverSound } from "./utils/soundEffects";
 import "./App.css";
 
 
 function App() {
+  useEffect(() => {
+    function handlePointerOver(event) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const control = target.closest(
+        'button:not(:disabled):not([aria-disabled="true"]), a[href]:not([aria-disabled="true"]), [role="button"]:not([aria-disabled="true"]), [role="tab"]:not([aria-disabled="true"])'
+      );
+      if (!control || control.contains(event.relatedTarget)) return;
+
+      playHoverSound();
+    }
+
+    document.addEventListener("pointerover", handlePointerOver);
+    return () => document.removeEventListener("pointerover", handlePointerOver);
+  }, []);
+
   return (
     <BrowserRouter>
       <DiagramConnectors />

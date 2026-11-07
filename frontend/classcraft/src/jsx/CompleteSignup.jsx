@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import AuthFieldHint from "../components/AuthFieldHint";
 import "../App.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
@@ -72,6 +73,7 @@ export default function CompleteSignup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hint, setHint] = useState(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: current } }) => {
@@ -88,17 +90,24 @@ export default function CompleteSignup() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    setHint(null);
+
+    if (username.trim().length < 2) {
+      setHint({ field: "username", message: "Use at least 2 non-space characters." });
+      return;
+    }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setHint({ field: "password", message: "Use at least 6 characters." });
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setHint({ field: "confirmPassword", message: "These passwords don't match." });
       return;
     }
 
+    setHint(null);
     setLoading(true);
 
     try {
@@ -138,16 +147,36 @@ export default function CompleteSignup() {
         </p>
 
         <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="Enter username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          minLength={2}
-          maxLength={30}
-        />
+        <div className="auth-field-anchor">
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+              if (hint?.field === "username") setHint(null);
+            }}
+            onBlur={(event) => {
+              const value = event.currentTarget.value.trim();
+              if (value.length < 2) {
+                setHint({ field: "username", message: value ? "Use at least 2 characters." : "Please enter a username." });
+              } else if (value.length > 30) {
+                setHint({ field: "username", message: "Keep your username under 30 characters." });
+              } else if (hint?.field === "username") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "username" || undefined}
+            aria-describedby={hint?.field === "username" ? "signup-username-hint" : undefined}
+            required
+            minLength={2}
+            maxLength={30}
+          />
+          {hint?.field === "username" && (
+            <AuthFieldHint id="signup-username-hint" title="Username check">{hint.message}</AuthFieldHint>
+          )}
+        </div>
 
         <label htmlFor="password">Password</label>
         <div className="password-wrapper">
@@ -156,10 +185,25 @@ export default function CompleteSignup() {
             type={showPassword ? "text" : "password"}
             placeholder="At least 6 characters"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              if (hint?.field === "password") setHint(null);
+            }}
+            onBlur={(event) => {
+              if (event.currentTarget.value.length < 6) {
+                setHint({ field: "password", message: event.currentTarget.value ? "Use at least 6 characters." : "Please enter a password." });
+              } else if (hint?.field === "password") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "password" || undefined}
+            aria-describedby={hint?.field === "password" ? "signup-password-hint" : undefined}
             required
             minLength={6}
           />
+          {hint?.field === "password" && (
+            <AuthFieldHint id="signup-password-hint" title="Password check">{hint.message}</AuthFieldHint>
+          )}
           <PasswordToggle
             visible={showPassword}
             onToggle={() => setShowPassword(!showPassword)}
@@ -173,9 +217,26 @@ export default function CompleteSignup() {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Re-enter password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value);
+              if (hint?.field === "confirmPassword") setHint(null);
+            }}
+            onBlur={() => {
+              if (!confirmPassword) {
+                setHint({ field: "confirmPassword", message: "Please re-enter your password." });
+              } else if (confirmPassword !== password) {
+                setHint({ field: "confirmPassword", message: "These passwords don't match." });
+              } else if (hint?.field === "confirmPassword") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "confirmPassword" || undefined}
+            aria-describedby={hint?.field === "confirmPassword" ? "signup-confirm-password-hint" : undefined}
             required
           />
+          {hint?.field === "confirmPassword" && (
+            <AuthFieldHint id="signup-confirm-password-hint" title="Password check">{hint.message}</AuthFieldHint>
+          )}
           <PasswordToggle
             visible={showConfirmPassword}
             onToggle={() => setShowConfirmPassword(!showConfirmPassword)}

@@ -6,6 +6,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
+import { playClickSound, playHoverSound } from "../../utils/soundEffects";
+
 
 const NODE_W = 172;
 const NODE_H = 112;
@@ -115,6 +117,7 @@ function PlaygroundDiagram({ focus }) {
   function startDrag(event, id) {
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
+    playClickSound();
     dragRef.current = {
       id,
       offsetX: event.clientX - positions[id].left,
@@ -194,7 +197,13 @@ function AuthHero() {
           <li
             key={step.id}
             className={focus === step.id ? "cc-hero-step is-active" : "cc-hero-step"}
-            onPointerEnter={() => setFocus(step.id)}
+            tabIndex={0}
+            onPointerEnter={() => {
+              setFocus(step.id);
+              playHoverSound();
+            }}
+            onFocus={() => setFocus(step.id)}
+            onBlur={() => setFocus(null)}
           >
             <span className="cc-hero-step-number">0{index + 1}</span>
             <strong>{step.title}</strong>

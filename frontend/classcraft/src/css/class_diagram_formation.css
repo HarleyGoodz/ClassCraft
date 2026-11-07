@@ -237,9 +237,35 @@
 }
 
 .cdf-uml-section {
+  position: relative;
   padding: 1rem;
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-field-hint.cdf-field-hint {
+  position: static;
+  width: 100%;
+  margin-top: 0.75rem;
+  translate: none;
+  pointer-events: none;
+}
+
+.cdf-field-hint .auth-field-agent {
+  flex-basis: 34px;
+  width: 34px;
+  height: 34px;
+}
+
+.cdf-field-hint .auth-field-speech {
+  flex: 1;
+  max-width: none;
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+}
+
+.cdf-field-hint .auth-field-speech::before {
+  top: 50%;
 }
 
 .cdf-uml-section.cdf-drop-ready {

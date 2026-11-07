@@ -15,6 +15,7 @@ import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
 import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
 import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
+import AuthFieldHint from "../components/AuthFieldHint";
 import "../css/class_diagram_formation.css";
 
 const NAV_ITEMS = [
@@ -122,6 +123,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
   );
 
   const [feedback, setFeedback] = useState({ message: "", type: "" });
+  const [mentorHints, setMentorHints] = useState({});
   
   const placePiece = (piece, targetSection) => {
     if (targetSection === "class") {
@@ -140,6 +142,35 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
 
     setSelectedPiece(null);
     setFeedback({ message: "", type: "" });
+    let hint = "";
+
+    if (targetSection === "class" && piece.text !== currentScenario.targetClass) {
+      hint = piece.type === "attribute"
+        ? `"${piece.text}" is data, not a class. A class name should be a noun or noun phrase for the thing being modeled.`
+        : piece.type === "method"
+          ? `"${piece.text}" is an action, not a class. Choose a noun for the thing being modeled.`
+          : `"${piece.text}" is a noun, but this scenario asks you to model ${currentScenario.targetClass}.`;
+    } else if (
+      targetSection === "attribute" &&
+      (piece.type !== "attribute" || !currentScenario.validAttributes.includes(piece.text))
+    ) {
+      hint = piece.type === "class"
+        ? `"${piece.text}" names a thing, not data. Attributes are nouns for information the class has.`
+        : piece.type === "method"
+          ? `"${piece.text}" is an action. Attributes are nouns for information the class has.`
+          : `"${piece.text}" is not a property described in this scenario. Choose relevant data the class has.`;
+    } else if (
+      targetSection === "method" &&
+      (piece.type !== "method" || !currentScenario.validMethods.includes(piece.text))
+    ) {
+      hint = piece.type === "class"
+        ? `"${piece.text}" names a thing, not an action. Methods are verbs for what the class can do.`
+        : piece.type === "attribute"
+          ? `"${piece.text}" is data, not an action. Methods are verbs for what the class can do.`
+          : `"${piece.text}" is not an action described in this scenario. Choose a relevant class action.`;
+    }
+
+    setMentorHints((previous) => ({ ...previous, [targetSection]: hint }));
   };
 
   const handleRemovePiece = (e, piece, section) => {
@@ -150,6 +181,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
 
     setAvailablePieces([...availablePieces, piece]);
     setFeedback({ message: "", type: "" });
+    setMentorHints({});
   };
 
   // Helper function to evaluate the board and save the score
@@ -165,7 +197,8 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
     const userAttrTexts = attributes.map(a => a.text);
     const requiredAttrs = currentScenario.validAttributes;
     const hasMissingAttrs = requiredAttrs.some(req => !userAttrTexts.includes(req));
-    const hasExtraAttrs = userAttrTexts.some(usr => !requiredAttrs.includes(usr));
+    const extraAttributes = attributes.filter((attribute) => !requiredAttrs.includes(attribute.text));
+    const hasExtraAttrs = extraAttributes.length > 0;
 
     if (hasMissingAttrs) errors.push("You are missing required attributes in the Attributes section.");
     if (hasExtraAttrs) errors.push("You have incorrect or irrelevant attributes in the Attributes section.");
@@ -173,7 +206,8 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
     const userMethodTexts = methods.map(m => m.text);
     const requiredMethods = currentScenario.validMethods;
     const hasMissingMethods = requiredMethods.some(req => !userMethodTexts.includes(req));
-    const hasExtraMethods = userMethodTexts.some(usr => !requiredMethods.includes(usr));
+    const extraMethods = methods.filter((method) => !requiredMethods.includes(method.text));
+    const hasExtraMethods = extraMethods.length > 0;
 
     if (hasMissingMethods) errors.push("You are missing required methods in the Methods section.");
     if (hasExtraMethods) errors.push("You have incorrect or irrelevant methods in the Methods section.");
@@ -186,11 +220,47 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
     const isCorrect = errors.length === 0;
     
     if (!isCorrect) {
+      const wrongClassHint = className && className.text !== currentScenario.targetClass
+        ? className.type === "attribute"
+          ? `"${className.text}" describes data, not a class. A class name should be a noun for the main thing in the scenario.`
+          : className.type === "method"
+            ? `"${className.text}" describes an action, not a class. Choose a noun for the thing the class represents.`
+            : `"${className.text}" is a noun, but it is not the specific class requested by this scenario.`
+        : "";
+      const wrongAttribute = extraAttributes[0];
+      const wrongAttributeHint = wrongAttribute
+        ? wrongAttribute.type === "class"
+          ? `"${wrongAttribute.text}" names a class, not data. Attributes are nouns for information the class has.`
+          : wrongAttribute.type === "method"
+            ? `"${wrongAttribute.text}" describes an action. Put actions under Methods; Attributes are nouns for data.`
+            : `"${wrongAttribute.text}" is not a property described for this class. Choose relevant data from the scenario.`
+        : hasMissingAttrs
+          ? "Add the missing properties. Attributes are nouns for data the class has."
+          : "";
+      const wrongMethod = extraMethods[0];
+      const wrongMethodHint = wrongMethod
+        ? wrongMethod.type === "class"
+          ? `"${wrongMethod.text}" names a thing, not an action. Methods should be verbs for what the class can do.`
+          : wrongMethod.type === "attribute"
+            ? `"${wrongMethod.text}" describes data, not an action. Put it under Attributes; Methods should be verbs.`
+            : `"${wrongMethod.text}" is not an action described for this class. Choose a relevant action from the scenario.`
+        : hasMissingMethods
+          ? "Add the missing action. Methods are verbs for what the class can do."
+          : "";
+
+      setMentorHints({
+        class: !className
+          ? "Choose a noun or noun phrase for the thing this class represents."
+          : wrongClassHint,
+        attribute: wrongAttributeHint,
+        method: wrongMethodHint,
+      });
       setFeedback({ 
         message: "Incorrect. Review your diagram:\n• " + errors.join("\n• "), 
         type: "error" 
       });
     } else {
+      setMentorHints({});
       setFeedback({ 
         message: "Correct! You have successfully formed the class diagram.", 
         type: "success" 
@@ -225,6 +295,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
     const shuffled = [...scenario.pieces].sort(() => Math.random() - 0.5);
     setAvailablePieces(shuffled);
     setFeedback({ message: "", type: "" });
+    setMentorHints({});
   };
 
   const handleReset = () => resetBoard(currentScenario);
@@ -318,6 +389,11 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
                 ) : (
                   <span className="cdf-drop-placeholder">Drop here</span>
                 )}
+                {mentorHints.class && (
+                  <AuthFieldHint className="cdf-field-hint" title="Class name">
+                    {mentorHints.class}
+                  </AuthFieldHint>
+                )}
               </div>
 
               <div data-drop-target="attribute" onClick={() => handleDropZoneClick("attribute")} className={`cdf-uml-section cdf-uml-attributes${selectedPiece ? " cdf-drop-ready" : ""}`}>
@@ -328,6 +404,11 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
                     <div key={attr.id} onClick={(e) => handleRemovePiece(e, attr, "attribute")} className="cdf-placed-item">{attr.text}</div>
                   ))}
                 </div>
+                {mentorHints.attribute && (
+                  <AuthFieldHint className="cdf-field-hint" title="Attributes">
+                    {mentorHints.attribute}
+                  </AuthFieldHint>
+                )}
               </div>
 
               <div data-drop-target="method" onClick={() => handleDropZoneClick("method")} className={`cdf-uml-section cdf-uml-methods${selectedPiece ? " cdf-drop-ready" : ""}`}>
@@ -338,6 +419,11 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
                     <div key={method.id} onClick={(e) => handleRemovePiece(e, method, "method")} className="cdf-placed-item">{method.text}</div>
                   ))}
                 </div>
+                {mentorHints.method && (
+                  <AuthFieldHint className="cdf-field-hint" title="Methods">
+                    {mentorHints.method}
+                  </AuthFieldHint>
+                )}
               </div>
 
             </div>
