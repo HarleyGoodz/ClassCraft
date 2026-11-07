@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import ResendConfirmationButton from "../components/ResendConfirmationButton";
 import SocialAuthButtons from "../components/SocialAuthButtons";
+import AuthFieldHint from "../components/AuthFieldHint";
 import "../App.css";
 
 function getConfirmationLinkError() {
@@ -21,6 +22,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [emailHint, setEmailHint] = useState("");
+  const [passwordHint, setPasswordHint] = useState("");
   const [error, setError] = useState(getConfirmationLinkError);
   const [unconfirmedEmail, setUnconfirmedEmail] = useState("");
 
@@ -39,6 +42,8 @@ export default function Login() {
     event.preventDefault();
     setError("");
     setUnconfirmedEmail("");
+    setEmailHint("");
+    setPasswordHint("");
 
     const { error: signInError } =
       await supabase.auth.signInWithPassword({
@@ -50,6 +55,11 @@ export default function Login() {
       if (signInError.code === "email_not_confirmed") {
         setError("Please confirm your email before logging in. Check your inbox and spam folder.");
         setUnconfirmedEmail(email.trim());
+        return;
+      }
+
+      if (signInError.code === "invalid_credentials") {
+        setPasswordHint("credentials");
         return;
       }
 
@@ -67,14 +77,45 @@ export default function Login() {
         <h2>Log in</h2>
 
         <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className="login-email-field">
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onInvalid={(event) => {
+              event.preventDefault();
+              setEmailHint(event.currentTarget.value.trim() ? "format" : "required");
+            }}
+            onChange={(event) => {
+              const nextEmail = event.target.value;
+              setEmail(nextEmail);
+              setPasswordHint("");
+              if (!nextEmail || event.currentTarget.validity.valid) {
+                setEmailHint("");
+              } else if (emailHint) {
+                setEmailHint("format");
+              }
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.value.trim()) {
+                setEmailHint("required");
+              } else if (!event.currentTarget.validity.valid) {
+                setEmailHint("format");
+              }
+            }}
+            aria-invalid={Boolean(emailHint) || undefined}
+            aria-describedby={emailHint ? "login-email-hint" : undefined}
+            required
+          />
+          {emailHint && (
+            <AuthFieldHint id="login-email-hint" title="Email check">
+              {emailHint === "required"
+                ? "Please enter your email address."
+                : "That doesn't look like a valid email address."}
+            </AuthFieldHint>
+          )}
+        </div>
 
         <label htmlFor="password">Password</label>
         <div className="password-wrapper">
@@ -83,7 +124,16 @@ export default function Login() {
             type={showPassword ? "text" : "password"}
             placeholder="Enter password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => {
+              const nextPassword = event.target.value;
+              setPassword(nextPassword);
+              setPasswordHint("");
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.value) setPasswordHint("required");
+            }}
+            aria-invalid={Boolean(passwordHint) || undefined}
+            aria-describedby={passwordHint ? "login-password-hint" : undefined}
             required
           />
 
@@ -130,7 +180,13 @@ export default function Login() {
                 </svg>
             )}
         </button>
-
+          {passwordHint && (
+            <AuthFieldHint id="login-password-hint" title="Password check">
+              {passwordHint === "required"
+                ? "Please enter your password."
+                : "These details don't match. Check your email and password."}
+            </AuthFieldHint>
+          )}
         </div>
 
         <p className="forgot-password-link">

@@ -4,6 +4,7 @@ import { supabase } from "../utils/supabase";
 import { findEmailProblem } from "../utils/emailCheck";
 import SocialAuthButtons from "../components/SocialAuthButtons";
 import ResendConfirmationButton from "../components/ResendConfirmationButton";
+import AuthFieldHint from "../components/AuthFieldHint";
 import "../App.css";
 
 function PasswordToggle({ visible, onToggle }) {
@@ -55,25 +56,40 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmationSentTo, setConfirmationSentTo] = useState("");
+  const [hint, setHint] = useState(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    setHint(null);
+
+    if (username.trim().length < 2) {
+      setHint({
+        field: "username",
+        title: "Username check",
+        message: "Use at least 2 non-space characters.",
+      });
+      return;
+    }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setHint({ field: "password", title: "Password check", message: "Use at least 6 characters." });
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setHint({ field: "confirmPassword", title: "Password check", message: "These passwords don't match." });
       return;
     }
 
     const emailProblem = await findEmailProblem(email.trim());
 
     if (emailProblem) {
-      setError(emailProblem);
+      setHint({
+        field: "email",
+        title: "Email check",
+        message: "That address may not receive email. Check it or try another.",
+      });
       return;
     }
 
@@ -148,25 +164,78 @@ export default function Register() {
         <h2>Create an account</h2>
 
         <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="Enter username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          minLength={2}
-        />
+        <div className="auth-field-anchor">
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+              if (hint?.field === "username") setHint(null);
+            }}
+            onBlur={(event) => {
+              const value = event.currentTarget.value.trim();
+              if (value.length < 2) {
+                setHint({ field: "username", title: "Username check", message: value ? "Use at least 2 characters." : "Please enter a username." });
+              } else if (hint?.field === "username") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "username" || undefined}
+            aria-describedby={hint?.field === "username" ? "register-username-hint" : undefined}
+            required
+            minLength={2}
+          />
+          {hint?.field === "username" && (
+            <AuthFieldHint id="register-username-hint" title={hint.title}>{hint.message}</AuthFieldHint>
+          )}
+        </div>
 
         <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className="auth-field-anchor">
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onInvalid={(event) => {
+              event.preventDefault();
+              setHint({
+                field: "email",
+                title: "Email check",
+                message: event.currentTarget.value.trim()
+                  ? "That doesn't look like a valid email address."
+                  : "Please enter your email address.",
+              });
+            }}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              if (hint?.field === "email") {
+                setHint(!event.currentTarget.value.trim()
+                  ? { field: "email", title: "Email check", message: "Please enter your email address." }
+                  : !event.currentTarget.validity.valid
+                    ? { field: "email", title: "Email check", message: "That doesn't look like a valid email address." }
+                    : null);
+              }
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.value.trim()) {
+                setHint({ field: "email", title: "Email check", message: "Please enter your email address." });
+              } else if (!event.currentTarget.validity.valid) {
+                setHint({ field: "email", title: "Email check", message: "That doesn't look like a valid email address." });
+              } else if (hint?.field === "email") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "email" || undefined}
+            aria-describedby={hint?.field === "email" ? "register-email-hint" : undefined}
+            required
+          />
+          {hint?.field === "email" && (
+            <AuthFieldHint id="register-email-hint" title={hint.title}>{hint.message}</AuthFieldHint>
+          )}
+        </div>
 
         <label htmlFor="password">Password</label>
         <div className="password-wrapper">
@@ -175,10 +244,25 @@ export default function Register() {
             type={showPassword ? "text" : "password"}
             placeholder="At least 6 characters"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              if (hint?.field === "password") setHint(null);
+            }}
+            onBlur={(event) => {
+              if (event.currentTarget.value.length < 6) {
+                setHint({ field: "password", title: "Password check", message: event.currentTarget.value ? "Use at least 6 characters." : "Please enter a password." });
+              } else if (hint?.field === "password") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "password" || undefined}
+            aria-describedby={hint?.field === "password" ? "register-password-hint" : undefined}
             required
             minLength={6}
           />
+          {hint?.field === "password" && (
+            <AuthFieldHint id="register-password-hint" title={hint.title}>{hint.message}</AuthFieldHint>
+          )}
           <PasswordToggle
             visible={showPassword}
             onToggle={() => setShowPassword(!showPassword)}
@@ -192,9 +276,26 @@ export default function Register() {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Re-enter password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value);
+              if (hint?.field === "confirmPassword") setHint(null);
+            }}
+            onBlur={() => {
+              if (!confirmPassword) {
+                setHint({ field: "confirmPassword", title: "Password check", message: "Please re-enter your password." });
+              } else if (confirmPassword !== password) {
+                setHint({ field: "confirmPassword", title: "Password check", message: "These passwords don't match." });
+              } else if (hint?.field === "confirmPassword") {
+                setHint(null);
+              }
+            }}
+            aria-invalid={hint?.field === "confirmPassword" || undefined}
+            aria-describedby={hint?.field === "confirmPassword" ? "register-confirm-password-hint" : undefined}
             required
           />
+          {hint?.field === "confirmPassword" && (
+            <AuthFieldHint id="register-confirm-password-hint" title={hint.title}>{hint.message}</AuthFieldHint>
+          )}
           <PasswordToggle
             visible={showConfirmPassword}
             onToggle={() => setShowConfirmPassword(!showConfirmPassword)}

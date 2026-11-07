@@ -328,6 +328,7 @@ input[type="checkbox"] {
 }
 
 .cc-hero-step {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -342,6 +343,11 @@ input[type="checkbox"] {
 .cc-hero-step.is-active {
   border-color: var(--cc-lime);
   transform: translateY(-2px);
+}
+
+.cc-hero-step:focus-visible {
+  outline: 2px solid var(--cc-lime);
+  outline-offset: 3px;
 }
 
 .cc-hero-step strong {
@@ -465,12 +471,16 @@ form.simple-auth-form h2::after {
 }
 
 .simple-auth-form label:has(+ input:focus),
+.simple-auth-form label:has(+ .login-email-field input:focus),
+.simple-auth-form label:has(+ .auth-field-anchor input:focus),
 .simple-auth-form label:has(+ .password-wrapper input:focus) {
   color: var(--cc-lime);
 }
 
 /* A filled attribute has a value */
 .simple-auth-form label:has(+ input:not(:placeholder-shown))::after,
+.simple-auth-form label:has(+ .login-email-field input:not(:placeholder-shown))::after,
+.simple-auth-form label:has(+ .auth-field-anchor input:not(:placeholder-shown))::after,
 .simple-auth-form label:has(+ .password-wrapper input:not(:placeholder-shown))::after {
   content: " : String = set";
   color: var(--cc-lime);
@@ -505,6 +515,106 @@ form.simple-auth-form h2::after {
   border-color: var(--cc-lime);
   outline: none;
   box-shadow: 3px 3px 0 var(--cc-lime);
+}
+
+.login-email-field {
+  position: relative;
+  width: 100%;
+}
+
+.auth-field-anchor {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.auth-field-hint {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: -6px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(250px, calc(100vw - 32px));
+  margin: 0;
+  translate: 0 -50%;
+  color: var(--cc-ink);
+  pointer-events: none;
+  animation: cc-login-hint-pop 0.22s ease-out both;
+}
+
+.auth-field-agent {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  padding: 2px;
+  border: 1px solid var(--cc-lime);
+  border-radius: 50%;
+  background: var(--cc-bg);
+  color: var(--cc-lime);
+  animation: cc-login-agent-float 2.4s ease-in-out infinite;
+}
+
+.auth-field-speech {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 20rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cc-warn-line);
+  background: var(--cc-warn-bg);
+  color: var(--cc-ink);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.auth-field-speech::before {
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid var(--cc-warn-line);
+  border-right: 1px solid var(--cc-warn-line);
+  background: var(--cc-warn-bg);
+  content: "";
+  transform: rotate(45deg);
+  translate: 0 -50%;
+}
+
+.auth-field-speech strong {
+  color: var(--cc-warn);
+  font-family: var(--cc-font-mono);
+  font-size: 0.7rem;
+}
+
+@keyframes cc-login-hint-pop {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes cc-login-agent-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 .password-wrapper input:focus + .password-toggle {
