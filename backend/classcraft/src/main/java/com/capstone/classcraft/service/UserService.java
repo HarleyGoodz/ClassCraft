@@ -61,6 +61,40 @@ public class UserService {
     }
 
     @Transactional
+    public UserEntity claimUsername(UUID authUserId, String email, String username) {
+        if (username.length() < 2 || username.length() > 30) {
+            throw new IllegalArgumentException(
+                "Username must be between 2 and 30 characters."
+            );
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                "Your account does not have an email address."
+            );
+        }
+
+        Optional<UserEntity> existing = userRepository.findByAuthUserId(authUserId);
+
+        Optional<UserEntity> usernameOwner = userRepository.findByUsername(username);
+        if (usernameOwner.isPresent()
+                && !usernameOwner.get().getAuthUserId().equals(authUserId)) {
+            throw new IllegalArgumentException("Username already exists.");
+        }
+
+        if (existing.isEmpty() && userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
+        UserEntity user = existing.orElseGet(
+            () -> new UserEntity(authUserId, username, email)
+        );
+        user.setUsername(username);
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
     public UserEntity updateUsername(int userId, String username) {
         UserEntity user = userRepository.findById(userId)
             .orElseThrow(() ->

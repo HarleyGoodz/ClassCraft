@@ -1,3 +1,9 @@
+/*
+ * PreviousAttemptNotice.jsx: a small notice shown at the top of practice activities.
+ * Purpose: reminds learners how they did on this scenario before.
+ * What it does: filters the attempts for this activity and scenario, then shows the number of
+ * attempts with the first and latest scores. Shows nothing if there are no attempts.
+ */
 export default function PreviousAttemptNotice({ attempts, activityKey, scenarioKey }) {
   const scenarioAttempts = attempts
     .filter(
@@ -19,9 +25,9 @@ export default function PreviousAttemptNotice({ attempts, activityKey, scenarioK
       role="status"
       style={{
         padding: "0.65rem 0.85rem",
-        borderRadius: "0.5rem",
-        background: "#eff6ff",
-        color: "#1e40af",
+        borderRadius: "var(--cc-radius)",
+        background: "var(--cc-blue-tint)",
+        color: "var(--cc-info)",
       }}
     >
       Previously attempted {scenarioAttempts.length}{" "}

@@ -1,3 +1,7 @@
+/*
+ * class_relationships.css: styles for the Class Relationships activity (ClassRelationships.jsx).
+ * Purpose and what it does: lays out the classes, connectors, drop gap and feedback.
+ */
 /* ==================================================================
    Page shell (same as Dashboard)
    ================================================================== */
@@ -5,16 +9,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation (same as Dashboard)
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as the page content so the logo lines up with it */
@@ -30,7 +34,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +56,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +64,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +86,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +105,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +117,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -133,7 +137,7 @@
   min-width: 0;
   box-sizing: border-box;
   padding: 2.5rem 3rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--cc-font-body);
   text-align: left;
 }
 
@@ -150,7 +154,7 @@
 }
 
 .cdf-breadcrumb-link { 
-    color: #4a90e2; cursor: pointer; 
+    color: var(--cc-info); cursor: pointer; 
 }
 
 .cdf-breadcrumb-link:hover { 
@@ -158,31 +162,31 @@
 }
 
 .cdf-breadcrumb-separator { 
-    color: #a0a0a0; margin: 0 8px; font-weight: normal; 
+    color: var(--cc-faint); margin: 0 8px; font-weight: normal; 
 }
 
 .score-tracker {
   font-size: 14px;
   font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
+  color: var(--cc-text);
+  background: var(--cc-surface-2);
   padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--cc-radius);
+  border: 1px solid var(--cc-line);
 }
 
-.cdf-breadcrumb-current { color: #888888; }
-.cdf-scenario-counter { font-weight: bold; color: #555; font-size: 14px; }
-.cdf-title { font-size: 28px; margin: 10px 0; color: #333; }
-.cdf-description { margin-bottom: 30px; color: #555; line-height: 1.5; }
+.cdf-breadcrumb-current { color: var(--cc-faint); }
+.cdf-scenario-counter { font-weight: bold; color: var(--cc-text); font-size: 14px; }
+.cdf-title { font-size: 28px; margin: 10px 0; color: var(--cc-ink); }
+.cdf-description { margin-bottom: 30px; color: var(--cc-text); line-height: 1.5; }
 
 /* ==================================================================
    The Interactive Box
    ================================================================== */
 .relationship-builder-box {
-  background: #f4f7fb;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
+  background: var(--cc-sunken);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   padding: 2rem;
   margin-bottom: 2rem;
 }
@@ -197,9 +201,9 @@
 }
 
 .connector-option {
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   padding: 10px 15px;
   width: 160px;
   text-align: center;
@@ -214,7 +218,7 @@
 }
 
 .connector-option:hover {
-  border-color: #3b82f6;
+  border-color: var(--cc-info);
 }
 
 .connector-option:active {
@@ -224,7 +228,7 @@
 .connector-option span {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--cc-text);
 }
 
 .svg-container {
@@ -245,63 +249,63 @@
 }
 
 .uml-class-box {
-  background: #fff;
-  border: 1.5px solid #334155;
-  border-radius: 4px;
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   padding: 14px 28px;
   font-weight: bold;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 1.05rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
 }
 
 .connection-gap {
-  border: 2px dashed #cbd5e1;
-  border-radius: 6px;
+  border: 2px dashed var(--cc-line-2);
+  border-radius: var(--cc-radius);
   width: clamp(140px, 28vw, 380px);
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--cc-surface);
   transition: all 0.2s;
 }
 
 .drop-text {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--cc-faint);
 }
 
 .connection-gap.filled {
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--cc-line-2);
 }
 
 .connection-gap.correct {
-  border-color: #22c55e;
-  background: #f0fdf4;
+  border-color: var(--cc-ok-line);
+  background: var(--cc-ok-bg);
 }
 
 .connection-gap.wrong {
-  border-color: #ef4444;
-  background: #fef2f2;
+  border-color: var(--cc-err-line);
+  background: var(--cc-err-bg);
 }
 
 .dropped-connector {
   width: 90%;
   cursor: pointer;
   padding: 5px;
-  border-radius: 4px;
+  border-radius: var(--cc-radius);
   transition: background 0.2s;
 }
 
 .dropped-connector:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgb(255 143 134 / 12%);
 }
 
 /* 3. Scenario Text */
 .relationship-scenario-text {
   font-size: 0.95rem;
-  color: #334155;
+  color: var(--cc-text);
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
@@ -309,18 +313,18 @@
 /* 4. Feedback */
 .relationship-feedback {
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: var(--cc-radius);
   margin-top: 1rem;
 }
 
 .relationship-feedback.success {
-  background: #dcfce7;
-  border: 1px solid #86efac;
+  background: var(--cc-ok-bg);
+  border: 1px solid var(--cc-ok-line);
 }
 
 .relationship-feedback.error {
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
+  background: var(--cc-err-bg);
+  border: 1px solid var(--cc-err-line);
 }
 
 .relationship-feedback h3 {
@@ -342,7 +346,7 @@
   gap: 0.75rem;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--cc-line);
   padding-top: 1.5rem;
 }
 
@@ -354,7 +358,7 @@
 
 .cdf-btn {
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -364,38 +368,38 @@
 }
 
 .cdf-btn-prev {
-  background: #fff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  border: 1px solid var(--cc-line-2);
 }
 
 .cdf-btn-prev:hover:not(:disabled) {
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
 }
 
 .cdf-btn-prev:disabled {
-  background: #f8fafc;
-  color: #cbd5e1;
+  background: var(--cc-sunken);
+  color: var(--cc-text);
   cursor: not-allowed;
-  border-color: #e2e8f0;
+  border-color: var(--cc-line);
 }
 
 .cdf-btn-next {
-  background: #3b82f6;
+  background: var(--cc-blue);
   color: white;
 }
 
 .cdf-btn-next:hover {
-  background: #2563eb;
+  background: var(--cc-blue);
 }
 
 .cdf-btn-check {
-  background: #3b82f6;
+  background: var(--cc-blue);
   color: white;
 }
 
 .cdf-btn-check:hover:not(:disabled) {
-  background: #2563eb;
+  background: var(--cc-blue);
 }
 
 .cdf-btn-check:disabled {

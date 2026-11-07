@@ -1,14 +1,14 @@
+/*
+ * LearnBasics.jsx: the Learn the Basics topic list page (/learn-basics).
+ * Purpose: the starting point for the lessons.
+ * What it does: shows each topic from LEARN_BASICS_TOPICS as a class-style card that opens
+ * that lesson.
+ */
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import { LEARN_BASICS_TOPICS } from "../utils/learnBasicsTopics";
 import "../css/LearnBasics_css.css";
-
-const TOPICS = [
-  { key: "classes-objects", label: "Classes and Objects" },
-  { key: "class-construction", label: "Class Construction" },
-  { key: "relationships-multiplicity", label: "Relationships and Multiplicity" },
-  { key: "four-oop-pillars", label: "The Four OOP Pillars" },
-];
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", end: true },
@@ -88,25 +88,29 @@ export default function LearnBasics() {
         </header>
 
         <section className="topic-grid">
-          {TOPICS.map((topic) => (
+          {LEARN_BASICS_TOPICS.map((topic) => (
             <button
               key={topic.key}
               type="button"
               className="topic-button"
               onClick={() => navigate(`/learn-basics/${topic.key}`)}
             >
-              {topic.label}
+              <span className="topic-header">
+                <span className="topic-stereotype" aria-hidden="true">«topic»</span>
+                <span className="topic-name">{topic.label}</span>
+              </span>
+              <span className="topic-covers" aria-hidden="true">
+                {topic.covers.map((item) => (
+                  <span key={item} className="topic-cover">- {item}</span>
+                ))}
+              </span>
+              <span className="topic-action" aria-hidden="true">
+                <span>+ open()</span>
+                <span className="topic-arrow">→</span>
+              </span>
             </button>
           ))}
         </section>
-
-        <button
-          type="button"
-          className="back-button"
-          onClick={() => navigate("/dashboard")}
-        >
-          ← Back to Dashboard
-        </button>
       </main>
     </div>
   );

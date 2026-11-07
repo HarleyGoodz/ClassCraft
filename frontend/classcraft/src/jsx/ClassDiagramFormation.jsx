@@ -1,3 +1,10 @@
+/*
+ * ClassDiagramFormation.jsx: a Skill Development activity
+ * (/skill-development/class-diagram-formation).
+ * Purpose: practice building a class from a written scenario.
+ * What it does: learners drag each piece into the right compartment and check their answers.
+ * Shows their previous attempts.
+ */
 import { SCENARIOS as SCENARIO_BANK } from "../questionBank/classDiagramFormation.jsx";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -284,7 +291,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
         </div>
 
         <h1 className="cdf-title">{currentScenario.title}</h1>
-        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
         <p className="cdf-description">
           <strong>Scenario:</strong> {currentScenario.text} <br/>
           Drag each piece into the compartment where it belongs. When you are ready, press <strong>Check answers</strong>.

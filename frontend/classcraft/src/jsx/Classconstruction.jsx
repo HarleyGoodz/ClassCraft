@@ -1,9 +1,16 @@
+/*
+ * Classconstruction.jsx: the Class Construction lesson (/learn-basics/class-construction).
+ * Purpose: teaches what belongs in each compartment of a class box.
+ * What it does: learners drag pieces into a Student class box, then check their answers and
+ * get a hint for each misplaced piece.
+ */
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import "../css/LearnBasics_css.css";
 import "../css/ClassConstruction_css.css";
 import "../css/lesson_path_header.css";
+import TopicPager from "../components/TopicPager";
 
 const ZONES = ["name", "attributes", "methods"];
 
@@ -381,6 +388,8 @@ export default function ClassConstruction() {
             )}
           </section>
         </div>
+
+        <TopicPager current="class-construction" />
       </main>
     </div>
   );

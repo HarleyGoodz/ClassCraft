@@ -1,3 +1,9 @@
+/*
+ * ClassObjects.jsx: the Classes and Objects lesson (/learn-basics/classes-objects).
+ * Purpose: teaches the difference between a class (blueprint) and an object (real instance).
+ * What it does: explains both with code samples, then shows example scenarios of a class
+ * diagram and the objects made from it.
+ */
 import { SCENARIOS } from "../questionBank/classObjects.jsx";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -5,6 +11,7 @@ import { supabase } from "../utils/supabase";
 import "../css/class_objects.css";
 import "../css/class_objects_scenarios.css";
 import "../css/lesson_path_header.css";
+import TopicPager from "../components/TopicPager";
 
 /*
   Plain-English meaning of each data type used in the scenarios.
@@ -263,6 +270,8 @@ john.id = "2024-001";`}
             Show another scenario
           </button>
         </section>
+
+        <TopicPager current="classes-objects" />
       </main>
     </div>
   );

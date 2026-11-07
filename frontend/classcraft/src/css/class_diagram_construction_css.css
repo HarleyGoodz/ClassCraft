@@ -1,3 +1,8 @@
+/*
+ * class_diagram_construction_css.css: styles for the Class Diagram Construction pages.
+ * Purpose and what it does: styles ClassDiagramConstruction.jsx and gives
+ * ClassDiagramScenarios.jsx its page shell and top header.
+ */
 /* ==================================================================
    Page shell (same as Dashboard)
    ================================================================== */
@@ -5,16 +10,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation (same as Dashboard)
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as .cdc-page so the logo lines up with the content */
@@ -30,7 +35,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +57,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +65,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +87,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +106,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +118,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -145,11 +150,11 @@
   align-items: center;
   gap: 3rem;
   box-sizing: border-box;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
   padding: 3rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
   text-align: left;
 }
 
@@ -162,9 +167,9 @@
   flex-direction: column;
   min-width: 0;
   padding: 1.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #f8fafc;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-sunken);
 }
 
 .cdc-title {
@@ -172,7 +177,7 @@
   font-size: 2.25rem;
   font-weight: 700;
   line-height: 1.2;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .cdc-subtitle {
@@ -180,7 +185,7 @@
   max-width: 62ch;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #475569;
+  color: var(--cc-text);
 }
 
 .cdc-practice-modes {
@@ -188,15 +193,15 @@
   gap: 0.75rem;
   margin: 0 0 1rem;
   padding: 1rem 1.1rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
   text-align: left;
 }
 
 .cdc-practice-modes legend {
   padding: 0 0.3rem;
-  color: #334155;
+  color: var(--cc-text);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -205,7 +210,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
-  color: #475569;
+  color: var(--cc-text);
   font-size: 0.9rem;
   line-height: 1.4;
   cursor: pointer;
@@ -224,12 +229,12 @@
 }
 
 .cdc-availability {
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .cdc-empty-state,
 .cdc-progress-error {
-  color: #b91c1c;
+  color: var(--cc-err);
 }
 
 /* ==================================================================
@@ -239,10 +244,10 @@
   display: block;
   width: 100%;
   padding: 0.9rem 1rem;
-  background: #3b82f6;
-  color: #fff;
+  background: var(--cc-blue);
+  color: var(--cc-white);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--cc-radius);
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
@@ -251,7 +256,7 @@
 }
 
 .cdc-start-button:hover {
-  background: #2563eb;
+  background: var(--cc-blue);
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
 }
 
@@ -260,13 +265,13 @@
 }
 
 .cdc-start-button:disabled {
-  background: #94a3b8;
+  background: var(--cc-line-3);
   box-shadow: none;
   cursor: not-allowed;
 }
 
 .cdc-start-button:focus-visible {
-  outline: 3px solid #bfdbfe;
+  outline: 3px solid var(--cc-blue-line);
   outline-offset: 3px;
 }
 
@@ -276,11 +281,11 @@
 .cdc-hint {
   margin: 0;
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .cdc-hint strong {
-  color: #334155;
+  color: var(--cc-text);
 }
 
 /* ==================================================================

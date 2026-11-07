@@ -1,3 +1,9 @@
+/*
+ * Multiplicity.jsx: a Skill Development activity (/skill-development/multiplicity).
+ * Purpose: practice reading multiplicity from a scenario.
+ * What it does: learners drag the correct notation to the ends of the line and get feedback.
+ * Shows their previous attempts.
+ */
 import { MULTIPLICITY_SCENARIOS as SCENARIO_BANK } from "../questionBank/multiplicity.jsx";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -211,7 +217,7 @@ export default function Multiplicity() {
         <p className="cdf-description">
           Read the scenario and drag the correct multiplicity notation to the ends of the line.
         </p>
-        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
         <PreviousAttemptNotice
           attempts={priorAttempts}
           activityKey="multiplicity"

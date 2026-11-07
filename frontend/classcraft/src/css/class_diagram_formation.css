@@ -1,3 +1,8 @@
+/*
+ * class_diagram_formation.css: styles for the Class Diagram Formation activity
+ * (ClassDiagramFormation.jsx).
+ * Purpose and what it does: lays out the scenario, class compartments, pieces and feedback.
+ */
 /* ==================================================================
    Page shell (same as Dashboard)
    ================================================================== */
@@ -5,16 +10,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation (same as Dashboard)
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as the page content so the logo lines up with it */
@@ -30,7 +35,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +57,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +65,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +87,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +106,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +118,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -133,7 +138,7 @@
   min-width: 0;
   box-sizing: border-box;
   padding: 2.5rem 3rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--cc-font-body);
   text-align: left;
 }
 
@@ -151,11 +156,11 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .cdf-breadcrumb-link {
-  color: #3b82f6;
+  color: var(--cc-info);
   cursor: pointer;
   text-decoration: none;
 }
@@ -166,38 +171,38 @@
 
 .cdf-breadcrumb-separator {
   margin: 0 0.5rem;
-  color: #cbd5e1;
+  color: var(--cc-text);
 }
 
 .cdf-breadcrumb-current {
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .cdf-scenario-counter {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--cc-text);
 }
 
 .score-tracker {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
+  color: var(--cc-text);
+  background: var(--cc-surface-2);
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--cc-radius);
+  border: 1px solid var(--cc-line);
 }
 
 .cdf-title {
   margin: 0.5rem 0 0.5rem 0;
   font-size: 1.85rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .cdf-description {
   margin: 0 0 2rem 0;
-  color: #475569;
+  color: var(--cc-text);
   max-width: 800px;
   line-height: 1.6;
   font-size: 0.95rem;
@@ -225,10 +230,10 @@
 }
 
 .cdf-uml-box {
-  border: 2px solid #cbd5e1;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 2px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
 }
 
 .cdf-uml-section {
@@ -242,37 +247,37 @@
 }
 
 .cdf-uml-section.cdf-drop-ready:hover {
-  background-color: #eff6ff;
-  box-shadow: inset 0 0 0 2px #93c5fd;
+  background-color: var(--cc-blue-tint);
+  box-shadow: inset 0 0 0 2px var(--cc-blue-line);
 }
 
 .cdf-uml-class {
-  border-bottom: 2px solid #cbd5e1;
+  border-bottom: 2px solid var(--cc-line-2);
   min-height: 70px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #f8fafc;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  background: var(--cc-sunken);
+  border-top-left-radius: var(--cc-radius);
+  border-top-right-radius: var(--cc-radius);
 }
 
 .cdf-uml-attributes {
-  border-bottom: 2px solid #cbd5e1;
+  border-bottom: 2px solid var(--cc-line-2);
   min-height: 130px;
 }
 
 .cdf-uml-methods {
   min-height: 130px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: var(--cc-radius);
+  border-bottom-right-radius: var(--cc-radius);
 }
 
 .cdf-section-label {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--cc-faint);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
@@ -280,7 +285,7 @@
 }
 
 .cdf-drop-placeholder {
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-style: italic;
   display: block;
   text-align: center;
@@ -290,21 +295,21 @@
 .cdf-placed-item {
   cursor: pointer;
   padding: 0.35rem 0;
-  color: #334155;
+  color: var(--cc-text);
   font-size: 0.9rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   transition: color 0.15s;
 }
 
 .cdf-placed-item:hover {
-  color: #ef4444; /* Red hint to show it will be removed */
+  color: var(--cc-err); /* Red hint to show it will be removed */
   text-decoration: line-through;
 }
 
 .cdf-uml-class .cdf-placed-item {
   font-weight: 700;
   margin-top: 0.25rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--cc-font-body);
   font-size: 1.05rem;
 }
 
@@ -318,7 +323,7 @@
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.15rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 /* Pieces flow into as many columns as fit */
@@ -327,22 +332,22 @@
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   align-content: start;
   gap: 0.6rem;
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--cc-line-2);
   padding: 1.25rem;
-  border-radius: 10px;
+  border-radius: var(--cc-radius);
   min-height: 340px;
-  background: #f8fafc;
+  background: var(--cc-sunken);
 }
 
 .cdf-piece {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
   padding: 0.75rem;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
   cursor: grab;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  color: #334155;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  color: var(--cc-text);
   font-size: 0.9rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   transition: border-color 0.15s;
@@ -351,12 +356,12 @@
 }
 
 .cdf-piece:hover {
-  border-color: #3b82f6;
+  border-color: var(--cc-info);
 }
 
 .cdf-piece-selected {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px #bfdbfe;
+  border-color: var(--cc-info);
+  box-shadow: 0 0 0 2px var(--cc-blue-line);
 }
 
 .cdf-piece:active {
@@ -365,7 +370,7 @@
 
 .cdf-tip {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--cc-faint);
   text-align: center;
   margin-top: 0.75rem;
 }
@@ -380,7 +385,7 @@
   gap: 0.75rem;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--cc-line);
   padding-top: 1.5rem;
 }
 
@@ -392,7 +397,7 @@
 
 .cdf-btn {
   padding: 0.6rem 1.25rem;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -401,62 +406,62 @@
 }
 
 .cdf-btn-prev {
-  background: #fff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  border: 1px solid var(--cc-line-2);
 }
 
 .cdf-btn-prev:hover:not(:disabled) {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--cc-surface-2);
+  color: var(--cc-ink);
 }
 
 .cdf-btn-prev:disabled {
-  background: #f8fafc;
-  color: #cbd5e1;
+  background: var(--cc-sunken);
+  color: var(--cc-text);
   cursor: not-allowed;
-  border-color: #e2e8f0;
+  border-color: var(--cc-line);
 }
 
 .cdf-btn-back {
   background: transparent;
-  color: #64748b;
+  color: var(--cc-muted);
   border: none;
 }
 
 .cdf-btn-back:hover {
-  color: #0f172a;
+  color: var(--cc-ink);
   background: transparent;
 }
 
 .cdf-btn-reset {
-  background: #fff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  border: 1px solid var(--cc-line-2);
 }
 
 .cdf-btn-reset:hover {
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
 }
 
 .cdf-btn-check {
-  background: #3b82f6;
+  background: var(--cc-blue);
   color: white;
   border: none;
 }
 
 .cdf-btn-check:hover {
-  background: #2563eb;
+  background: var(--cc-blue);
 }
 
 .cdf-btn-next {
-  background: #fff;
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
+  background: var(--cc-surface);
+  color: var(--cc-info);
+  border: 1px solid var(--cc-info);
 }
 
 .cdf-btn-next:hover {
-  background: #eff6ff;
+  background: var(--cc-blue-tint);
 }
 
 /* ==================================================================
@@ -465,22 +470,22 @@
 .cdf-feedback {
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--cc-radius);
   white-space: pre-line;
   line-height: 1.55;
   font-size: 0.9rem;
 }
 
 .cdf-feedback-error {
-  background: #fef3c7; /* Amber background from your original file */
-  color: #92400e;
-  border: 1px solid #fcd34d;
+  background: var(--cc-warn-bg); /* Amber background from your original file */
+  color: var(--cc-warn);
+  border: 1px solid var(--cc-warn-line);
 }
 
 .cdf-feedback-success {
-  background: #dcfce7; /* Green background from your original file */
-  color: #166534;
-  border: 1px solid #86efac;
+  background: var(--cc-ok-bg); /* Green background from your original file */
+  color: var(--cc-ok);
+  border: 1px solid var(--cc-ok-line);
 }
 
 /* ==================================================================

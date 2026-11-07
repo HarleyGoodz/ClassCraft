@@ -1,3 +1,7 @@
+/*
+ * class_diagram_scenarios_css.css: styles for the scenario page (ClassDiagramScenarios.jsx).
+ * Purpose and what it does: lays out the diagram area, piece bank and relationship tools.
+ */
 /* ==================================================================
    Class Diagram Construction – scenario page
    (.app-shell + the top header come from class_diagram_construction_css.css)
@@ -28,11 +32,11 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #888;
+  color: var(--cc-faint);
 }
 
 .cds-breadcrumb-link {
-  color: #4a90e2;
+  color: var(--cc-info);
   cursor: pointer;
 }
 
@@ -42,30 +46,30 @@
 
 .cds-breadcrumb-sep {
   margin: 0 8px;
-  color: #a0a0a0;
+  color: var(--cc-faint);
 }
 
 .cds-counter {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  color: var(--cc-text);
+  background: var(--cc-surface-2);
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
   padding: 0.25rem 0.75rem;
 }
 
 .cds-title {
   margin: 0.25rem 0 0.5rem;
   font-size: 1.7rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .cds-scenario {
   margin: 0 0 0.75rem;
   max-width: 1100px;
   line-height: 1.6;
-  color: #334155;
+  color: var(--cc-text);
 }
 
 .cds-meta {
@@ -74,22 +78,22 @@
   gap: 0.35rem;
   margin-bottom: 1.25rem;
   font-size: 0.85rem;
-  color: #475569;
+  color: var(--cc-text);
 }
 
 .cds-chip {
   display: inline-block;
   margin: 0 6px 0 0;
   padding: 2px 10px;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue-tint);
+  color: var(--cc-info);
   font-size: 0.78rem;
   font-weight: 600;
 }
 
 .cds-muted {
-  color: #64748b;
+  color: var(--cc-muted);
   font-size: 0.85rem;
 }
 
@@ -110,16 +114,16 @@
   flex: 1;
   min-width: 0;
   overflow-x: auto;
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
+  background: var(--cc-sunken);
+  border: 1px dashed var(--cc-line-2);
+  border-radius: var(--cc-radius);
   padding: 3rem 1.25rem 2rem;
 }
 
 .cds-subtitle {
   margin: 1.25rem 0 0.5rem;
   font-size: 1rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 /* ---------- Diagram layouts ---------- */
@@ -145,7 +149,7 @@
   width: 20px;
   height: 2px;
   flex-shrink: 0;
-  background: #334155;
+  background: var(--cc-surface-3);
 }
 
 .cds-branches {
@@ -164,15 +168,15 @@
   width: 2px;
   align-self: stretch;
   flex-shrink: 0;
-  background: #334155;
+  background: var(--cc-surface-3);
 }
 
 .cds-branch-0 .cds-bracket {
-  background: linear-gradient(to bottom, transparent 50%, #334155 50%);
+  background: linear-gradient(to bottom, transparent 50%, var(--cc-surface-3) 50%);
 }
 
 .cds-branch-1 .cds-bracket {
-  background: linear-gradient(to bottom, #334155 50%, transparent 50%);
+  background: linear-gradient(to bottom, var(--cc-surface-3) 50%, transparent 50%);
 }
 
 /* ---------- Connector between two boxes ---------- */
@@ -193,7 +197,7 @@
   right: 0;
   top: 50%;
   height: 2px;
-  background: #334155;
+  background: var(--cc-surface-3);
 }
 
 /* multiplicities sit just above the line, next to each box */
@@ -211,10 +215,10 @@
   position: relative;
   flex: 0 0 230px;
   width: 230px;
-  background: #fff;
-  border: 2px solid #334155;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: var(--cc-surface);
+  border: 2px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 30%);
 }
 
 .cds-box-number {
@@ -222,9 +226,9 @@
   top: -11px;
   left: 10px;
   padding: 0 8px;
-  background: #334155;
-  color: #fff;
-  border-radius: 999px;
+  background: var(--cc-surface-3);
+  color: var(--cc-white);
+  border-radius: var(--cc-radius-pill);
   font-size: 0.7rem;
   font-weight: 700;
 }
@@ -235,8 +239,8 @@
   justify-content: center;
   min-height: 64px;
   padding: 14px 10px 10px;
-  background: #f1f5f9;
-  border-bottom: 2px solid #334155;
+  background: var(--cc-surface-2);
+  border-bottom: 2px solid var(--cc-line-3);
   text-align: center;
   white-space: pre-line;
 }
@@ -244,12 +248,12 @@
 .cds-class-name {
   font-weight: 700;
   font-size: 1.05rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   cursor: pointer;
 }
 
 .cds-placeholder {
-  color: #94a3b8;
+  color: var(--cc-faint);
   font-style: italic;
   font-size: 0.85rem;
 }
@@ -257,7 +261,7 @@
 .cds-section {
   min-height: 90px;
   padding: 10px;
-  border-bottom: 1px solid #cbd5e1;
+  border-bottom: 1px solid var(--cc-line-2);
 }
 
 .cds-section:last-child {
@@ -272,7 +276,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: var(--cc-faint);
 }
 
 .cds-item {
@@ -282,7 +286,7 @@
   margin-bottom: 6px;
   padding: 3px;
   border: 2px solid transparent;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
 }
 
 .cds-vis {
@@ -292,49 +296,49 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  background: #e2e8f0;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  background: var(--cc-surface-3);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   font-family: monospace;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--cc-ink);
   cursor: pointer;
 }
 
 .cds-vis:hover {
-  background: #bfdbfe;
-  border-color: #3b82f6;
+  background: var(--cc-blue-line);
+  border-color: var(--cc-info);
 }
 
 .cds-item-text {
   font-family: ui-monospace, monospace;
   font-size: 0.82rem;
-  color: #334155;
+  color: var(--cc-text);
   cursor: pointer;
   word-break: break-word;
 }
 
 .cds-item-text:hover {
-  color: #ef4444;
+  color: var(--cc-err);
   text-decoration: line-through;
 }
 
 /* drag-over highlight */
 .over {
-  background: #dbeafe;
+  background: var(--cc-blue-tint-2);
 }
 
 /* after "Check Answer" (the only feedback): red = wrong, green = correct */
 .cds-wrong {
-  outline: 2px solid #ef4444;
+  outline: 2px solid var(--cc-err-line);
   outline-offset: -2px;
-  background: #fef2f2;
+  background: var(--cc-err-bg);
 }
 
 .cds-right {
-  outline: 2px solid #22c55e;
+  outline: 2px solid var(--cc-ok-line);
   outline-offset: -2px;
-  background: #f0fdf4;
+  background: var(--cc-ok-bg);
 }
 
 /* ---------- Drop zones (relationship line and multiplicity) ---------- */
@@ -344,10 +348,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  border: 2px dashed #cbd5e1;
-  border-radius: 6px;
-  color: #94a3b8;
+  background: var(--cc-surface);
+  border: 2px dashed var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  color: var(--cc-faint);
   font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
@@ -368,8 +372,8 @@
 .cds-zone-rel.filled {
   width: 100%;
   padding: 0 4px;
-  background: #fff;
-  border: 1px solid #cbd5e1;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
 }
 
 /* ---------- Relationship symbols ---------- */
@@ -386,7 +390,7 @@
 .cds-sym-line {
   flex: 1;
   height: 2px;
-  background: #334155;
+  background: var(--cc-surface-3);
 }
 
 .cds-tool .cds-sym {
@@ -422,7 +426,7 @@
   justify-content: center;
   min-height: 260px;
   text-align: center;
-  color: #475569;
+  color: var(--cc-text);
 }
 
 .cds-empty p {
@@ -441,17 +445,17 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 999px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius-pill);
   font-size: 0.7rem;
-  color: #475569;
+  color: var(--cc-text);
   cursor: pointer;
 }
 
 .cds-box-controls button:hover:not(:disabled) {
-  background: #eff6ff;
-  border-color: #3b82f6;
+  background: var(--cc-blue-tint);
+  border-color: var(--cc-info);
 }
 
 .cds-box-controls button:disabled {
@@ -466,37 +470,37 @@
   transform: translateX(-50%);
   z-index: 2;
   padding: 1px 10px;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 999px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius-pill);
   font-size: 0.8rem;
-  color: #475569;
+  color: var(--cc-text);
   cursor: pointer;
 }
 
 .cds-flip:hover {
-  background: #eff6ff;
-  border-color: #3b82f6;
+  background: var(--cc-blue-tint);
+  border-color: var(--cc-info);
 }
 
 .cds-zone.filled {
-  border: 1px solid #cbd5e1;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border: 1px solid var(--cc-line-2);
+  background: var(--cc-blue-tint);
+  color: var(--cc-info);
   font-weight: 700;
 }
 
 .cds-zone.cds-wrong {
-  border: 2px solid #ef4444;
-  background: #fef2f2;
-  color: #991b1b;
+  border: 2px solid var(--cc-err-line);
+  background: var(--cc-err-bg);
+  color: var(--cc-err);
   outline: none;
 }
 
 .cds-zone.cds-right {
-  border: 2px solid #22c55e;
-  background: #f0fdf4;
-  color: #166534;
+  border: 2px solid var(--cc-ok-line);
+  background: var(--cc-ok-bg);
+  color: var(--cc-ok);
   outline: none;
 }
 
@@ -517,9 +521,9 @@
   align-content: start;
   min-height: 180px;
   padding: 12px;
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 10px;
+  background: var(--cc-sunken);
+  border: 2px dashed var(--cc-line-2);
+  border-radius: var(--cc-radius);
 }
 
 .cds-piece {
@@ -527,13 +531,13 @@
   align-items: center;
   justify-content: center;
   padding: 10px 6px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
   font-family: ui-monospace, monospace;
   font-size: 0.8rem;
-  color: #334155;
+  color: var(--cc-text);
   text-align: center;
   white-space: pre-line;
   word-break: break-word;
@@ -544,7 +548,7 @@
 }
 
 .cds-piece:hover {
-  border-color: #3b82f6;
+  border-color: var(--cc-info);
 }
 
 .cds-piece:active {
@@ -556,19 +560,19 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 12px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: var(--cc-surface-2);
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
 }
 
 .cds-tool {
   padding: 8px 12px;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   font-size: 0.8rem;
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
@@ -576,18 +580,18 @@
 }
 
 .cds-tool:hover {
-  border-color: #3b82f6;
+  border-color: var(--cc-info);
 }
 
 .cds-piece.cds-selected,
 .cds-tool.cds-selected {
-  border-color: #3b82f6;
-  background: #eff6ff;
+  border-color: var(--cc-info);
+  background: var(--cc-blue-tint);
   box-shadow: 0 0 0 2px rgb(59 130 246 / 18%);
 }
 
 .cds-drop-ready {
-  outline: 2px dashed #93c5fd;
+  outline: 2px dashed var(--cc-blue-line);
   outline-offset: -3px;
 }
 
@@ -604,21 +608,21 @@
   gap: 0.75rem;
   margin-top: 1.5rem;
   padding-top: 1.25rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--cc-line);
 }
 
 .cds-note {
   margin-right: auto;
   font-size: 0.9rem;
-  color: #991b1b;
+  color: var(--cc-err);
 }
 
 .cds-btn {
   padding: 10px 20px;
-  background: #fff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 600;
@@ -627,17 +631,17 @@
 }
 
 .cds-btn:hover {
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
 }
 
 .cds-btn-primary {
-  background: #3b82f6;
-  color: #fff;
+  background: var(--cc-blue);
+  color: var(--cc-white);
   border-color: transparent;
 }
 
 .cds-btn-primary:hover {
-  background: #2563eb;
+  background: var(--cc-blue);
 }
 
 .cds-btn:disabled {
@@ -650,15 +654,15 @@
   max-width: 720px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
 }
 
 .cds-results h1 {
   margin: 0 0 0.5rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .cds-result-list {
@@ -672,18 +676,18 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #e2e8f0;
-  color: #334155;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-text);
 }
 
 .cds-pass {
-  color: #166534;
+  color: var(--cc-ok);
   font-weight: 700;
   white-space: nowrap;
 }
 
 .cds-fail {
-  color: #991b1b;
+  color: var(--cc-err);
   font-weight: 700;
   white-space: nowrap;
 }

@@ -36,7 +36,13 @@ public class SupabaseAuthService {
             .build();
     }
 
+    public record AuthenticatedUser(UUID id, String email) {}
+
     public UUID requireUserId(String authorizationHeader) {
+        return requireUser(authorizationHeader).id();
+    }
+
+    public AuthenticatedUser requireUser(String authorizationHeader) {
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "A bearer token is required.");
         }
@@ -78,7 +84,8 @@ public class SupabaseAuthService {
             }
 
             JsonNode user = objectMapper.readTree(response.body());
-            return UUID.fromString(user.path("id").asText());
+            String email = user.hasNonNull("email") ? user.get("email").asText() : "";
+            return new AuthenticatedUser(UUID.fromString(user.path("id").asText()), email);
         } catch (ResponseStatusException exception) {
             throw exception;
         } catch (InterruptedException exception) {

@@ -1,11 +1,15 @@
+/*
+ * activity_loading_skeleton.css: styles for ActivityLoadingSkeleton.jsx.
+ * Purpose and what it does: draws the placeholder shown while an activity is loading.
+ */
 .activity-loading {
   width: min(100% - 2rem, 940px);
   min-height: 70vh;
   margin: 3rem auto;
   padding: 1.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .activity-loading-header,
@@ -20,7 +24,7 @@
 .activity-loading-description,
 .activity-loading-panel,
 .activity-loading-footer span {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e8eef5 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, var(--cc-surface-2) 25%, var(--cc-surface-3) 50%, var(--cc-surface-2) 75%);
   background-size: 200% 100%;
   animation: activity-loading-pulse 1.4s ease-in-out infinite;
 }
@@ -28,21 +32,21 @@
 .activity-loading-header span {
   width: 8rem;
   height: 1rem;
-  border-radius: 999px;
+  border-radius: var(--cc-radius-pill);
 }
 
 .activity-loading-title {
   width: min(24rem, 70%);
   height: 2rem;
   margin-top: 2rem;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
 }
 
 .activity-loading-description {
   width: min(42rem, 90%);
   height: 1rem;
   margin-top: 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--cc-radius-pill);
 }
 
 .activity-loading-workspace {
@@ -54,8 +58,8 @@
 
 .activity-loading-panel {
   min-height: 18rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
 }
 
 .activity-loading-footer {
@@ -65,7 +69,7 @@
 .activity-loading-footer span {
   width: 6rem;
   height: 2.5rem;
-  border-radius: 8px;
+  border-radius: var(--cc-radius);
 }
 
 @keyframes activity-loading-pulse {

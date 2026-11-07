@@ -1,3 +1,9 @@
+/*
+ * OOPClassModeling.jsx: a Skill Development activity (/skill-development/oop-class-modeling).
+ * Purpose: practice modeling a scenario with classes, relationships and visibility.
+ * What it does: learners drag pieces to the classes, connect them with a relationship, click
+ * visibility symbols to change them, and get feedback. Shows their previous attempts.
+ */
 import { OOP_SCENARIOS as SCENARIO_BANK } from "../questionBank/oopClassModeling.jsx";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -532,7 +538,7 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
         </div>
 
         <h1 className="cdf-title">{currentScenario.title}</h1>
-        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
         <p className="cdf-description">
           <strong>Scenario:</strong> {currentScenario.scenario} <br />
           Drag pieces to the classes. Connect them with a relationship. <strong>Click visibility symbols to change them.</strong>
@@ -610,7 +616,7 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
 
             {/* CHILD CLASS */}
             <div className="oop-class-box">
-              <div data-drop-target="child_name" onClick={() => placeSelectedPiece("child_name")} className={`oop-class-header${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`} style={{ background: "#f8fafc" }}>
+              <div data-drop-target="child_name" onClick={() => placeSelectedPiece("child_name")} className={`oop-class-header${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`} style={{ background: "var(--cc-sunken)" }}>
                 {renderNameSlot(childName, "child_name", "Drop Child")}
               </div>
               <div data-drop-target="child_attr" onClick={() => placeSelectedPiece("child_attr")} className={`oop-uml-section${selectedTool?.type === "piece" ? " oop-drop-ready" : ""}`}>

@@ -1,9 +1,13 @@
+/*
+ * class_objects_scenarios.css: styles for the example scenario section of ClassObjects.jsx.
+ * Purpose and what it does: lays out the class box, the arrow and the object cards.
+ */
 .scenario-section {
   margin-bottom: 2rem;
   padding: 1.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .scenario-section code {
@@ -21,20 +25,20 @@
 .scenario-top h2 {
   margin: 0 0 4px;
   font-size: 1.2rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .scenario-intro {
   margin: 0;
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .scenario-counter {
   padding: 4px 12px;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue-tint);
+  color: var(--cc-info);
   font-size: 0.85rem;
   font-weight: 600;
   white-space: nowrap;
@@ -66,13 +70,13 @@
 /* ---------- UML class box ---------- */
 .uml-box {
   margin-top: 6px;
-  border: 2px solid #1f2937;
-  background: #eff6ff;
+  border: 2px solid var(--cc-line-3);
+  background: var(--cc-blue-tint);
 }
 
 .uml-compartment {
   padding: 10px 14px;
-  border-top: 2px solid #1f2937;
+  border-top: 2px solid var(--cc-line-3);
   min-height: 36px;
 }
 
@@ -83,26 +87,26 @@
 .uml-name {
   text-align: center;
   font-size: 1.05rem;
-  background: #dbeafe;
+  background: var(--cc-blue-tint-2);
 }
 
 .uml-line {
   padding: 2px 0;
   font-size: 0.88rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 /* ---------- Object cards ---------- */
 .scenario-card {
   padding: 14px 16px;
-  border-radius: 8px;
-  border: 2px solid #1f2937;
-  background: #fff;
+  border-radius: var(--cc-radius);
+  border: 2px solid var(--cc-line-3);
+  background: var(--cc-surface);
 }
 
 .scenario-card--object {
-  border-color: #16a34a;
-  background: #f0fdf4;
+  border-color: var(--cc-ok-line);
+  background: var(--cc-ok-bg);
 }
 
 .scenario-card h3 {
@@ -122,13 +126,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280;
+  color: var(--cc-muted);
 }
 
 .scenario-small {
   margin: 10px 0 0;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--cc-muted);
   font-style: italic;
 }
 
@@ -137,13 +141,13 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  color: #6b7280;
+  color: var(--cc-muted);
   font-size: 0.8rem;
 }
 
 .scenario-arrow-icon {
   font-size: 1.6rem;
-  color: #2563eb;
+  color: var(--cc-info);
 }
 
 .scenario-objects {
@@ -156,21 +160,21 @@
 .scenario-howto {
   margin: 8px 0 16px;
   padding: 16px 20px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #f8fafc;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-sunken);
 }
 
 .scenario-howto h3 {
   margin: 0 0 10px;
   font-size: 1rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .scenario-howto h4 {
   margin: 16px 0 2px;
   font-size: 0.9rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .scenario-steps {
@@ -178,7 +182,7 @@
   padding-left: 20px;
   font-size: 0.9rem;
   line-height: 1.6;
-  color: #334155;
+  color: var(--cc-text);
 }
 
 .scenario-steps li {
@@ -190,15 +194,15 @@
   padding-left: 20px;
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #334155;
+  color: var(--cc-text);
 }
 
 .scenario-explain {
   margin: 0 0 16px;
   padding: 12px 16px;
-  border-left: 4px solid #2563eb;
-  background: #f8fafc;
+  border-left: 4px solid var(--cc-info);
+  background: var(--cc-sunken);
   font-size: 0.92rem;
   line-height: 1.55;
-  color: #334155;
+  color: var(--cc-text);
 }

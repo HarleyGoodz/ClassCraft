@@ -1,0 +1,65 @@
+/*
+ * design_tokens.css: the shared design values for the whole app.
+ * Purpose: keeps colours, fonts and corner radius in one place.
+ * What it does: defines the --cc-* variables every stylesheet uses. Change a value here and
+ * it updates across the whole app.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Grounds */
+  --cc-bg: #0a0f1a;
+  --cc-panel: #070b14;
+  --cc-sunken: #0c1321;
+  --cc-surface: #101827;
+  --cc-surface-2: #162033;
+  --cc-surface-3: #1c2942;
+
+  /* Lines */
+  --cc-line: #223049;
+  --cc-line-2: #2c3b58;
+  --cc-line-3: #4a6194;
+  --cc-wire: #8b9dc0;
+  --cc-grid: rgb(148 163 184 / 6%);
+
+  /* Text */
+  --cc-white: #ffffff;
+  --cc-ink: #e8eef8;
+  --cc-text: #c5d0e3;
+  --cc-muted: #a7b4cc;
+  --cc-faint: #93a3bf;
+
+  /* Accents */
+  --cc-lime: #c6f13a;
+  --cc-lime-hover: #e2ff7a;
+  --cc-on-lime: #0a0f1a;
+  --cc-blue: #2f5fe0;
+  --cc-blue-hover: #254dbd;
+  --cc-blue-line: #4a6194;
+  --cc-blue-tint: #15244a;
+  --cc-blue-tint-2: #1b2f60;
+  --cc-info: #8fb0ff;
+
+  /* Status */
+  --cc-ok: #a8ea7f;
+  --cc-ok-bg: #16301c;
+  --cc-ok-line: #3f7a45;
+  --cc-ok-solid: #4fae5c;
+  --cc-warn: #ffcf6b;
+  --cc-warn-bg: #33270c;
+  --cc-warn-line: #8a6b1f;
+  --cc-warn-solid: #d99a1c;
+  --cc-err: #ff8f86;
+  --cc-err-bg: #3a1714;
+  --cc-err-line: #8f3d36;
+  --cc-err-solid: #c23b30;
+
+  /* Shape: UML boxes have square corners */
+  --cc-radius: 0;
+  --cc-radius-pill: 0;
+
+  /* Type */
+  --cc-font-body: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cc-font-display: "Space Grotesk", Inter, system-ui, sans-serif;
+  --cc-font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
