@@ -1,0 +1,1462 @@
+/*
+ * uml_theme.css: the main dark class-diagram theme.
+ * Purpose: makes the existing pages look like a class diagram on a blueprint grid.
+ * What it does: loads after every page stylesheet so it can override them. Also holds the
+ * sign-in layout, the topic cards and the Previous/Next link styles. Colours come from
+ * design_tokens.css.
+ */
+
+/* ========== Ground ========== */
+:root {
+  /* Keeps index.css's own variables on the dark palette, whatever the OS theme. */
+  --text: var(--cc-text);
+  --text-h: var(--cc-ink);
+  --bg: var(--cc-bg);
+  --border: var(--cc-line);
+  --code-bg: var(--cc-surface-2);
+  --accent: var(--cc-lime);
+
+  font-family: var(--cc-font-body);
+  color: var(--cc-text);
+  background: var(--cc-bg);
+  letter-spacing: normal;
+}
+
+html {
+  background-color: var(--cc-bg);
+  background-image:
+    linear-gradient(var(--cc-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cc-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+body,
+.app-shell {
+  background: transparent;
+  color: var(--cc-text);
+}
+
+#root {
+  border-inline: 0;
+}
+
+/* The grid lights up around the cursor */
+.cc-grid-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(198 241 58 / 30%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(198 241 58 / 30%) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(220px circle at var(--cc-cursor-x, -300px) var(--cc-cursor-y, -300px), #000, transparent 100%);
+  mask-image: radial-gradient(220px circle at var(--cc-cursor-x, -300px) var(--cc-cursor-y, -300px), #000, transparent 100%);
+}
+
+a {
+  color: var(--cc-lime);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--cc-lime-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cc-lime);
+  outline-offset: 2px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--cc-lime);
+}
+
+/* ========== Cursor spotlight on panels ========== */
+.summary-card:hover,
+.topic-button:hover,
+.experience-card:hover,
+.cdc-hero-panel:hover,
+.progress-table-wrapper:hover,
+.simple-auth-form:hover {
+  background-image: radial-gradient(260px circle at var(--cc-mx, 50%) var(--cc-my, 50%), rgb(198 241 58 / 8%), transparent 75%);
+}
+
+/* ========== Association lines between cards ========== */
+.cc-connectors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cc-link-track {
+  fill: none;
+  stroke: var(--cc-line-3);
+  stroke-width: 1.5;
+  transition: stroke 0.15s ease;
+}
+
+.cc-link-diamond {
+  fill: var(--cc-bg);
+  stroke: var(--cc-line-3);
+  stroke-width: 1.5;
+  transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.cc-link.is-active .cc-link-track {
+  stroke: var(--cc-lime);
+}
+
+.cc-link.is-active .cc-link-diamond {
+  fill: var(--cc-lime);
+  stroke: var(--cc-lime);
+}
+
+.cc-link-beam {
+  fill: none;
+  stroke: var(--cc-white);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  animation: cc-beam 1.1s linear infinite;
+}
+
+@keyframes cc-beam {
+  to {
+    stroke-dashoffset: var(--beam-travel);
+  }
+}
+
+/* ========== Sign-in pages ========== */
+.cc-auth-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  /* #root is a flex column, so auto margins alone would shrink this to its content */
+  width: 100%;
+  max-width: 1140px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+  text-align: left;
+}
+
+.cc-hero {
+  flex: 1 1 460px;
+  min-width: 0;
+  max-width: 620px;
+}
+
+.cc-hero-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  color: var(--cc-lime);
+}
+
+.cc-hero-brand span {
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cc-hero .cc-hero-title {
+  max-width: 11em;
+  margin: 0;
+  color: var(--cc-ink);
+  font-family: var(--cc-font-display);
+  font-size: clamp(2.75rem, 5.6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.cc-hero-title span {
+  color: var(--cc-lime);
+}
+
+.cc-hero-copy {
+  max-width: 30rem;
+  margin: 1.25rem 0 1.75rem;
+  color: var(--cc-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.cc-hero-canvas {
+  position: relative;
+  height: 290px;
+  border: 1px dashed var(--cc-line-2);
+  background: rgb(16 24 39 / 55%);
+  touch-action: pan-y;
+}
+
+.cc-hero-lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cc-hero-link-track {
+  fill: none;
+  stroke: var(--cc-wire);
+  stroke-width: 1.5;
+  transition: stroke 0.15s ease;
+}
+
+.cc-hero-link-beam {
+  fill: none;
+  stroke: var(--cc-lime);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  animation: cc-beam 2.6s linear infinite;
+}
+
+.cc-hero-link-diamond {
+  fill: var(--cc-wire);
+  transition: fill 0.15s ease;
+}
+
+.cc-hero-link-label {
+  fill: var(--cc-muted);
+  font-family: var(--cc-font-mono);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.cc-hero-node {
+  position: absolute;
+  width: 172px;
+  height: 112px;
+  overflow: hidden;
+  border: 1px solid var(--cc-line-3);
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  font-family: var(--cc-font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.cc-hero-node:hover {
+  border-color: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-lime);
+}
+
+.cc-hero-node.is-dragging {
+  z-index: 2;
+  border-color: var(--cc-lime);
+  box-shadow: 8px 8px 0 var(--cc-lime);
+  cursor: grabbing;
+}
+
+.cc-hero-node-name {
+  padding: 0.45rem 0.65rem;
+  background: var(--cc-blue);
+  color: var(--cc-white);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cc-hero-node-row {
+  padding: 0.45rem 0.65rem;
+  white-space: nowrap;
+}
+
+.cc-hero-node-row + .cc-hero-node-row {
+  border-top: 1px solid var(--cc-line-2);
+}
+
+.cc-hero-hint {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.5rem;
+  color: var(--cc-faint);
+  font-family: var(--cc-font-mono);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.cc-hero-canvas[data-focus="construct"] .cc-hero-node {
+  border-color: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-lime);
+}
+
+.cc-hero-canvas[data-focus="relate"] .cc-hero-link-track {
+  stroke: var(--cc-lime);
+}
+
+.cc-hero-canvas[data-focus="relate"] .cc-hero-link-diamond {
+  fill: var(--cc-lime);
+}
+
+.cc-hero-canvas[data-focus="relate"] .cc-hero-link-beam {
+  stroke: var(--cc-white);
+  animation-duration: 1s;
+}
+
+.cc-hero-canvas[data-focus="model"] {
+  border: 1px solid var(--cc-lime);
+}
+
+.cc-hero-canvas[data-focus="model"] .cc-hero-node-name {
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+}
+
+.cc-hero-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-hero-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--cc-line-2);
+  background: var(--cc-surface);
+  font-family: var(--cc-font-mono);
+  transition: border-color 0.12s ease, transform 0.12s ease;
+}
+
+.cc-hero-step.is-active {
+  border-color: var(--cc-lime);
+  transform: translateY(-2px);
+}
+
+.cc-hero-step strong {
+  color: var(--cc-ink);
+  font-size: 0.9rem;
+}
+
+.cc-hero-step-number {
+  color: var(--cc-lime);
+  font-size: 0.75rem;
+}
+
+.cc-hero-step-detail {
+  color: var(--cc-faint);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+.cc-hero-legend {
+  margin: 1rem 0 0;
+  color: var(--cc-faint);
+  font-family: var(--cc-font-mono);
+  font-size: 0.75rem;
+}
+
+/* ----- The form is a UML class box ----- */
+.simple-auth {
+  flex: 0 1 440px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.simple-auth-form {
+  position: relative;
+  max-width: none;
+  gap: 0.55rem;
+  padding: 0 1.4rem 1.5rem;
+  border: 1px solid var(--cc-line-3);
+  box-shadow: 10px 10px 0 var(--cc-lime);
+  animation: cc-rise 0.3s ease both;
+}
+
+.simple-auth-form h1,
+.simple-auth-form h2 {
+  margin-right: -1.4rem;
+  margin-left: -1.4rem;
+  padding-right: 1.4rem;
+  padding-left: 1.4rem;
+  background: var(--cc-blue);
+  color: var(--cc-white);
+  font-family: var(--cc-font-mono);
+  text-align: left;
+}
+
+.simple-auth-form h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 1rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.simple-auth-form h1::before {
+  content: "«";
+}
+
+.simple-auth-form h1::after {
+  content: "»";
+}
+
+.simple-auth-form h2 {
+  position: relative;
+  margin-top: -0.55rem;
+  margin-bottom: 0.4rem;
+  padding-top: 0.35rem;
+  padding-bottom: 1rem;
+  box-shadow: 0 -1px 0 var(--cc-blue);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+form.simple-auth-form h2 {
+  margin-bottom: 2.6rem;
+}
+
+form.simple-auth-form h2::after {
+  content: "ATTRIBUTES";
+  position: absolute;
+  top: calc(100% + 0.9rem);
+  right: 1.4rem;
+  left: 1.4rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-faint);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+/* Labels read as attributes: "- email : String" */
+.simple-auth-form label {
+  margin-top: 0.45rem;
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: color 0.12s ease;
+}
+
+.simple-auth-form label::before {
+  content: "- ";
+  color: var(--cc-lime);
+}
+
+.simple-auth-form label::after {
+  content: " : String";
+  color: var(--cc-faint);
+}
+
+.simple-auth-form label:has(+ input:focus),
+.simple-auth-form label:has(+ .password-wrapper input:focus) {
+  color: var(--cc-lime);
+}
+
+/* A filled attribute has a value */
+.simple-auth-form label:has(+ input:not(:placeholder-shown))::after,
+.simple-auth-form label:has(+ .password-wrapper input:not(:placeholder-shown))::after {
+  content: " : String = set";
+  color: var(--cc-lime);
+}
+
+/* Revealing a password makes the attribute public */
+.simple-auth-form label:has(+ .password-wrapper input[type="text"])::before {
+  content: "+ ";
+  color: var(--cc-warn);
+}
+
+.simple-auth-form input {
+  min-height: 46px;
+  padding: 0.7rem 0.85rem;
+  border-color: var(--cc-line-2);
+  background: var(--cc-bg);
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.875rem;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.simple-auth-form input::placeholder {
+  color: #7f8fab;
+}
+
+.simple-auth-form input:hover {
+  border-color: var(--cc-line-3);
+}
+
+.simple-auth-form input:focus {
+  border-color: var(--cc-lime);
+  outline: none;
+  box-shadow: 3px 3px 0 var(--cc-lime);
+}
+
+.password-wrapper input:focus + .password-toggle {
+  color: var(--cc-lime);
+}
+
+.simple-auth-form .password-toggle,
+.simple-auth-form .password-toggle:hover,
+.simple-auth-form .password-toggle:focus {
+  min-height: 0;
+  margin: 0;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--cc-faint);
+  transform: translateY(-50%);
+}
+
+.simple-auth-form .password-toggle:hover {
+  color: var(--cc-lime);
+}
+
+.simple-auth-form p {
+  color: var(--cc-muted);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.forgot-password-link {
+  margin-top: 0.1rem !important;
+  text-align: right !important;
+  font-family: var(--cc-font-mono);
+  font-size: 0.78rem !important;
+}
+
+.simple-auth-error {
+  padding: 0.6rem 0.75rem;
+  border: 1px dashed var(--cc-err-line);
+  background: var(--cc-err-bg);
+  color: var(--cc-err) !important;
+  font-family: var(--cc-font-mono);
+  font-size: 0.78rem !important;
+}
+
+/* Buttons: the submit is the primary method, the rest are outlined */
+.simple-auth-form button {
+  min-height: 46px;
+  border: 1px solid var(--cc-line-2);
+  background: transparent;
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.85rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.simple-auth-form button:hover,
+.simple-auth-form button:disabled:hover {
+  border-color: var(--cc-lime);
+  background: transparent;
+  color: var(--cc-lime);
+}
+
+.simple-auth-form button[type="submit"] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  margin-top: 2.7rem;
+  padding: 0 1.1rem;
+  border: 0;
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.simple-auth-form button[type="submit"]::before {
+  content: "METHODS";
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.9rem);
+  left: 0;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-faint);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-align: left;
+}
+
+.simple-auth-form button[type="submit"]::after {
+  content: "→";
+  transition: transform 0.12s ease;
+}
+
+.simple-auth-form button[type="submit"]:hover {
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+  box-shadow: 4px 4px 0 var(--cc-ink);
+  transform: translate(-2px, -2px);
+}
+
+.simple-auth-form button[type="submit"]:hover::after {
+  transform: translateX(4px);
+}
+
+.simple-auth-form button[type="submit"]:active {
+  box-shadow: none;
+  transform: none;
+}
+
+.simple-auth-form .social-auth-button {
+  min-height: 44px;
+  margin: 0;
+  border: 1px solid var(--cc-line-2);
+  background: transparent;
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.82rem;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.simple-auth-form a.social-auth-button:hover {
+  border-color: var(--cc-lime);
+  background: transparent;
+  color: var(--cc-lime);
+}
+
+.simple-auth-form button.social-auth-button,
+.simple-auth-form button.social-auth-button:hover {
+  border-color: var(--cc-line);
+  background: transparent;
+  color: var(--cc-faint);
+}
+
+.simple-auth-divider {
+  margin: 0.35rem 0;
+  color: var(--cc-faint);
+  font-family: var(--cc-font-mono);
+  font-size: 0.75rem;
+}
+
+.simple-auth-divider::before,
+.simple-auth-divider::after {
+  border-color: var(--cc-line);
+}
+
+.simple-auth-form .simple-auth-text-button,
+.simple-auth-form .simple-auth-link-button {
+  min-height: 0;
+  border: 0;
+  color: var(--cc-lime);
+}
+
+.simple-auth-form .simple-auth-link-button:hover,
+.simple-auth-form .simple-auth-text-button:hover {
+  border: 0;
+  background: transparent;
+  color: var(--cc-lime-hover);
+}
+
+@media (max-width: 1040px) {
+  .simple-auth {
+    order: -1;
+  }
+
+  .cc-hero {
+    flex-basis: 100%;
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cc-hero-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cc-hero-canvas {
+    height: 340px;
+    margin-bottom: 1.75rem;
+  }
+
+  .cc-hero-hint {
+    right: 0;
+    bottom: -1.5rem;
+  }
+
+  .simple-auth-form {
+    box-shadow: 6px 6px 0 var(--cc-lime);
+  }
+}
+
+/* ========== App shell ========== */
+.topnav {
+  position: relative;
+  z-index: 4;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line);
+}
+
+.topnav-inner {
+  column-gap: 1.25rem;
+}
+
+.topnav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 1rem;
+  letter-spacing: normal;
+}
+
+.topnav-brand::before {
+  content: "";
+  flex: none;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(var(--cc-lime), var(--cc-lime)) 0 30% / 100% 2px no-repeat;
+  box-shadow: inset 0 0 0 2px var(--cc-lime);
+  transition: transform 0.2s ease;
+}
+
+.topnav-brand:hover::before {
+  transform: rotate(90deg);
+}
+
+.topnav-link {
+  position: relative;
+  padding: 0 0.65rem;
+  border-bottom: 0;
+  color: var(--cc-muted);
+  font-family: var(--cc-font-mono);
+  font-size: 0.76rem;
+}
+
+.topnav-link::after {
+  content: "";
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0;
+  left: 0.65rem;
+  height: 2px;
+  background: var(--cc-lime);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+
+.topnav-link:hover {
+  color: var(--cc-ink);
+}
+
+.topnav-link:hover::after,
+.topnav-link.active::after {
+  transform: scaleX(1);
+}
+
+.topnav-link.active {
+  color: var(--cc-lime);
+}
+
+.topnav-avatar {
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+  font-family: var(--cc-font-mono);
+  font-weight: 700;
+}
+
+.topnav-username {
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.8rem;
+}
+
+.topnav-logout {
+  border-color: var(--cc-line-2);
+  color: var(--cc-err);
+  font-family: var(--cc-font-mono);
+  font-size: 0.78rem;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.topnav-logout:hover {
+  border-color: var(--cc-err);
+  background: var(--cc-err-bg);
+  color: var(--cc-err);
+}
+
+/* Pages fade in with each route change */
+.app-shell > main {
+  position: relative;
+  z-index: 1;
+  animation: cc-fade 0.25s ease both;
+}
+
+@keyframes cc-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cc-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ========== Type ========== */
+.app-shell main h1 {
+  color: var(--cc-ink);
+  font-family: var(--cc-font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.app-shell main h2,
+.app-shell main h3 {
+  font-family: var(--cc-font-display);
+  letter-spacing: -0.01em;
+}
+
+/* ========== Shared controls ========== */
+.back-button {
+  border-color: var(--cc-line-2);
+  background: transparent;
+  color: var(--cc-text);
+  font-family: var(--cc-font-mono);
+  font-size: 0.8rem;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.back-button:hover {
+  border-color: var(--cc-lime);
+  background: transparent;
+  color: var(--cc-lime);
+}
+
+/* Primary actions are the lime method button */
+.cdc-start-button,
+.cdf-btn-check,
+.cdf-btn-next,
+.cds-btn-primary,
+.next-button,
+.practice-button {
+  border: 0;
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+  font-family: var(--cc-font-mono);
+  font-weight: 700;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.cdc-start-button:hover:not(:disabled),
+.cdf-btn-check:hover:not(:disabled),
+.cdf-btn-next:hover:not(:disabled),
+.cds-btn-primary:hover:not(:disabled),
+.next-button:hover:not(:disabled),
+.practice-button:hover:not(:disabled) {
+  background: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-ink);
+  transform: translate(-2px, -2px);
+}
+
+.cdc-start-button:active:not(:disabled),
+.cdf-btn-check:active:not(:disabled),
+.cdf-btn-next:active:not(:disabled),
+.cds-btn-primary:active:not(:disabled),
+.next-button:active:not(:disabled),
+.practice-button:active:not(:disabled) {
+  box-shadow: none;
+  transform: none;
+}
+
+.cdc-start-button:disabled,
+.cdf-btn-check:disabled,
+.cdf-btn-next:disabled,
+.cds-btn-primary:disabled,
+.next-button:disabled,
+.practice-button:disabled {
+  background: var(--cc-surface-3);
+  color: var(--cc-faint);
+}
+
+/* ========== Learn the Basics: topics as class boxes ========== */
+.topic-grid {
+  gap: 2.5rem;
+}
+
+.topic-button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 290px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--cc-line-3);
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  font-family: var(--cc-font-mono);
+  font-weight: 400;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.topic-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-height: 5.25rem;
+  padding: 0.75rem 1.25rem 0.85rem;
+  background: var(--cc-blue);
+  color: var(--cc-white);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.topic-stereotype {
+  font-size: 0.68rem;
+  opacity: 0.9;
+}
+
+.topic-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.topic-covers {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.topic-cover {
+  overflow-wrap: anywhere;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.topic-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 46px;
+  padding: 0 1.25rem;
+  border-top: 1px solid var(--cc-line-2);
+  color: var(--cc-muted);
+  font-size: 0.8rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.topic-arrow {
+  transition: transform 0.12s ease;
+}
+
+.topic-button:hover,
+.topic-button:focus-visible {
+  border-color: var(--cc-lime);
+  box-shadow: 6px 6px 0 var(--cc-lime);
+  transform: translate(-3px, -3px);
+}
+
+.topic-button:hover .topic-header,
+.topic-button:focus-visible .topic-header {
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+}
+
+.topic-button:hover .topic-cover,
+.topic-button:focus-visible .topic-cover {
+  color: var(--cc-ink);
+  transform: translateX(4px);
+}
+
+.topic-button:hover .topic-cover:nth-child(2),
+.topic-button:focus-visible .topic-cover:nth-child(2) {
+  transition-delay: 30ms;
+}
+
+.topic-button:hover .topic-cover:nth-child(3),
+.topic-button:focus-visible .topic-cover:nth-child(3) {
+  transition-delay: 60ms;
+}
+
+.topic-button:hover .topic-cover:nth-child(4),
+.topic-button:focus-visible .topic-cover:nth-child(4) {
+  transition-delay: 90ms;
+}
+
+.topic-button:hover .topic-cover:nth-child(5),
+.topic-button:focus-visible .topic-cover:nth-child(5) {
+  transition-delay: 120ms;
+}
+
+.topic-button:hover .topic-action,
+.topic-button:focus-visible .topic-action {
+  color: var(--cc-lime);
+}
+
+.topic-button:hover .topic-arrow,
+.topic-button:focus-visible .topic-arrow {
+  transform: translateX(4px);
+}
+
+.topic-button:active {
+  box-shadow: none;
+  transform: none;
+}
+
+/* ========== Skill Development: experiences as class boxes ========== */
+.experience-grid {
+  gap: 2.5rem;
+}
+
+.experience-card {
+  padding: 0 1.25rem 1.25rem;
+  border: 1px solid var(--cc-line-3);
+  background-color: var(--cc-surface);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.experience-card:hover {
+  border-color: var(--cc-lime);
+  box-shadow: 6px 6px 0 var(--cc-lime);
+  transform: translate(-3px, -3px);
+}
+
+.app-shell main .experience-title {
+  margin: 0 -1.25rem 1rem;
+  padding: 0.75rem 1.25rem 0.85rem;
+  background: var(--cc-blue);
+  color: var(--cc-white);
+  font-family: var(--cc-font-mono);
+  font-size: 0.95rem;
+  letter-spacing: normal;
+}
+
+.experience-title::before {
+  content: "«experience»";
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.experience-availability,
+.cdc-availability {
+  font-family: var(--cc-font-mono);
+}
+
+.experience-card-actions {
+  text-align: stretch;
+}
+
+.practice-button {
+  width: 100%;
+  min-height: 46px;
+}
+
+/* Radio groups */
+.practice-mode-options,
+.cdc-practice-modes {
+  border-color: var(--cc-line-2);
+}
+
+.practice-mode-options legend,
+.cdc-practice-modes legend {
+  color: var(--cc-muted);
+  font-family: var(--cc-font-mono);
+  font-size: 0.72rem;
+}
+
+.practice-mode-options label,
+.cdc-practice-modes label {
+  margin: 0 -0.35rem;
+  padding: 0.3rem 0.35rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.practice-mode-options label:hover,
+.cdc-practice-modes label:hover {
+  background: var(--cc-surface-2);
+}
+
+.practice-mode-options label:has(input:checked),
+.cdc-practice-modes label:has(input:checked) {
+  background: rgb(198 241 58 / 8%);
+  color: var(--cc-lime);
+}
+
+/* ========== Dashboard ========== */
+.summary-grid {
+  gap: 2rem;
+}
+
+.summary-section-title {
+  color: var(--cc-ink);
+  font-family: var(--cc-font-display);
+  font-size: 1.25rem;
+}
+
+.summary-card {
+  border: 1px solid var(--cc-line-3);
+  background-color: var(--cc-surface);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.summary-card:hover,
+.summary-card:focus-within {
+  border-color: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-lime);
+  transform: translate(-2px, -2px);
+}
+
+.summary-label {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-muted);
+  font-family: var(--cc-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.summary-value {
+  margin-top: 0.6rem;
+  color: var(--cc-lime);
+  font-family: var(--cc-font-mono);
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  cursor: help;
+}
+
+.summary-sub {
+  color: var(--cc-faint);
+}
+
+.summary-card-breakdown-tooltip,
+.accuracy-breakdown-panel,
+.consistency-breakdown-panel {
+  border-color: var(--cc-line-3);
+  background: var(--cc-surface-2);
+  box-shadow: 6px 6px 0 rgb(0 0 0 / 45%);
+  color: var(--cc-text);
+  animation: cc-rise 0.14s ease both;
+}
+
+.progress-tabs {
+  border-bottom-color: var(--cc-line-2);
+}
+
+.progress-tab {
+  color: var(--cc-muted);
+  font-family: var(--cc-font-mono);
+  font-size: 0.82rem;
+}
+
+.progress-tab:hover {
+  color: var(--cc-ink);
+}
+
+.progress-tab.active {
+  border-bottom-color: var(--cc-lime);
+  color: var(--cc-lime);
+}
+
+.progress-table-wrapper {
+  border-color: var(--cc-line-3);
+  background-color: var(--cc-surface);
+}
+
+.progress-table thead th {
+  background: var(--cc-blue);
+  color: var(--cc-white);
+  font-family: var(--cc-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.progress-table tbody tr {
+  transition: background 0.12s ease;
+}
+
+.progress-table tbody tr:hover {
+  background: rgb(198 241 58 / 5%);
+}
+
+.progress-table tbody td {
+  border-bottom-color: var(--cc-line);
+  color: var(--cc-text);
+}
+
+.accuracy-bar,
+.consistency-bar {
+  background: var(--cc-surface-3);
+}
+
+.accuracy-bar-fill,
+.consistency-bar-fill {
+  transform-origin: left;
+  animation: cc-grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.accuracy-bar-label,
+.consistency-bar-label {
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes cc-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.badge {
+  border: 1px solid transparent;
+  font-family: var(--cc-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.badge--pass { border-color: var(--cc-ok-line); }
+.badge--warn { border-color: var(--cc-warn-line); }
+.badge--info { border-color: var(--cc-blue-line); background: var(--cc-blue-tint); }
+.badge--muted { border-color: var(--cc-line-2); background: var(--cc-surface-2); color: var(--cc-muted); }
+
+/* ========== Drag-and-drop activities ========== */
+.cdf-piece,
+.connector-option,
+.multiplicity-option,
+.oop-piece,
+.tool-item {
+  font-family: var(--cc-font-mono);
+  cursor: grab;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.cdf-piece:hover,
+.connector-option:hover,
+.multiplicity-option:hover,
+.oop-piece:hover,
+.tool-item:hover {
+  border-color: var(--cc-lime);
+  box-shadow: 3px 3px 0 var(--cc-lime);
+  transform: translate(-1px, -1px);
+}
+
+.cdf-piece:active,
+.connector-option:active,
+.multiplicity-option:active,
+.oop-piece:active,
+.tool-item:active {
+  box-shadow: none;
+  cursor: grabbing;
+  transform: none;
+}
+
+.pointer-drag-preview {
+  border: 1px solid var(--cc-lime);
+  background: var(--cc-surface);
+  box-shadow: 5px 5px 0 var(--cc-lime);
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  font-size: 0.8rem;
+}
+
+[data-drop-target] {
+  transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+[data-drop-target]:hover {
+  background-color: rgb(198 241 58 / 5%);
+}
+
+/* Relationship lines drawn as thin elements need to read on the dark ground */
+.cds-hub-stem,
+.cds-bracket,
+.cds-connector::before,
+.cds-sym-line,
+.multiplicity-line,
+.oop-line {
+  background: var(--cc-wire);
+}
+
+/* ========== Lesson actions ========== */
+.submit-button,
+.another-example-button {
+  font-family: var(--cc-font-mono);
+  font-weight: 700;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.submit-button {
+  background: var(--cc-lime);
+  color: var(--cc-on-lime);
+}
+
+.submit-button:hover:not(:disabled) {
+  background: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-ink);
+  transform: translate(-2px, -2px);
+}
+
+.submit-button:active:not(:disabled) {
+  box-shadow: none;
+  transform: none;
+}
+
+.submit-button:disabled {
+  background: var(--cc-surface-3);
+  color: var(--cc-faint);
+}
+
+.another-example-button:hover {
+  border-color: var(--cc-lime);
+  color: var(--cc-lime);
+}
+
+.my-progress-header {
+  text-align: left;
+}
+
+/* ========== Previous and next links at the end of each lesson ========== */
+.topic-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.topic-step {
+  display: flex;
+  flex: 0 1 26rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-width: 0;
+  min-height: 72px;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--cc-line-3);
+  background: var(--cc-surface);
+  color: var(--cc-ink);
+  font-family: var(--cc-font-mono);
+  text-align: left;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.topic-step--previous {
+  justify-content: flex-start;
+  border-color: var(--cc-line-2);
+  background: transparent;
+  color: var(--cc-text);
+}
+
+.topic-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.topic-step-kicker {
+  color: var(--cc-muted);
+  font-size: 0.72rem;
+  transition: color 0.12s ease;
+}
+
+.topic-step-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.topic-step-arrow {
+  flex: none;
+  font-size: 1.1rem;
+  transition: transform 0.12s ease;
+}
+
+.topic-step--next:hover,
+.topic-step--next:focus-visible {
+  border-color: var(--cc-lime);
+  background: var(--cc-lime);
+  box-shadow: 4px 4px 0 var(--cc-ink);
+  color: var(--cc-on-lime);
+  transform: translate(-2px, -2px);
+}
+
+.topic-step--next:hover .topic-step-kicker,
+.topic-step--next:focus-visible .topic-step-kicker {
+  color: var(--cc-on-lime);
+}
+
+.topic-step--next:hover .topic-step-arrow,
+.topic-step--next:focus-visible .topic-step-arrow {
+  transform: translateX(4px);
+}
+
+.topic-step--previous:hover,
+.topic-step--previous:focus-visible {
+  border-color: var(--cc-lime);
+  color: var(--cc-lime);
+}
+
+.topic-step--previous:hover .topic-step-arrow,
+.topic-step--previous:focus-visible .topic-step-arrow {
+  transform: translateX(-4px);
+}
+
+.topic-step:active {
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .topic-pager {
+    flex-direction: column-reverse;
+  }
+
+  .topic-step {
+    flex: 1 1 auto;
+  }
+}
+
+/* Mono is too wide for six table columns on a phone */
+@media (max-width: 640px) {
+  .progress-table thead th {
+    font-family: var(--cc-font-body);
+    font-size: 0.56rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .cc-link-beam,
+  .cc-hero-link-beam {
+    display: none;
+  }
+}

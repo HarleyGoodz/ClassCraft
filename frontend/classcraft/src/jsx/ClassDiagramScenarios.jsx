@@ -1,3 +1,10 @@
+/*
+ * ClassDiagramScenarios.jsx: the Class Diagram Construction scenario page
+ * (/class-diagram-construction/scenario).
+ * Purpose: practice building a full class diagram from a scenario.
+ * What it does: learners place pieces, relationship lines and multiplicity on a diagram and
+ * work through the scenarios. Shows their previous attempts.
+ */
 import { CDC_SCENARIOS } from "../questionBank/classDiagramConstruction.jsx";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -101,12 +108,12 @@ const classOfBox = (box) =>
     Aggregation: hollow diamond    Composition: filled diamond
 */
 function RelSymbol({ type, flipped = false }) {
-  const stroke = "#334155";
+  const stroke = "var(--cc-wire)";
   let end = null;
   if (type === "Inheritance") {
-    end = <polygon points="2,12 26,3 26,21" fill="#fff" stroke={stroke} strokeWidth="2" strokeLinejoin="round" />;
+    end = <polygon points="2,12 26,3 26,21" fill="var(--cc-surface)" stroke={stroke} strokeWidth="2" strokeLinejoin="round" />;
   } else if (type === "Aggregation") {
-    end = <polygon points="2,12 14,3 26,12 14,21" fill="#fff" stroke={stroke} strokeWidth="2" strokeLinejoin="round" />;
+    end = <polygon points="2,12 14,3 26,12 14,21" fill="var(--cc-surface)" stroke={stroke} strokeWidth="2" strokeLinejoin="round" />;
   } else if (type === "Composition") {
     end = <polygon points="2,12 14,3 26,12 14,21" fill={stroke} stroke={stroke} strokeWidth="2" strokeLinejoin="round" />;
   }
@@ -620,7 +627,7 @@ export default function ClassDiagramScenarios() {
         {finished ? (
           <section className="cds-results">
             <h1>All scenarios complete</h1>
-            {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+            {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
             <p className="cds-muted">
               Target: at least {TARGET_PERCENT}% of the required diagram elements modeled correctly in each scenario.
             </p>
@@ -658,7 +665,7 @@ export default function ClassDiagramScenarios() {
             </div>
 
             <h1 className="cds-title">{scenario.title}</h1>
-            {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+            {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
             <PreviousAttemptNotice
               attempts={attempts}
               activityKey="class-diagram-construction"

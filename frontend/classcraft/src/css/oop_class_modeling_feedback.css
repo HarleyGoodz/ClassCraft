@@ -1,3 +1,9 @@
+/*
+ * oop_class_modeling_feedback.css: styles for the OOP Class Modeling activity
+ * (OOPClassModeling.jsx), loaded after oop_class_modeling.css.
+ * Purpose and what it does: styles the page shell, top navigation, workspace, class boxes,
+ * relationship line, piece banks and the success/error feedback messages.
+ */
 /* ==================================================================
    Page shell (same as Dashboard)
    ================================================================== */
@@ -5,16 +11,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation (same as Dashboard)
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as the page content so the logo lines up with it */
@@ -30,7 +36,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +58,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +66,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +88,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +107,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +119,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -133,7 +139,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 2rem 3rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--cc-font-body);
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -142,16 +148,16 @@
 /* Header */
 .cdf-top-header { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
 .cdf-breadcrumb { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-.cdf-breadcrumb-link { color: #4a90e2; cursor: pointer; }
+.cdf-breadcrumb-link { color: var(--cc-info); cursor: pointer; }
 .cdf-breadcrumb-link:hover { text-decoration: underline; }
-.cdf-breadcrumb-separator { color: #a0a0a0; margin: 0 8px; font-weight: normal; }
-.cdf-breadcrumb-current { color: #888888; }
-.cdf-scenario-counter { font-weight: bold; color: #555; font-size: 14px; }
-.score-tracker { font-size: 0.85rem; font-weight: 600; color: #475569; background: #f1f5f9; padding: 0.25rem 0.75rem; border-radius: 20px; border: 1px solid #e2e8f0; }
-.cdf-title { font-size: 30px; margin: 10px 0; color: #333; text-align: left; }
+.cdf-breadcrumb-separator { color: var(--cc-faint); margin: 0 8px; font-weight: normal; }
+.cdf-breadcrumb-current { color: var(--cc-faint); }
+.cdf-scenario-counter { font-weight: bold; color: var(--cc-text); font-size: 14px; }
+.score-tracker { font-size: 0.85rem; font-weight: 600; color: var(--cc-text); background: var(--cc-surface-2); padding: 0.25rem 0.75rem; border-radius: var(--cc-radius); border: 1px solid var(--cc-line); }
+.cdf-title { font-size: 30px; margin: 10px 0; color: var(--cc-ink); text-align: left; }
 .cdf-description {
   margin-bottom: 24px;
-  color: #555;
+  color: var(--cc-text);
   line-height: 1.6;
   font-size: 1rem;
   text-align: left;
@@ -173,10 +179,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
+  background: var(--cc-sunken);
   padding: 3rem 2rem;
-  border-radius: 12px;
-  border: 1px dashed #cbd5e1;
+  border-radius: var(--cc-radius);
+  border: 1px dashed var(--cc-line-2);
   flex: 1;
   min-width: 0;
   min-height: 560px;
@@ -186,12 +192,12 @@
    UML Class Boxes
    ================================================================== */
 .oop-class-box {
-  background: #fff;
-  border: 2px solid #334155;
-  border-radius: 6px;
+  background: var(--cc-surface);
+  border: 2px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   width: 300px;
   flex-shrink: 0;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 30%);
   display: flex;
   flex-direction: column;
 }
@@ -199,8 +205,8 @@
 .oop-class-header {
   padding: 15px;
   text-align: center;
-  border-bottom: 2px solid #334155;
-  background: #f1f5f9;
+  border-bottom: 2px solid var(--cc-line-3);
+  background: var(--cc-surface-2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,25 +215,25 @@
 
 .oop-uml-section {
   padding: 12px;
-  border-bottom: 1px solid #cbd5e1;
+  border-bottom: 1px solid var(--cc-line-2);
   min-height: 150px;
 }
 
 .oop-drop-ready {
   cursor: copy;
-  background-color: #eff6ff;
+  background-color: var(--cc-blue-tint);
 }
 
 .oop-piece-selected,
 .oop-tool-selected {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px #bfdbfe;
+  border-color: var(--cc-info);
+  box-shadow: 0 0 0 2px var(--cc-blue-line);
 }
 
 .oop-section-label {
   font-size: 0.65rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--cc-faint);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
@@ -236,7 +242,7 @@
 }
 
 .oop-drop-placeholder {
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-style: italic;
   font-size: 0.9rem;
 }
@@ -244,7 +250,7 @@
 .oop-class-name {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   cursor: pointer;
 }
 
@@ -262,31 +268,31 @@
   align-items: center;
   width: 24px;
   height: 24px;
-  background: #e2e8f0;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  background: var(--cc-surface-3);
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
   font-weight: bold;
   font-family: monospace;
-  color: #0f172a;
+  color: var(--cc-ink);
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .oop-visibility-badge:hover {
-  background: #bfdbfe;
-  border-color: #3b82f6;
+  background: var(--cc-blue-line);
+  border-color: var(--cc-info);
 }
 
 .oop-item-text {
   cursor: pointer;
   font-size: 0.9rem;
-  color: #334155;
+  color: var(--cc-text);
   font-family: ui-monospace, monospace;
   transition: color 0.15s;
 }
 
 .oop-item-text:hover {
-  color: #ef4444;
+  color: var(--cc-err);
   text-decoration: line-through;
 }
 
@@ -311,26 +317,26 @@
   left: -2px;
   right: -2px;
   height: 2px;
-  background: #334155;
+  background: var(--cc-surface-3);
   z-index: 1;
 }
 
 .rel-dropzone, .mult-dropzone {
-  border: 2px dashed #cbd5e1;
-  border-radius: 6px;
-  background: #fff;
+  border: 2px dashed var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 .rel-dropzone.oop-drop-ready,
 .mult-dropzone.oop-drop-ready {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -338,36 +344,36 @@
   width: 130px;
   height: 42px;
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--cc-faint);
 }
 
 .mult-dropzone {
   width: 56px;
   height: 32px;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--cc-faint);
   position: absolute;
   top: calc(50% - 46px);      /* sits just above the line, near the child class */
   right: 8px;
 }
 
 .rel-dropzone.filled, .mult-dropzone.filled {
-  border: 1px solid #cbd5e1;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border: 1px solid var(--cc-line-2);
+  background: var(--cc-blue-tint);
+  color: var(--cc-info);
   font-weight: bold;
 }
 
 .rel-dropzone.correct, .mult-dropzone.correct {
-  border-color: #22c55e;
-  background: #dcfce7;
-  color: #166534;
+  border-color: var(--cc-ok-line);
+  background: var(--cc-ok-bg);
+  color: var(--cc-ok);
 }
 
 .rel-dropzone.wrong, .mult-dropzone.wrong {
-  border-color: #ef4444;
-  background: #fee2e2;
-  color: #991b1b;
+  border-color: var(--cc-err-line);
+  background: var(--cc-err-bg);
+  color: var(--cc-err);
 }
 
 /* ==================================================================
@@ -385,16 +391,16 @@
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 1.1rem;
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 /* Pieces now sit in a 2-column grid so nothing needs to scroll */
 .oop-bank-box {
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--cc-line-2);
   padding: 15px;
-  border-radius: 10px;
+  border-radius: var(--cc-radius);
   min-height: 250px;
-  background: #f8fafc;
+  background: var(--cc-sunken);
   margin-bottom: 15px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -403,15 +409,15 @@
 }
 
 .oop-piece {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
   padding: 12px 8px;
   margin: 0;
-  border-radius: 6px;
+  border-radius: var(--cc-radius);
   cursor: grab;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  color: #334155;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  color: var(--cc-text);
   font-size: 0.85rem;
   font-family: ui-monospace, monospace;
   transition: border-color 0.15s;
@@ -423,28 +429,28 @@
   user-select: none;
 }
 
-.oop-piece:hover { border-color: #3b82f6; }
+.oop-piece:hover { border-color: var(--cc-info); }
 .oop-piece:active { cursor: grabbing; }
 
 .tools-bank {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--cc-radius);
+  border: 1px solid var(--cc-line);
 }
 
 .tool-item {
-  background: #fff;
-  border: 1px solid #cbd5e1;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line-2);
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: var(--cc-radius);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: grab;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -454,26 +460,26 @@
 }
 
 .tool-item:hover {
-  border-color: #3b82f6;
+  border-color: var(--cc-info);
 }
 
 /* Feedback & Actions */
-.oop-feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; white-space: pre-line; line-height: 1.5; font-size: 0.95rem; }
-.oop-feedback-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-.oop-feedback-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.oop-feedback { margin-top: 1rem; padding: 1rem; border-radius: var(--cc-radius); white-space: pre-line; line-height: 1.5; font-size: 0.95rem; }
+.oop-feedback-error { background: var(--cc-err-bg); color: var(--cc-err); border: 1px solid var(--cc-err-line); }
+.oop-feedback-success { background: var(--cc-ok-bg); color: var(--cc-ok); border: 1px solid var(--cc-ok-line); }
 
-.cdf-action-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; margin-top: 1rem; }
+.cdf-action-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: center; border-top: 1px solid var(--cc-line); padding-top: 1.5rem; margin-top: 1rem; }
 .cdf-action-left, .cdf-action-right { display: flex; gap: 0.75rem; }
-.cdf-btn { padding: 10px 20px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; font-family: inherit; }
-.cdf-btn-prev { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
-.cdf-btn-prev:hover:not(:disabled) { background: #f1f5f9; }
-.cdf-btn-prev:disabled { background: #f8fafc; color: #cbd5e1; cursor: not-allowed; border-color: #e2e8f0; }
-.cdf-btn-reset { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
-.cdf-btn-reset:hover { background: #f1f5f9; }
-.cdf-btn-next { background: #3b82f6; color: white; }
-.cdf-btn-next:hover { background: #2563eb; }
-.cdf-btn-check { background: #3b82f6; color: white; }
-.cdf-btn-check:hover:not(:disabled) { background: #2563eb; }
+.cdf-btn { padding: 10px 20px; border-radius: var(--cc-radius); font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; font-family: inherit; }
+.cdf-btn-prev { background: var(--cc-surface); color: var(--cc-text); border: 1px solid var(--cc-line-2); }
+.cdf-btn-prev:hover:not(:disabled) { background: var(--cc-surface-2); }
+.cdf-btn-prev:disabled { background: var(--cc-sunken); color: var(--cc-text); cursor: not-allowed; border-color: var(--cc-line); }
+.cdf-btn-reset { background: var(--cc-surface); color: var(--cc-text); border: 1px solid var(--cc-line-2); }
+.cdf-btn-reset:hover { background: var(--cc-surface-2); }
+.cdf-btn-next { background: var(--cc-blue); color: white; }
+.cdf-btn-next:hover { background: var(--cc-blue); }
+.cdf-btn-check { background: var(--cc-blue); color: white; }
+.cdf-btn-check:hover:not(:disabled) { background: var(--cc-blue); }
 
 /* ==================================================================
    Smaller screens: stack the bank under the diagram

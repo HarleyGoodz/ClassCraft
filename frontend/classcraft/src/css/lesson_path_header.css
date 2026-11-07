@@ -1,3 +1,8 @@
+/*
+ * lesson_path_header.css: styles for the breadcrumb at the top of lessons.
+ * Purpose and what it does: shows "Learn the Basics > lesson name" so learners can see where
+ * they are.
+ */
 .lesson-breadcrumb {
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +16,7 @@
 }
 
 .lesson-breadcrumb a {
-  color: #3b82f6;
+  color: var(--cc-info);
   text-decoration: none;
 }
 
@@ -20,15 +25,15 @@
 }
 
 .lesson-breadcrumb a:focus-visible {
-  border-radius: 2px;
-  outline: 2px solid #3b82f6;
+  border-radius: var(--cc-radius);
+  outline: 2px solid var(--cc-info);
   outline-offset: 2px;
 }
 
 .lesson-breadcrumb-separator {
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 .lesson-breadcrumb-current {
-  color: #64748b;
+  color: var(--cc-muted);
 }

@@ -1,3 +1,10 @@
+/*
+ * ClassRelationships.jsx: a Skill Development activity
+ * (/skill-development/class-relationships).
+ * Purpose: practice choosing the right relationship between two classes.
+ * What it does: learners drag or tap a connector into the gap between the classes and get
+ * feedback. Shows their previous attempts.
+ */
 import {
   RELATIONSHIP_SCENARIOS as SCENARIO_BANK,
   getRelationshipFeedback,
@@ -59,7 +66,7 @@ function TopNav({ username, onLogout }) {
 
 // Visual Connector Component
 function ConnectorVisual({ type }) {
-  const color = "#475569";
+  const color = "var(--cc-wire)";
   const stroke = 2;
   
   if (type === "Association") {
@@ -69,7 +76,7 @@ function ConnectorVisual({ type }) {
     return (
       <svg width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
         <line x1="0" y1="10" x2="90" y2="10" stroke={color} strokeWidth={stroke} />
-        <polygon points="90,5 100,10 90,15" fill="#fff" stroke={color} strokeWidth={stroke} />
+        <polygon points="90,5 100,10 90,15" fill="var(--cc-surface)" stroke={color} strokeWidth={stroke} />
       </svg>
     );
   }
@@ -77,7 +84,7 @@ function ConnectorVisual({ type }) {
     return (
       <svg width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
         <line x1="0" y1="10" x2="85" y2="10" stroke={color} strokeWidth={stroke} />
-        <polygon points="85,5 95,10 85,15 75,10" fill="#fff" stroke={color} strokeWidth={stroke} />
+        <polygon points="85,5 95,10 85,15 75,10" fill="var(--cc-surface)" stroke={color} strokeWidth={stroke} />
       </svg>
     );
   }
@@ -229,7 +236,7 @@ export default function ClassRelationships() {
         <p className="cdf-description">
           Drag a connector into the gap between the classes. On a touchscreen, tap a connector, then tap the gap.
         </p>
-        {trackingError && <p role="alert" style={{ color: "#b91c1c" }}>{trackingError}</p>}
+        {trackingError && <p role="alert" style={{ color: "var(--cc-err)" }}>{trackingError}</p>}
         <PreviousAttemptNotice
           attempts={priorAttempts}
           activityKey="class-relationships"

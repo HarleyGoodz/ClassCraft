@@ -1,8 +1,16 @@
+/*
+ * RelationshipsMultiplicity.jsx: the Relationships and Multiplicity lesson
+ * (/learn-basics/relationships-multiplicity).
+ * Purpose: teaches how classes connect and how to read multiplicity.
+ * What it does: explains the four relationship types and the notation, then lets learners
+ * place a connector in an example and get feedback.
+ */
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import "../css/relationships_multiplicity.css";
 import "../css/lesson_path_header.css";
+import TopicPager from "../components/TopicPager";
 import {
   RelationshipConnector,
   RelationshipDiagram,
@@ -327,6 +335,7 @@ export default function RelationshipsMultiplicity() {
           </button>
         </section>
 
+        <TopicPager current="relationships-multiplicity" />
       </main>
     </div>
   );

@@ -1,3 +1,8 @@
+/*
+ * SkillDevelopment.jsx: the Skill Development page (/skill-development).
+ * Purpose: the starting point for the practice activities.
+ * What it does: lists the activities and links to each one.
+ */
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
@@ -282,14 +287,6 @@ export default function SkillDevelopment() {
             );
           })}
         </section>
-
-        <button
-          type="button"
-          className="back-button"
-          onClick={() => navigate("/dashboard")}
-        >
-          ← Back to Dashboard
-        </button>
       </main>
     </div>
   );

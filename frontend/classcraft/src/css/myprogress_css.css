@@ -1,3 +1,8 @@
+/*
+ * myprogress_css.css: styles for a My Progress page.
+ * Purpose and what it does: styles the page shell and progress content.
+ * Note: no page imports this file at the moment.
+ */
 /* ==================================================================
    Page shell
    ================================================================== */
@@ -5,16 +10,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as .my-progress so the logo lines up with the content */
@@ -30,7 +35,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +57,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +65,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +87,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +106,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +118,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -137,13 +142,13 @@
 
 .my-progress-header h1 {
   margin: 0 0 0.25rem 0;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 1.75rem;
 }
 
 .my-progress-header p {
   margin: 0;
-  color: #64748b;
+  color: var(--cc-muted);
 }
 
 /* ==================================================================
@@ -156,14 +161,14 @@
   gap: 0.75rem 1rem;
   margin-top: 1.5rem;
   padding: 0.875rem 1.125rem;
-  border: 1px solid #fecaca;
-  border-radius: 12px;
-  background: #fef2f2;
+  border: 1px solid var(--cc-err-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-err-bg);
 }
 
 .progress-alert-icon {
   flex: none;
-  color: #b91c1c;
+  color: var(--cc-err);
 }
 
 .progress-alert-text {
@@ -175,12 +180,12 @@
 }
 
 .progress-alert-title {
-  color: #991b1b;
+  color: var(--cc-err);
   font-size: 0.95rem;
 }
 
 .progress-alert-message {
-  color: #b91c1c;
+  color: var(--cc-err);
   font-size: 0.875rem;
 }
 
@@ -188,9 +193,9 @@
   min-height: 40px;
   padding: 0 1rem;
   border: none;
-  border-radius: 8px;
-  background: #b91c1c;
-  color: #fff;
+  border-radius: var(--cc-radius);
+  background: var(--cc-err-solid);
+  color: var(--cc-white);
   font: inherit;
   font-size: 0.875rem;
   font-weight: 600;
@@ -198,7 +203,7 @@
 }
 
 .progress-alert-action:hover {
-  background: #991b1b;
+  background: var(--cc-err-solid);
 }
 
 /* ==================================================================
@@ -219,7 +224,7 @@
 
 .summary-section-title {
   margin: 0;
-  color: #334155;
+  color: var(--cc-text);
   font-size: 1.1rem;
   font-weight: 600;
   text-align: left;
@@ -227,7 +232,7 @@
 
 .summary-section-note {
   margin: 0;
-  color: #64748b;
+  color: var(--cc-muted);
   font-size: 0.82rem;
 }
 
@@ -242,9 +247,9 @@
   min-width: 0;
   box-sizing: border-box;
   padding: 1.125rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
   text-align: left;
 }
 
@@ -255,7 +260,7 @@
 
 .summary-label {
   margin: 0 0 0.25rem;
-  color: #64748b;
+  color: var(--cc-muted);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -264,14 +269,14 @@
 
 .summary-value {
   margin: 0;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 1.65rem;
   font-weight: 700;
 }
 
 .summary-sub {
   margin: 0.35rem 0 0 0;
-  color: #94a3b8;
+  color: var(--cc-faint);
   font-size: 0.8rem;
 }
 
@@ -283,8 +288,8 @@
 }
 
 .summary-card-value-wrap:focus-visible .summary-value {
-  border-radius: 0.2rem;
-  outline: 2px solid #93c5fd;
+  border-radius: var(--cc-radius);
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 3px;
 }
 
@@ -300,11 +305,11 @@
   max-height: min(14rem, calc(100vh - 2rem));
   padding: 0.8rem 0.9rem;
   overflow-y: auto;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  background: #fff;
-  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
-  color: #334155;
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 45%);
+  color: var(--cc-text);
   font-size: 0.72rem;
   line-height: 1.4;
   text-align: left;
@@ -318,7 +323,7 @@
 .summary-card-breakdown-tooltip strong {
   display: block;
   margin-bottom: 0.3rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 0.76rem;
 }
 
@@ -340,7 +345,7 @@
   display: flex;
   gap: 0.25rem;
   margin-bottom: 1.25rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--cc-line);
 }
 
 .progress-tab {
@@ -349,7 +354,7 @@
   border: none;
   border-bottom: 2px solid transparent;
   background: transparent;
-  color: #64748b;
+  color: var(--cc-muted);
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
@@ -357,12 +362,12 @@
 }
 
 .progress-tab:hover {
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .progress-tab.active {
-  border-bottom-color: #3b82f6;
-  color: #1d4ed8;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-info);
   font-weight: 600;
 }
 
@@ -372,9 +377,9 @@
 .progress-table-wrapper {
   overflow: visible;
   margin-bottom: 1.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .progress-table {
@@ -391,9 +396,9 @@
 
 .progress-table thead th {
   padding: 0.65rem 0.5rem;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f1f5f9;
-  color: #475569;
+  border-bottom: 1px solid var(--cc-line);
+  background: var(--cc-surface-2);
+  color: var(--cc-text);
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -405,8 +410,8 @@
 
 .progress-table tbody td {
   padding: 0.65rem 0.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  color: #1e293b;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-ink);
   vertical-align: middle;
   overflow-wrap: anywhere;
 }
@@ -423,7 +428,7 @@
 }
 
 .progress-table tbody tr:hover {
-  background: #f8fafc;
+  background: var(--cc-sunken);
 }
 
 .cell-center {
@@ -445,7 +450,7 @@
 .construction-progress-table th:nth-child(6) { width: 7%; }
 
 .progress-table details > summary {
-  color: #1d4ed8;
+  color: var(--cc-info);
   cursor: pointer;
   font-size: 0.82rem;
 }
@@ -458,7 +463,7 @@
 
 .construction-scenario-name {
   display: block;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-weight: 600;
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -472,7 +477,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: #2563eb;
+  color: var(--cc-info);
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 500;
@@ -505,14 +510,14 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.4rem 0.55rem;
-  border-radius: 6px;
-  background: #f8fafc;
-  color: #64748b;
+  border-radius: var(--cc-radius);
+  background: var(--cc-sunken);
+  color: var(--cc-muted);
   font-size: 0.75rem;
 }
 
 .construction-score-details li strong {
-  color: #334155;
+  color: var(--cc-text);
 }
 
 /* ==================================================================
@@ -541,7 +546,7 @@
 }
 
 .accuracy-breakdown:focus-visible .accuracy-bar {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--cc-blue-line);
   outline-offset: 3px;
 }
 
@@ -552,8 +557,8 @@
   width: 100%;
   height: 20px;
   overflow: hidden;
-  border-radius: 999px;
-  background: #e2e8f0;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-surface-3);
 }
 
 .accuracy-bar-fill {
@@ -561,20 +566,20 @@
   top: 0;
   bottom: 0;
   left: 0;
-  background: #94a3b8;
+  background: var(--cc-line-3);
   transition: width 0.3s ease;
 }
 
 .accuracy-bar--pass .accuracy-bar-fill {
-  background: #22c55e;
+  background: var(--cc-ok-solid);
 }
 
 .accuracy-bar--needs-improvement .accuracy-bar-fill {
-  background: #f59e0b;
+  background: var(--cc-warn-solid);
 }
 
 .accuracy-bar--empty .accuracy-bar-fill {
-  background: #cbd5e1;
+  background: var(--cc-line-2);
 }
 
 .accuracy-bar-label {
@@ -582,7 +587,7 @@
   z-index: 1;
   margin-right: 0.5rem;
   margin-left: auto;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -599,11 +604,11 @@
   max-height: min(14rem, calc(100vh - 2rem));
   padding: 0.8rem 0.9rem;
   overflow-y: auto;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  background: #fff;
-  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
-  color: #334155;
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 45%);
+  color: var(--cc-text);
   font-size: 0.72rem;
   line-height: 1.4;
   text-align: left;
@@ -623,7 +628,7 @@
 .accuracy-breakdown-panel strong {
   display: block;
   margin-bottom: 0.3rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 0.76rem;
 }
 
@@ -656,7 +661,7 @@
 }
 
 .consistency-metric--interactive:focus-visible .consistency-bar {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--cc-blue-line);
   outline-offset: 3px;
 }
 
@@ -667,19 +672,19 @@
   width: 100%;
   height: 20px;
   overflow: hidden;
-  border-radius: 999px;
-  background: #e2e8f0;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-surface-3);
 }
 
 .consistency-bar-fill {
   position: absolute;
   inset: 0 auto 0 0;
-  background: #3b82f6;
+  background: var(--cc-blue);
   transition: width 0.3s ease;
 }
 
 .consistency-bar--empty .consistency-bar-fill {
-  background: #cbd5e1;
+  background: var(--cc-line-2);
 }
 
 .consistency-bar-label {
@@ -687,7 +692,7 @@
   z-index: 1;
   margin-left: auto;
   padding: 0 0.45rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 0.72rem;
   font-weight: 600;
 }
@@ -704,11 +709,11 @@
   max-height: min(14rem, calc(100vh - 2rem));
   padding: 0.8rem 0.9rem;
   overflow-y: auto;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  background: #fff;
-  box-shadow: 0 8px 20px rgb(15 23 42 / 14%);
-  color: #334155;
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 45%);
+  color: var(--cc-text);
   font-size: 0.72rem;
   line-height: 1.4;
   text-align: left;
@@ -722,7 +727,7 @@
 .consistency-breakdown-panel strong {
   display: block;
   margin-bottom: 0.3rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   font-size: 0.76rem;
 }
 
@@ -743,30 +748,30 @@
 .badge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--cc-radius-pill);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .badge--pass {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--cc-ok-bg);
+  color: var(--cc-ok);
 }
 
 .badge--warn {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--cc-warn-bg);
+  color: var(--cc-warn);
 }
 
 .badge--info {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--cc-blue-tint-2);
+  color: var(--cc-info);
 }
 
 .badge--muted {
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--cc-surface-2);
+  color: var(--cc-muted);
 }
 
 /* ==================================================================
@@ -838,8 +843,8 @@
 .sidebar {
   width: 240px;
   flex-shrink: 0;
-  background: #1e293b;
-  color: #e2e8f0;
+  background: var(--cc-panel);
+  color: var(--cc-ink);
   padding: 1.5rem 1rem;
 }
 
@@ -857,20 +862,20 @@
 .sidebar-link {
   display: block;
   padding: 0.6rem 0.75rem;
-  border-radius: 6px;
-  color: #cbd5e1;
+  border-radius: var(--cc-radius);
+  color: var(--cc-text);
   text-decoration: none;
   font-size: 0.95rem;
 }
 
 .sidebar-link:hover {
-  background: #334155;
-  color: #fff;
+  background: var(--cc-surface-3);
+  color: var(--cc-white);
 }
 
 .sidebar-link.active {
-  background: #3b82f6;
-  color: #fff;
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-weight: 600;
 }
 

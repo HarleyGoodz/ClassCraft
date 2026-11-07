@@ -1,3 +1,8 @@
+/*
+ * relationships_multiplicity.css: styles for the Relationships and Multiplicity lesson
+ * (RelationshipsMultiplicity.jsx).
+ * Purpose and what it does: lays out the relationship cards, notation table and example.
+ */
 /* ==================================================================
    Page shell (same as Dashboard)
    ================================================================== */
@@ -5,16 +10,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  font-family: var(--cc-font-body);
+  background: var(--cc-sunken);
 }
 
 /* ==================================================================
    Top navigation (same as Dashboard)
    ================================================================== */
 .topnav {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--cc-panel);
+  border-bottom: 1px solid var(--cc-line-3);
 }
 
 /* Same side padding as the page content so the logo lines up with it */
@@ -30,7 +35,7 @@
 
 .topnav-brand {
   padding: 1rem 0;
-  color: #fff;
+  color: var(--cc-white);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -52,7 +57,7 @@
   padding: 0 0.875rem;
   box-sizing: border-box;
   border-bottom: 3px solid transparent;
-  color: #cbd5e1;
+  color: var(--cc-text);
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -60,12 +65,12 @@
 }
 
 .topnav-link:hover {
-  color: #fff;
+  color: var(--cc-white);
 }
 
 .topnav-link.active {
-  border-bottom-color: #3b82f6;
-  color: #fff;
+  border-bottom-color: var(--cc-info);
+  color: var(--cc-white);
   font-weight: 600;
 }
 
@@ -82,15 +87,15 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: #3b82f6;
-  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-blue);
+  color: var(--cc-white);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .topnav-username {
-  color: #e2e8f0;
+  color: var(--cc-ink);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -101,10 +106,10 @@
   gap: 0.375rem;
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid #334155;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line-3);
+  border-radius: var(--cc-radius);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cc-err);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -113,14 +118,14 @@
 }
 
 .topnav-logout:hover {
-  background: #334155;
-  color: #fecaca;
+  background: var(--cc-surface-3);
+  color: var(--cc-err);
 }
 
 .topnav-brand:focus-visible,
 .topnav-link:focus-visible,
 .topnav-logout:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -133,15 +138,15 @@
   min-width: 0;
   box-sizing: border-box;
   padding: 2.5rem 3rem;
-  color: #0f172a;
-  color-scheme: light;
+  color: var(--cc-ink);
+  color-scheme: dark;
   text-align: left;
 }
 
 .relationships-multiplicity h1,
 .relationships-multiplicity h2,
 .relationships-multiplicity h3 {
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .relationships-header h1 {
@@ -154,7 +159,7 @@
 .relationships-header > p:last-child {
   max-width: 720px;
   margin: 0 0 2rem;
-  color: #475569;
+  color: var(--cc-text);
   line-height: 1.6;
   text-align: left;
 }
@@ -179,10 +184,10 @@
 .relationship-card {
   min-width: 0;
   padding: 1.25rem;
-  border: 1px solid #e2e8f0;
-  border-top: 4px solid #3b82f6;
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-top: 4px solid var(--cc-info);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .relationship-card h3 {
@@ -200,14 +205,14 @@
 }
 
 .diagram-class {
-  fill: #fff;
-  stroke: #3b82f6;
+  fill: var(--cc-surface);
+  stroke: var(--cc-info);
   stroke-width: 1.5;
 }
 
 .diagram-label {
-  fill: #0f172a;
-  font-family: Arial, sans-serif;
+  fill: var(--cc-ink);
+  font-family: var(--cc-font-body);
   font-size: 10px;
   font-weight: 700;
   text-anchor: middle;
@@ -215,32 +220,32 @@
 }
 
 .diagram-line {
-  stroke: #475569;
+  stroke: var(--cc-wire);
   stroke-width: 1.8;
 }
 
 .diagram-inheritance-arrow {
-  fill: #fff;
-  stroke: #475569;
+  fill: var(--cc-surface);
+  stroke: var(--cc-wire);
   stroke-width: 1.8;
   stroke-linejoin: round;
 }
 
 .diagram-diamond {
-  fill: #fff;
-  stroke: #475569;
+  fill: var(--cc-surface);
+  stroke: var(--cc-wire);
   stroke-width: 1.8;
   stroke-linejoin: round;
 }
 
 .diagram-diamond--filled {
-  fill: #475569;
+  fill: var(--cc-text);
 }
 
 .relationship-card p,
 .relationships-intro {
   margin: 0.75rem 0 0;
-  color: #475569;
+  color: var(--cc-text);
   font-size: 0.92rem;
   line-height: 1.6;
   text-align: left;
@@ -248,9 +253,9 @@
 
 .multiplicity-table-wrap {
   overflow-x: auto;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .multiplicity-table {
@@ -262,16 +267,16 @@
 .multiplicity-table th,
 .multiplicity-table td {
   padding: 0.8rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
-  color: #334155;
+  border-bottom: 1px solid var(--cc-line);
+  color: var(--cc-text);
 }
 
 .multiplicity-table thead {
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
 }
 
 .multiplicity-table thead th {
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .multiplicity-table tbody tr:last-child th,
@@ -283,7 +288,7 @@
 .relationships-example code {
   display: inline;
   padding: 0;
-  color: #1d4ed8;
+  color: var(--cc-info);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-weight: 700;
 }
@@ -291,21 +296,21 @@
 .relationships-example {
   margin-bottom: 2rem;
   padding: 1.5rem;
-  border: 1px solid #bfdbfe;
-  border-radius: 10px;
-  background: #eff6ff;
+  border: 1px solid var(--cc-blue-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-blue-tint);
 }
 
 .relationships-example > p {
   margin: 0;
-  color: #1e3a8a;
+  color: var(--cc-info);
   line-height: 1.6;
   text-align: left;
 }
 
 .example-instructions {
   margin: 0 0 1rem;
-  color: #1e3a8a;
+  color: var(--cc-info);
   line-height: 1.55;
   text-align: left;
 }
@@ -324,10 +329,10 @@
   align-items: center;
   gap: 0.15rem;
   padding: 0.4rem 0.65rem 0.55rem;
-  border: 1px solid #93c5fd;
-  border-radius: 7px;
-  background: #fff;
-  color: #1e40af;
+  border: 1px solid var(--cc-blue-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  color: var(--cc-info);
   font-size: 0.88rem;
   font-weight: 600;
   cursor: grab;
@@ -340,13 +345,13 @@
 
 .relationship-choice:hover,
 .relationship-choice.is-selected {
-  border-color: #2563eb;
-  background: #dbeafe;
+  border-color: var(--cc-info);
+  background: var(--cc-blue-tint-2);
 }
 
 .relationship-choice:focus-visible,
 .relationship-drop-zone:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 
@@ -361,9 +366,9 @@
 .example-class {
   min-width: 105px;
   padding: 0.8rem 0.75rem;
-  border: 2px solid #3b82f6;
-  border-radius: 6px;
-  background: #fff;
+  border: 2px solid var(--cc-info);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
   font-weight: 700;
   text-align: center;
 }
@@ -372,7 +377,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  color: #1e40af;
+  color: var(--cc-info);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.85rem;
 }
@@ -389,19 +394,19 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 2px dashed #93c5fd;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.75);
-  color: #64748b;
+  border: 2px dashed var(--cc-blue-line);
+  border-radius: var(--cc-radius);
+  background: rgb(16 24 39 / 75%);
+  color: var(--cc-muted);
 }
 
 .relationship-drop-zone.is-ready {
-  border-color: #2563eb;
-  background: #fff;
+  border-color: var(--cc-info);
+  background: var(--cc-surface);
 }
 
 .drop-prompt {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--cc-font-body);
   font-size: 0.72rem;
   white-space: nowrap;
 }
@@ -436,22 +441,22 @@
   flex: 1;
   min-width: min(100%, 280px);
   margin: 0;
-  color: #334155;
+  color: var(--cc-text);
   line-height: 1.5;
   text-align: left;
 }
 
 .example-feedback.is-correct {
-  color: #166534;
+  color: var(--cc-ok);
 }
 
 .example-feedback.is-incorrect {
-  color: #92400e;
+  color: var(--cc-warn);
 }
 
 .example-explanation {
   margin: 0;
-  color: #1e3a8a;
+  color: var(--cc-info);
   line-height: 1.6;
   text-align: left;
 }
@@ -459,20 +464,20 @@
 .another-example-button {
   margin-top: 1rem;
   padding: 0.6rem 0.9rem;
-  border: 1px solid #2563eb;
-  border-radius: 6px;
-  background: #fff;
-  color: #1d4ed8;
+  border: 1px solid var(--cc-info);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  color: var(--cc-info);
   font-size: 0.88rem;
   font-weight: 600;
 }
 
 .another-example-button:hover {
-  background: #dbeafe;
+  background: var(--cc-blue-tint-2);
 }
 
 .another-example-button:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--cc-blue-line);
   outline-offset: 2px;
 }
 

@@ -1,3 +1,7 @@
+/*
+ * four_oop_pillars.css: styles for The Four OOP Pillars lesson (FourOopPillars.jsx).
+ * Purpose and what it does: lays out the pillar cards and the example scenario.
+ */
 /* Full width; side padding matches the header in dashboard_css.css
    (3rem, then 2rem below 1000px, 1rem below 640px) so the logo lines up. */
 .four-oop-page {
@@ -6,13 +10,13 @@
   width: 100%;
   box-sizing: border-box;
   padding: 2.5rem 3rem;
-  color: #0f172a;
+  color: var(--cc-ink);
   text-align: left;
 }
 
 .four-oop-page h1,
 .four-oop-page h2 {
-  color: #0f172a;
+  color: var(--cc-ink);
 }
 
 .four-oop-header {
@@ -28,7 +32,7 @@
 
 .four-oop-header p {
   max-width: 760px;
-  color: #475569;
+  color: var(--cc-text);
   line-height: 1.6;
 }
 
@@ -43,9 +47,9 @@
   min-width: 0;
   overflow: hidden;
   padding: 1.25rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
 }
 
 .four-oop-card h2,
@@ -57,7 +61,7 @@
 
 .four-oop-summary,
 .four-oop-example {
-  color: #475569;
+  color: var(--cc-text);
   font-size: 0.92rem;
   line-height: 1.6;
 }
@@ -69,8 +73,8 @@
   height: auto;
   margin: 0.9rem 0;
   padding: 0.65rem;
-  border-radius: 6px;
-  background: #f1f5f9;
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface-2);
 }
 
 .four-oop-card .four-oop-diagram {
@@ -80,41 +84,41 @@
 }
 
 .uml-class-outline {
-  fill: #fff;
-  stroke: #334155;
+  fill: var(--cc-surface);
+  stroke: var(--cc-wire);
   stroke-width: 1.5;
   transition: fill 0.18s ease, stroke 0.18s ease, stroke-width 0.18s ease;
 }
 
 .uml-class-outline.is-highlighted {
-  fill: #eff6ff;
-  stroke: #2563eb;
+  fill: var(--cc-blue-tint);
+  stroke: var(--cc-info);
   stroke-width: 3;
 }
 
 .uml-divider,
 .uml-connector {
   fill: none;
-  stroke: #475569;
+  stroke: var(--cc-wire);
   stroke-width: 1.5;
   transition: stroke 0.18s ease, stroke-width 0.18s ease;
 }
 
 .uml-connector.is-highlighted {
-  stroke: #2563eb;
+  stroke: var(--cc-info);
   stroke-width: 3;
 }
 
 .uml-generalization {
-  fill: #f1f5f9;
-  stroke: #475569;
+  fill: var(--cc-surface);
+  stroke: var(--cc-wire);
   stroke-width: 1.5;
   stroke-linejoin: round;
 }
 
 .uml-generalization.is-highlighted {
-  fill: #dbeafe;
-  stroke: #2563eb;
+  fill: var(--cc-blue-tint);
+  stroke: var(--cc-info);
   stroke-width: 2.5;
 }
 
@@ -122,8 +126,8 @@
 .uml-stereotype,
 .uml-member,
 .uml-note {
-  fill: #0f172a;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  fill: var(--cc-ink);
+  font-family: var(--cc-font-body);
 }
 
 .uml-class-title {
@@ -133,7 +137,7 @@
 }
 
 .uml-stereotype {
-  fill: #64748b;
+  fill: var(--cc-text);
   font-size: 11px;
   font-style: italic;
   text-anchor: middle;
@@ -144,12 +148,12 @@
 }
 
 .uml-member.is-highlighted {
-  fill: #1d4ed8;
+  fill: var(--cc-info);
   font-weight: 700;
 }
 
 .uml-note {
-  fill: #475569;
+  fill: var(--cc-text);
   font-size: 12px;
   text-anchor: middle;
 }
@@ -161,8 +165,8 @@
 .four-oop-scenario {
   margin-top: 1.5rem;
   padding: 1.25rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--cc-line);
+  border-radius: var(--cc-radius);
 }
 
 .four-oop-scenario h2 {
@@ -173,7 +177,7 @@
 
 .scenario-intro {
   margin: 0 0 1rem;
-  color: #475569;
+  color: var(--cc-text);
   font-size: 0.92rem;
   line-height: 1.6;
 }
@@ -185,8 +189,8 @@
   height: auto;
   margin: 0 auto 1rem;
   padding: 0.65rem;
-  border-radius: 6px;
-  background: #f1f5f9;
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface-2);
 }
 
 .scenario-pillar-list {
@@ -195,14 +199,14 @@
   gap: 0.6rem 1.25rem;
   margin: 0;
   padding-left: 1.25rem;
-  color: #475569;
+  color: var(--cc-text);
   font-size: 0.9rem;
   line-height: 1.55;
 }
 
 .scenario-explorer-hint {
   margin: 0 0 0.5rem;
-  color: #64748b;
+  color: var(--cc-muted);
   font-size: 0.85rem;
 }
 
@@ -210,7 +214,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #1d4ed8;
+  color: var(--cc-info);
   font: inherit;
   text-align: left;
   text-decoration: underline;
@@ -218,37 +222,37 @@
 }
 
 .scenario-pillar-button.is-active {
-  color: #0f172a;
+  color: var(--cc-ink);
   text-decoration-thickness: 2px;
 }
 
 .scenario-pillar-button:focus-visible {
-  border-radius: 2px;
-  outline: 2px solid #3b82f6;
+  border-radius: var(--cc-radius);
+  outline: 2px solid var(--cc-info);
   outline-offset: 2px;
 }
 
 .scenario-toggle:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--cc-info);
   outline-offset: 2px;
 }
 
 .scenario-toggle {
   margin-top: 1rem;
   padding: 0.6rem 0.9rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  background: #fff;
-  color: #1e293b;
+  border: 1px solid var(--cc-line-2);
+  border-radius: var(--cc-radius);
+  background: var(--cc-surface);
+  color: var(--cc-ink);
   font-weight: 600;
 }
 
 .scenario-toggle:hover {
-  background: #f1f5f9;
+  background: var(--cc-surface-2);
 }
 
 .scenario-toggle:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--cc-info);
   outline-offset: 3px;
 }
 

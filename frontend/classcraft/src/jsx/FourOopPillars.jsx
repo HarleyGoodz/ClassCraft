@@ -1,3 +1,9 @@
+/*
+ * FourOopPillars.jsx: The Four OOP Pillars lesson (/learn-basics/four-oop-pillars).
+ * Purpose: teaches encapsulation, abstraction, inheritance and polymorphism.
+ * What it does: shows a card and diagram for each pillar, then an example scenario where
+ * selecting a pillar shows how it appears in the diagram.
+ */
 import { PILLARS, SCENARIOS } from "../questionBank/fourOopPillars.jsx";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -5,6 +11,7 @@ import { supabase } from "../utils/supabase";
 import "../css/dashboard_css.css";
 import "../css/four_oop_pillars.css";
 import "../css/lesson_path_header.css";
+import TopicPager from "../components/TopicPager";
 import {
   PillarDiagram,
   ScenarioDiagram,
@@ -152,6 +159,8 @@ export default function FourOopPillars() {
             Show another scenario
           </button>
         </section>
+
+        <TopicPager current="four-oop-pillars" />
       </main>
     </div>
   );
