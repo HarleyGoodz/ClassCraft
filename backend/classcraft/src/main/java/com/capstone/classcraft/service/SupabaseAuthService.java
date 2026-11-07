@@ -36,10 +36,18 @@ public class SupabaseAuthService {
             .build();
     }
 
-    public record AuthenticatedUser(UUID id, String email) {}
+    public record AuthenticatedUser(UUID id, String email, boolean admin) {}
 
     public UUID requireUserId(String authorizationHeader) {
         return requireUser(authorizationHeader).id();
+    }
+
+    public AuthenticatedUser requireAdmin(String authorizationHeader) {
+        AuthenticatedUser user = requireUser(authorizationHeader);
+        if (!user.admin()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Administrator access is required.");
+        }
+        return user;
     }
 
     public AuthenticatedUser requireUser(String authorizationHeader) {
@@ -85,7 +93,8 @@ public class SupabaseAuthService {
 
             JsonNode user = objectMapper.readTree(response.body());
             String email = user.hasNonNull("email") ? user.get("email").asText() : "";
-            return new AuthenticatedUser(UUID.fromString(user.path("id").asText()), email);
+            boolean admin = "admin".equalsIgnoreCase(user.path("app_metadata").path("role").asText());
+            return new AuthenticatedUser(UUID.fromString(user.path("id").asText()), email, admin);
         } catch (ResponseStatusException exception) {
             throw exception;
         } catch (InterruptedException exception) {
