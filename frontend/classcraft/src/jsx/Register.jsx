@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import { findEmailProblem } from "../utils/emailCheck";
+import SocialAuthButtons from "../components/SocialAuthButtons";
+import ResendConfirmationButton from "../components/ResendConfirmationButton";
 import "../App.css";
 
 function PasswordToggle({ visible, onToggle }) {
@@ -51,6 +54,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmationSentTo, setConfirmationSentTo] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -66,10 +70,18 @@ export default function Register() {
       return;
     }
 
+    const emailProblem = await findEmailProblem(email.trim());
+
+    if (emailProblem) {
+      setError(emailProblem);
+      return;
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/`,
         data: {
           username: username.trim(),
         },
@@ -81,14 +93,52 @@ export default function Register() {
       return;
     }
 
+    // Supabase sends no email for an address that is already registered and
+    // signals it with an empty identities list.
+    if (data.user?.identities?.length === 0) {
+      setError("An account with this email already exists. Please log in instead.");
+      return;
+    }
+
     if (!data.session) {
-      setError(
-        "Account created! Please check your email to confirm your account, then log in."
-      );
+      setConfirmationSentTo(email.trim());
       return;
     }
 
     navigate("/");
+  }
+
+  if (confirmationSentTo) {
+    return (
+      <main className="simple-auth">
+        <div className="simple-auth-form">
+          <h1>ClassCraft</h1>
+          <h2>Confirm your email</h2>
+
+          <p>
+            We sent a confirmation link to <strong>{confirmationSentTo}</strong>.
+            Click it to activate your account, then log in. Check your spam
+            folder if you don't see it.
+          </p>
+
+          <ResendConfirmationButton email={confirmationSentTo} startOnCooldown />
+
+          <p>
+            Wrong email?{" "}
+            <button
+              type="button"
+              className="simple-auth-link-button"
+              onClick={() => setConfirmationSentTo("")}
+            >
+              Sign up again
+            </button>
+          </p>
+          <p>
+            Already confirmed? <Link to="/">Log in</Link>
+          </p>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -158,6 +208,10 @@ export default function Register() {
         )}
 
         <button type="submit">Create account</button>
+
+        <div className="simple-auth-divider">or</div>
+
+        <SocialAuthButtons />
 
         <p>
           Already have an account? <Link to="/">Log in</Link>

@@ -1,19 +1,44 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import ResendConfirmationButton from "../components/ResendConfirmationButton";
+import SocialAuthButtons from "../components/SocialAuthButtons";
 import "../App.css";
+
+function getConfirmationLinkError() {
+  const linkError = new URLSearchParams(window.location.hash.slice(1)).get("error_code");
+
+  if (!linkError) return "";
+
+  return linkError === "otp_expired"
+    ? "That confirmation link is invalid or has expired. Log in with your email and password to get a new one."
+    : "We couldn't confirm your email from that link. Please try again.";
+}
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(getConfirmationLinkError);
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState("");
+
+  // Confirmation links land here: signed in if valid, error details in the URL if not.
+  useEffect(() => {
+    if (window.location.hash.includes("error_code=")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate("/dashboard", { replace: true });
+    });
+  }, [navigate]);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    setUnconfirmedEmail("");
 
     const { error: signInError } =
       await supabase.auth.signInWithPassword({
@@ -22,6 +47,12 @@ export default function Login() {
       });
 
     if (signInError) {
+      if (signInError.code === "email_not_confirmed") {
+        setError("Please confirm your email before logging in. Check your inbox and spam folder.");
+        setUnconfirmedEmail(email.trim());
+        return;
+      }
+
       setError(signInError.message);
       return;
     }
@@ -109,6 +140,12 @@ export default function Login() {
         {error && <p className="simple-auth-error">{error}</p>}
 
         <button type="submit">Log in</button>
+
+        {unconfirmedEmail && <ResendConfirmationButton email={unconfirmedEmail} />}
+
+        <div className="simple-auth-divider">or</div>
+
+        <SocialAuthButtons />
 
         <p>
           Don't have an account? <Link to="/register">Register</Link>

@@ -2,7 +2,10 @@
 package com.capstone.classcraft.controller;
 
 import com.capstone.classcraft.entity.UserEntity;
+import com.capstone.classcraft.service.SupabaseAuthService;
+import com.capstone.classcraft.service.SupabaseAuthService.AuthenticatedUser;
 import com.capstone.classcraft.service.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +20,13 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final SupabaseAuthService supabaseAuthService;
 
-    public UserController(UserService userService) {
+    public UserController(
+            UserService userService,
+            SupabaseAuthService supabaseAuthService) {
         this.userService = userService;
+        this.supabaseAuthService = supabaseAuthService;
     }
 
     @GetMapping
@@ -59,6 +66,40 @@ public class UserController {
             return ResponseEntity
                 .badRequest()
                 .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/me/username")
+    public ResponseEntity<?> claimUsername(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody Map<String, String> request) {
+
+        AuthenticatedUser authUser = supabaseAuthService.requireUser(authorization);
+        String username = request.get("username");
+
+        if (username == null || username.isBlank()) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Username is required."));
+        }
+
+        try {
+            return ResponseEntity.ok(
+                userService.claimUsername(
+                    authUser.id(),
+                    authUser.email(),
+                    username.trim()
+                )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                .badRequest()
+                .body(Map.of("error", e.getMessage()));
+
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("error", "Username already exists."));
         }
     }
 
