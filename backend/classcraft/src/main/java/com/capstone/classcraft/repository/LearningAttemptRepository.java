@@ -14,6 +14,8 @@ public interface LearningAttemptRepository extends JpaRepository<LearningAttempt
 
     List<LearningAttemptEntity> findAllByAuthUserIdOrderByCreatedAtAsc(UUID authUserId);
 
+    List<LearningAttemptEntity> findAllByOrderByCreatedAtDesc();
+
     @Query("""
         select coalesce(max(attempt.attemptNumber), 0)
         from LearningAttemptEntity attempt

@@ -29,6 +29,7 @@ import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
 import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
 import OOPClassModeling from './jsx/OOPClassModeling';
+import AdminDashboard from './jsx/AdminDashboard';
 import { playHoverSound } from "./utils/soundEffects";
 import "./App.css";
 
@@ -67,6 +68,7 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route element={<RequireAccountSetup />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/learn-basics" element={<LearnBasics />} />
           <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />

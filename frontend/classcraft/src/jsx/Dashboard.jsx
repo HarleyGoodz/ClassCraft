@@ -222,6 +222,8 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const [attempts, setAttempts] = useState([]);
   const [activeTab, setActiveTab] = useState("skills");
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
 
   useEffect(() => {
     async function loadUser() {
@@ -258,10 +260,15 @@ export default function Dashboard() {
     loadUser();
   }, [navigate]);
 
-  async function handleLogout() {
+  function handleLogout() {
+    setLogoutError("");
+    setShowLogoutConfirm(true);
+  }
+
+  async function confirmLogout() {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      setError({ title: "Couldn't log you out", message: error.message });
+      setLogoutError(error.message);
       return;
     }
     navigate("/", { replace: true });
@@ -521,6 +528,27 @@ export default function Dashboard() {
           </section>
         )}
       </main>
+      {showLogoutConfirm && (
+        <div
+          className="logout-confirm-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setShowLogoutConfirm(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") setShowLogoutConfirm(false);
+          }}
+        >
+          <section className="logout-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="logout-confirm-title">
+            <h2 id="logout-confirm-title">Log out?</h2>
+            <p>Are you sure you want to log out of ClassCraft?</p>
+            {logoutError && <p className="logout-confirm-error" role="alert">{logoutError}</p>}
+            <div className="logout-confirm-actions">
+              <button type="button" className="logout-cancel-button" onClick={() => setShowLogoutConfirm(false)}>Cancel</button>
+              <button type="button" className="logout-confirm-button" onClick={confirmLogout}>Log out</button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
