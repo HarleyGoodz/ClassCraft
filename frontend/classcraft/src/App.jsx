@@ -29,7 +29,12 @@ import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
 import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
 import OOPClassModeling from './jsx/OOPClassModeling';
-import AdminDashboard from './jsx/AdminDashboard';
+import AdminLayout from './jsx/admin/AdminLayout';
+import AdminHome from './jsx/admin/AdminHome';
+import AdminAccounts from './jsx/admin/AdminAccounts';
+import AdminAccountDetail from './jsx/admin/AdminAccountDetail';
+import AdminActivities from './jsx/admin/AdminActivities';
+import AdminTrends from './jsx/admin/AdminTrends';
 import { playHoverSound } from "./utils/soundEffects";
 import "./App.css";
 
@@ -68,7 +73,14 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route element={<RequireAccountSetup />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard" element={<AdminHome />} />
+            <Route path="accounts" element={<AdminAccounts />} />
+            <Route path="accounts/:userId" element={<AdminAccountDetail />} />
+            <Route path="activities" element={<AdminActivities />} />
+            <Route path="trends" element={<AdminTrends />} />
+          </Route>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/learn-basics" element={<LearnBasics />} />
           <Route path="/learn-basics/classes-objects" element={<ClassObjects />} />
