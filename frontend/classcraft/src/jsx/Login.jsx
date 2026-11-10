@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
+import { getUserHomePath } from "../utils/authRoles";
 import ResendConfirmationButton from "../components/ResendConfirmationButton";
 import SocialAuthButtons from "../components/SocialAuthButtons";
 import AuthFieldHint from "../components/AuthFieldHint";
@@ -34,7 +35,7 @@ export default function Login() {
     }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) navigate("/dashboard", { replace: true });
+      if (session) navigate(getUserHomePath(session.user), { replace: true });
     });
   }, [navigate]);
 
@@ -45,7 +46,7 @@ export default function Login() {
     setEmailHint("");
     setPasswordHint("");
 
-    const { error: signInError } =
+    const { data, error: signInError } =
       await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -67,7 +68,7 @@ export default function Login() {
       return;
     }
 
-    navigate("/dashboard");
+    navigate(getUserHomePath(data.user), { replace: true });
   }
 
   return (
