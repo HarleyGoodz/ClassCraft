@@ -34,6 +34,30 @@ export function playHoverSound() {
   return playTone(660, 0.055, 0.025);
 }
 
+/** Pip's "voice": a tiny square-wave blip played per typed character. */
+export function playPipBlip() {
+  const AudioContextClass = window.AudioContext;
+  if (!AudioContextClass) return;
+  audioContext ??= new AudioContextClass();
+  const context = audioContext;
+  if (context.state === "suspended") {
+    context.resume().catch(() => {});
+    return;
+  }
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const now = context.currentTime;
+  oscillator.type = "square";
+  oscillator.frequency.setValueAtTime(560 + Math.random() * 70, now);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.03, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+  oscillator.start(now);
+  oscillator.stop(now + 0.07);
+}
+
 export function playClickSound() {
   return playTone(440, 0.09, 0.04);
 }
