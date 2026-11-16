@@ -25,6 +25,7 @@ import ContinueWithEmail from './jsx/ContinueWithEmail';
 import RequireAccountSetup from './components/RequireAccountSetup';
 import AuthLayout from './components/design/AuthLayout';
 import DiagramConnectors from './components/design/DiagramConnectors';
+import PipTutor from './components/pip/PipTutor';
 import ClassRelationships from './jsx/ClassRelationships';
 import Multiplicity from './jsx/Multiplicity';
 import ClassDiagramScenarios from "./jsx/ClassDiagramScenarios";
@@ -62,6 +63,7 @@ function App() {
   return (
     <BrowserRouter>
       <DiagramConnectors />
+      <PipTutor />
       <Routes>
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Login />} />
