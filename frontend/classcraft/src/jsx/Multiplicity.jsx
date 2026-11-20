@@ -1,8 +1,9 @@
 /*
  * Multiplicity.jsx: a Skill Development activity (/skill-development/multiplicity).
  * Purpose: practice reading multiplicity from a scenario.
- * What it does: learners drag the correct notation to the ends of the line and get feedback.
- * Shows their previous attempts.
+ * What it does: learners drag the correct notation to the ends of the line and get feedback
+ * after pressing "Check Answer". Each drop plays a "ting" that rises as the line fills up, and a
+ * correct answer gets a party-pop celebration. Shows their previous attempts.
  */
 import { MULTIPLICITY_SCENARIOS as SCENARIO_BANK } from "../questionBank/multiplicity.jsx";
 import { useEffect, useState } from "react";
@@ -14,6 +15,8 @@ import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
 import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
 import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
+import PartyPop from "../components/PartyPop";
+import { playDropTing } from "../utils/practiceSounds";
 import "../css/multiplicity.css";
 
 
@@ -83,6 +86,7 @@ export default function Multiplicity() {
   const [droppedA, setDroppedA] = useState(null);
   const [droppedB, setDroppedB] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
   const [username, setUsername] = useState("User");
 
   useEffect(() => {
@@ -105,11 +109,14 @@ export default function Multiplicity() {
   const currentScenario = MULTIPLICITY_SCENARIOS[currentIndex];
 
   // --- Drag and Drop Logic ---
+  // Ting! The number is how many ends are filled after this drop (1 or 2).
   const handlePointerDrop = (option, target) => {
     if (target === "multiplicity-a") {
+      playDropTing(1 + (droppedB ? 1 : 0));
       setDroppedA(option);
       if (isSubmitted) setIsSubmitted(false);
     } else if (target === "multiplicity-b") {
+      playDropTing(1 + (droppedA ? 1 : 0));
       setDroppedB(option);
       if (isSubmitted) setIsSubmitted(false);
     }
@@ -118,9 +125,11 @@ export default function Multiplicity() {
   // Click to place (Mobile support)
   const handleOptionClick = (option) => {
     if (!droppedA) {
+      playDropTing(1 + (droppedB ? 1 : 0));
       setDroppedA(option);
       if (isSubmitted) setIsSubmitted(false);
     } else if (!droppedB) {
+      playDropTing(2);
       setDroppedB(option);
       if (isSubmitted) setIsSubmitted(false);
     }
@@ -146,10 +155,12 @@ export default function Multiplicity() {
     return isCorrect;
   };
 
-  const handleCheckAnswer = async () => {
+  // celebrateIfCorrect is true only for the "Check Answer" button, not when "Next" checks for them.
+  const handleCheckAnswer = async (celebrateIfCorrect = false) => {
     if (!droppedA || !droppedB) return;
     const isCorrect = evaluateAnswer();
     setIsSubmitted(true);
+    if (isCorrect && celebrateIfCorrect) setCelebrate(true);
     await recordAttempt({
       activityKey: "multiplicity",
       scenarioKey: currentScenario.id,
@@ -314,7 +325,7 @@ export default function Multiplicity() {
             <button onClick={handleReset} className="cdf-btn cdf-btn-reset">Reset</button>
             {!isSubmitted && (
               <button 
-                onClick={handleCheckAnswer} 
+                onClick={() => handleCheckAnswer(true)}
                 className="cdf-btn cdf-btn-check" 
                 disabled={!droppedA || !droppedB}
                 style={{ opacity: (!droppedA || !droppedB) ? 0.5 : 1 }}
@@ -324,6 +335,7 @@ export default function Multiplicity() {
             )}
           </div>
         </div>
+        <PartyPop active={celebrate} onDone={() => setCelebrate(false)} />
       </main>
     </div>
   );

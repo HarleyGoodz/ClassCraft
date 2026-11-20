@@ -3,6 +3,8 @@
  * (/skill-development/class-diagram-formation).
  * Purpose: practice building a class from a written scenario.
  * What it does: learners drag each piece into the right compartment and check their answers.
+ * Each drop plays a "ting" that rises as the diagram fills up. Mistakes are only shown after
+ * "Check Answers" is pressed, and a correct answer gets a party-pop celebration.
  * Shows their previous attempts.
  */
 import { SCENARIOS as SCENARIO_BANK } from "../questionBank/classDiagramFormation.jsx";
@@ -16,6 +18,8 @@ import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
 import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
 import AuthFieldHint from "../components/AuthFieldHint";
+import PartyPop from "../components/PartyPop";
+import { playDropTing } from "../utils/practiceSounds";
 import "../css/class_diagram_formation.css";
 
 const NAV_ITEMS = [
@@ -124,8 +128,16 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
 
   const [feedback, setFeedback] = useState({ message: "", type: "" });
   const [mentorHints, setMentorHints] = useState({});
-  
+  const [celebrate, setCelebrate] = useState(false);
+
   const placePiece = (piece, targetSection) => {
+    if (!["class", "attribute", "method"].includes(targetSection)) return;
+
+    // Ting! Higher for every piece in the diagram (replacing the class name keeps the count).
+    const piecesBefore = (className ? 1 : 0) + attributes.length + methods.length;
+    const replacingClassName = targetSection === "class" && className;
+    playDropTing(replacingClassName ? piecesBefore : piecesBefore + 1);
+
     if (targetSection === "class") {
       if (className) {
         setAvailablePieces((prev) => [...prev, className]);
@@ -141,36 +153,10 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
     }
 
     setSelectedPiece(null);
+    // No hints while building: mistakes are only revealed after "Check Answers".
+    // Changing the diagram also clears the results of the last check.
     setFeedback({ message: "", type: "" });
-    let hint = "";
-
-    if (targetSection === "class" && piece.text !== currentScenario.targetClass) {
-      hint = piece.type === "attribute"
-        ? `"${piece.text}" is data, not a class. A class name should be a noun or noun phrase for the thing being modeled.`
-        : piece.type === "method"
-          ? `"${piece.text}" is an action, not a class. Choose a noun for the thing being modeled.`
-          : `"${piece.text}" is a noun, but this scenario asks you to model ${currentScenario.targetClass}.`;
-    } else if (
-      targetSection === "attribute" &&
-      (piece.type !== "attribute" || !currentScenario.validAttributes.includes(piece.text))
-    ) {
-      hint = piece.type === "class"
-        ? `"${piece.text}" names a thing, not data. Attributes are nouns for information the class has.`
-        : piece.type === "method"
-          ? `"${piece.text}" is an action. Attributes are nouns for information the class has.`
-          : `"${piece.text}" is not a property described in this scenario. Choose relevant data the class has.`;
-    } else if (
-      targetSection === "method" &&
-      (piece.type !== "method" || !currentScenario.validMethods.includes(piece.text))
-    ) {
-      hint = piece.type === "class"
-        ? `"${piece.text}" names a thing, not an action. Methods are verbs for what the class can do.`
-        : piece.type === "attribute"
-          ? `"${piece.text}" is data, not an action. Methods are verbs for what the class can do.`
-          : `"${piece.text}" is not an action described in this scenario. Choose a relevant class action.`;
-    }
-
-    setMentorHints((previous) => ({ ...previous, [targetSection]: hint }));
+    setMentorHints({});
   };
 
   const handleRemovePiece = (e, piece, section) => {
@@ -273,6 +259,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
   const handleCheckAnswers = async () => {
     if (!className && attributes.length === 0 && methods.length === 0) return;
     const result = evaluateBoard();
+    if (result.isCorrect) setCelebrate(true);
     await recordAttempt({
       activityKey: "class-diagram-formation",
       scenarioKey: currentScenario.id,
@@ -475,6 +462,7 @@ function ClassDiagramFormationActivity({ scenarios: SCENARIOS, initialAttempts }
             {feedback.message}
           </div>
         )}
+        <PartyPop active={celebrate} onDone={() => setCelebrate(false)} />
       </main>
     </div>
   );

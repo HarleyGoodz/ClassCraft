@@ -3,7 +3,8 @@
  * (/skill-development/class-relationships).
  * Purpose: practice choosing the right relationship between two classes.
  * What it does: learners drag or tap a connector into the gap between the classes and get
- * feedback. Shows their previous attempts.
+ * feedback after pressing "Check Answer". Placing a connector plays a "ting", and a correct
+ * answer gets a party-pop celebration. Shows their previous attempts.
  */
 import {
   RELATIONSHIP_SCENARIOS as SCENARIO_BANK,
@@ -18,6 +19,8 @@ import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
 import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
 import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
+import PartyPop from "../components/PartyPop";
+import { playDropTing } from "../utils/practiceSounds";
 import "../css/class_relationships.css";
 
 const NAV_ITEMS = [
@@ -118,6 +121,7 @@ export default function ClassRelationships() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [droppedAnswer, setDroppedAnswer] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
   const [username, setUsername] = useState("User");
 
   useEffect(() => {
@@ -142,12 +146,14 @@ export default function ClassRelationships() {
   const handlePointerDrop = (type, target) => {
     if (target !== "relationship") return;
     if (type) {
+      playDropTing(1); // the diagram has one connector slot
       setDroppedAnswer(type);
       if (isSubmitted) setIsSubmitted(false); // Reset feedback if they change answer
     }
   };
 
   const handleOptionClick = (option) => {
+    playDropTing(1);
     setDroppedAnswer(option);
     if (isSubmitted) setIsSubmitted(false);
   };
@@ -166,10 +172,12 @@ export default function ClassRelationships() {
     return isCorrect;
   };
 
-  const handleCheckAnswer = async () => {
+  // celebrateIfCorrect is true only for the "Check Answer" button, not when "Next" checks for them.
+  const handleCheckAnswer = async (celebrateIfCorrect = false) => {
     if (!droppedAnswer) return;
     const isCorrect = evaluateAnswer();
     setIsSubmitted(true);
+    if (isCorrect && celebrateIfCorrect) setCelebrate(true);
     await recordAttempt({
       activityKey: "class-relationships",
       scenarioKey: currentScenario.id,
@@ -318,7 +326,7 @@ export default function ClassRelationships() {
             {!isSubmitted && (
               <button 
                 className="cdf-btn cdf-btn-check" 
-                onClick={handleCheckAnswer}
+                onClick={() => handleCheckAnswer(true)}
                 disabled={!droppedAnswer}
                 style={{ opacity: !droppedAnswer ? 0.5 : 1 }}
               >
@@ -329,6 +337,7 @@ export default function ClassRelationships() {
 
         </div>
 
+        <PartyPop active={celebrate} onDone={() => setCelebrate(false)} />
       </main>
     </div>
   );

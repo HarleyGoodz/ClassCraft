@@ -2,7 +2,9 @@
  * OOPClassModeling.jsx: a Skill Development activity (/skill-development/oop-class-modeling).
  * Purpose: practice modeling a scenario with classes, relationships and visibility.
  * What it does: learners drag pieces to the classes, connect them with a relationship, click
- * visibility symbols to change them, and get feedback. Shows their previous attempts.
+ * visibility symbols to change them, and get feedback after pressing "Check Answer". Each drop
+ * plays a "ting" that rises as the diagram fills up, and a correct model gets a party-pop
+ * celebration. Shows their previous attempts.
  */
 import { OOP_SCENARIOS as SCENARIO_BANK } from "../questionBank/oopClassModeling.jsx";
 import { useEffect, useState } from "react";
@@ -14,6 +16,8 @@ import { useSkillQuestionSet } from "../hooks/useSkillQuestionSet";
 import PreviousAttemptNotice from "../components/PreviousAttemptNotice";
 import ActivityLoadingSkeleton from "../components/ActivityLoadingSkeleton";
 import { GuidedExperiencePrompt, NoSkillQuestions } from "../components/SkillPracticeStatus";
+import PartyPop from "../components/PartyPop";
+import { playDropTing } from "../utils/practiceSounds";
 import "../css/oop_class_modeling.css";
 import "../css/oop_class_modeling_feedback.css";
 
@@ -175,8 +179,24 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [feedback, setFeedback] = useState({ message: "", type: "" });
+  const [celebrate, setCelebrate] = useState(false);
+
+  // How many things are in the diagram right now (pieces, the line and the multiplicity).
+  const diagramCount = () =>
+    (parentName ? 1 : 0) + (childName ? 1 : 0) +
+    parentAttrs.length + childAttrs.length + parentMethods.length + childMethods.length +
+    (droppedRelationship ? 1 : 0) + (droppedMultiplicity ? 1 : 0);
+
+  const PIECE_SECTIONS = ["parent_name", "child_name", "parent_attr", "child_attr", "parent_method", "child_method"];
 
   const placePiece = (piece, targetSection) => {
+    if (!PIECE_SECTIONS.includes(targetSection)) return;
+
+    // Ting! Higher for every item in the diagram (replacing a class name keeps the count).
+    const replacingName =
+      (targetSection === "parent_name" && parentName) || (targetSection === "child_name" && childName);
+    playDropTing(replacingName ? diagramCount() : diagramCount() + 1);
+
     const removeFromBank = (id) => {
       setAvailablePieces((prev) => prev.filter((p) => p.id !== id));
     };
@@ -217,6 +237,8 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
 
   const placeSelectedTool = (type) => {
     if (selectedTool?.type !== type) return;
+    const alreadyFilled = type === "relationship" ? droppedRelationship : droppedMultiplicity;
+    playDropTing(alreadyFilled ? diagramCount() : diagramCount() + 1);
     if (type === "relationship") setDroppedRelationship(selectedTool.value);
     if (type === "multiplicity") setDroppedMultiplicity(selectedTool.value);
     setSelectedTool(null);
@@ -230,10 +252,12 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
         placePiece(payload.value, target);
       }
     } else if (payload.type === "relationship" && target === "relationship") {
+      playDropTing(droppedRelationship ? diagramCount() : diagramCount() + 1);
       setDroppedRelationship(payload.value);
       setSelectedTool(null);
       setIsSubmitted(false);
     } else if (payload.type === "multiplicity" && target === "multiplicity") {
+      playDropTing(droppedMultiplicity ? diagramCount() : diagramCount() + 1);
       setDroppedMultiplicity(payload.value);
       setSelectedTool(null);
       setIsSubmitted(false);
@@ -423,10 +447,12 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
     };
   };
 
-  const handleCheckAnswer = async () => {
+  // celebrateIfCorrect is true only for the "Check Answer" button, not when "Next" checks for them.
+  const handleCheckAnswer = async (celebrateIfCorrect = false) => {
     if (placedItems().length === 0 && !droppedRelationship && !droppedMultiplicity) return;
     const result = evaluateAnswer();
     setIsSubmitted(true);
+    if (result.isCorrect && celebrateIfCorrect) setCelebrate(true);
     await recordAttempt({
       activityKey: "oop-class-modeling",
       scenarioKey: currentScenario.id,
@@ -679,9 +705,10 @@ function OOPClassModelingActivity({ scenarios: OOP_SCENARIOS, initialAttempts })
           </div>
           <div className="cdf-action-right">
             <button onClick={handleReset} className="cdf-btn cdf-btn-reset">Reset</button>
-            {!isSubmitted && <button onClick={handleCheckAnswer} className="cdf-btn cdf-btn-check">Check Answer</button>}
+            {!isSubmitted && <button onClick={() => handleCheckAnswer(true)} className="cdf-btn cdf-btn-check">Check Answer</button>}
           </div>
         </div>
+        <PartyPop active={celebrate} onDone={() => setCelebrate(false)} />
       </main>
     </div>
   );
