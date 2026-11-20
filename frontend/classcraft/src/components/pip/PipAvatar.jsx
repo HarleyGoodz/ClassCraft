@@ -3,8 +3,11 @@
  * Purpose: wraps pipModel.js so React components can show and animate Pip.
  * What it does: loads Three.js only when Pip first appears (so it isn't in the main bundle),
  * builds the scene, and hands the controller to the parent through onReady.
+ * It also plays Pip's background music (pipMusic.js) for as long as Pip is on screen,
+ * including while Pip is talking.
  */
 import { useEffect, useRef } from "react";
+import { startPipMusic } from "./pipMusic.js";
 
 export default function PipAvatar({ onReady, className = "" }) {
   const canvasRef = useRef(null);
@@ -15,6 +18,9 @@ export default function PipAvatar({ onReady, className = "" }) {
     let pip = null;
     let cancelled = false;
     const canvas = canvasRef.current;
+
+    // Music starts as soon as Pip appears, even if the 3D model can't be drawn.
+    const stopMusic = startPipMusic();
 
     import("./pipModel.js").then(({ createPipScene }) => {
       if (cancelled || !canvas) return;
@@ -33,6 +39,7 @@ export default function PipAvatar({ onReady, className = "" }) {
     return () => {
       cancelled = true;
       observer.disconnect();
+      stopMusic();
       onReadyRef.current?.(null);
       pip?.dispose();
     };
